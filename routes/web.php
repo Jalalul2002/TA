@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\RegisterStaffController;
 use App\Http\Controllers\DataStaffController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\StaffController;
@@ -27,4 +28,7 @@ Route::middleware(['auth', 'staffMiddleware'])->group(function () {
 Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('admin/data-staff', [DataStaffController::class, 'index'])->name('admin.staff');
+    Route::get('admin/add-staff', [RegisterStaffController::class, 'create'])->name('admin.add-staff');
+    Route::post('admin/add-staff', [RegisterStaffController::class, 'store']);
+    Route::delete('admin/data-staff/{id}', [DataStaffController::class, 'destroy'])->name('admin.destroy-staff');
 });

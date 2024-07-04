@@ -20,15 +20,15 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
+    @include('layouts.navigation')
 
-        @include('layouts.sidebar')
+    @include('layouts.sidebar')
 
-        <div class="sm:ml-64">
+    <div class="sm:ml-64 min-h-screen flex flex-col bg-gray-100">
+        <div class="flex-grow">
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-white shadow mt-20">
+                <header class="bg-white shadow pt-20">
                     <div class="max-w-full mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -39,10 +39,10 @@
             <main>
                 {{ $slot }}
             </main>
-
-            @include('layouts.footer')
         </div>
+        @include('layouts.footer')
     </div>
+
 </body>
 
 </html>

@@ -19,6 +19,6 @@ class StaffMiddleware
         if (Auth::user()->usertype == 'staff') {
             return $next($request);
         }
-        return redirect() -> back();
+        return redirect()->back();
     }
 }

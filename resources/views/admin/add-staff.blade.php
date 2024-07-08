@@ -27,6 +27,21 @@
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
+                    {{-- Role --}}
+                    <div class="mt-4">
+                        <x-input-label for="usertype" :value="__('Usertype')" />
+                        <x-text-input id="usertype" class="block mt-1 w-full" type="text" name="usertype"
+                            :value="old('usertype')" required autofocus autocomplete="usertype" />
+                        <x-input-error :messages="$errors->get('usertype')" class="mt-2" />
+                    </div>
+
+                    <div class="mt-4">
+                        <x-input-label for="prodi" :value="__('Program Studi')" />
+                        <x-text-input id="prodi" class="block mt-1 w-full" type="text" name="prodi"
+                            :value="old('prodi')" required autofocus autocomplete="prodi" />
+                        <x-input-error :messages="$errors->get('prodi')" class="mt-2" />
+                    </div>
+
                     <!-- Password -->
                     <div class="mt-4">
                         <x-input-label for="password" :value="__('Password')" />

@@ -15,14 +15,14 @@
                 </button>
                 <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24">
                     <img src="{{ asset('favicon.png') }}" class="h-8 me-3" alt="UIN SGD Logo" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">SIMA SAINTEK</span>
+                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">{{ config('app.name') }}</span>
                 </a>
             </div>
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-semibold rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">

@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 
 class DataStaffController extends Controller
 {
     public function index()
     {
-        $users = User::where('usertype', 'staff')->get();
+        $users = User::where('usertype', '!=', 'admin')->get();
         return view('admin.staff', compact('users'));
     }
 

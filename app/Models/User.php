@@ -18,6 +18,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'usertype',
+        'prodi',
         'email',
         'password',
     ];
@@ -43,5 +45,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'created_by');
     }
 }

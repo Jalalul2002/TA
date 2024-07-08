@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\RegisterStaffController;
 use App\Http\Controllers\DataStaffController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\StaffController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/data-product', [ProductController::class, 'index'])->name('product');
+    Route::get('/add-product', [ProductController::class, 'add'])->name('add-product');
+    Route::post('/add-product', [ProductController::class, 'store']);
+    Route::delete('/data-product/{id}', [ProductController::class, 'destroy'])->name('destroy-product');
 });
 
 require __DIR__.'/auth.php';

@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Product::class, 'created_by');
     }
+
+    public function aset()
+    {
+        return $this->hasMany(Assetlab::class, 'created_by');
+    }
 }

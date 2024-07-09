@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\RegisterStaffController;
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DataStaffController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -21,6 +22,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/add-product', [ProductController::class, 'add'])->name('add-product');
     Route::post('/add-product', [ProductController::class, 'store']);
     Route::delete('/data-product/{id}', [ProductController::class, 'destroy'])->name('destroy-product');
+
+    Route::get('/data-aset', [AssetController::class, 'indexInv'])->name('data-aset');
+    Route::get('/data-barang-habis-pakai', [AssetController::class, 'indexBhp'])->name('data-bhp');
 });
 
 require __DIR__.'/auth.php';

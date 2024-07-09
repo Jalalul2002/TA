@@ -16,7 +16,7 @@ class StaffMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::user()->usertype == 'staff') {
+        if (Auth::user()->usertype != 'admin') {
             return $next($request);
         }
         return redirect()->back();

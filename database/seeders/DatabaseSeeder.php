@@ -29,6 +29,62 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('master12345')
         ]);
 
+        User::create([
+            'name' => 'Teknik Informatika',
+            'email' => 'if@staff.id',
+            'usertype' => 'staff',
+            'prodi' => 'Teknik Informatika',
+            'password' => Hash::make('user12345')
+        ]);
+
+        User::create([
+            'name' => 'Teknik Elektro',
+            'email' => 'te@staff.id',
+            'usertype' => 'staff',
+            'prodi' => 'Teknik Elektro',
+            'password' => Hash::make('user12345')
+        ]);
+
+        User::create([
+            'name' => 'Kimia',
+            'email' => 'kim@staff.id',
+            'usertype' => 'staff',
+            'prodi' => 'Kimia',
+            'password' => Hash::make('user12345')
+        ]);
+
+        User::create([
+            'name' => 'Biologi',
+            'email' => 'bio@staff.id',
+            'usertype' => 'staff',
+            'prodi' => 'Biologi',
+            'password' => Hash::make('user12345')
+        ]);
+
+        User::create([
+            'name' => 'Fisika',
+            'email' => 'fis@staff.id',
+            'usertype' => 'staff',
+            'prodi' => 'Fisika',
+            'password' => Hash::make('user12345')
+        ]);
+
+        User::create([
+            'name' => 'Agroteknologi',
+            'email' => 'agro@staff.id',
+            'usertype' => 'staff',
+            'prodi' => 'Agroteknologi',
+            'password' => Hash::make('user12345')
+        ]);
+
+        User::create([
+            'name' => 'Matematika',
+            'email' => 'mat@staff.id',
+            'usertype' => 'staff',
+            'prodi' => 'Matematika',
+            'password' => Hash::make('user12345')
+        ]);
+
         // Product::factory(20)->create();
     }
 }

@@ -4,91 +4,93 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Assetlab;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AssetController extends Controller
 {
     public function indexInv(Request $request)
     {
-        $query = AssetLab::with('product')->where('type', 'inventaris');
+        $query = AssetLab::ofType('inventaris');
 
-        if (auth()->user()->usertype === 'staff') {
-            $query->whereHas('product', function ($q) {
-                $q->where('location', auth()->user()->prodi);
-            });
+        if (Auth::user()->usertype === 'staff') {
+            $query->ofLocation(Auth::user()->prodi);
         }
 
         if ($request->has('search')) {
-            $query->whereHas('product', function ($q) use ($request) {
-                $q->where('product_name', 'LIKE', "%{$request->search}%");
-            });
+            $query->search($request->search);
         }
 
         $assetLabs = $query->paginate(10);
         return view('dataaset', compact('assetLabs'));
     }
 
-    public function indexBhp()
+    public function indexBhp(Request $request)
     {
-        $assetLabs = AssetLab::all();
+        $query = AssetLab::ofType('bhp');
+
+        if (Auth::user()->usertype === 'staff') {
+            $query->ofLocation(Auth::user()->prodi);
+        }
+
+        if ($request->has('search')) {
+            $query->search($request->search);
+        }
+
+        $assetLabs = $query->paginate(10);
         return view('baranghabispakai', compact('assetLabs'));
     }
 
-    // public function create()
-    // {
-    //     return view('create-dataaset');
-    // }
+    public function addInv()
+    {
+        $prodi = Auth::user()->prodi;
+        return view('add-aset', compact('prodi'));
+    }
 
-    public function store(Request $request)
+    public function addBhp()
+    {
+        $prodi = Auth::user()->prodi;
+        return view('add-bhp', compact('prodi'));
+    }
+
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'type' => 'required|string',
-            'stock' => 'required|string',
-            'location' => 'required|string',
-            'created_by' => 'required|exists:users,id',
-            'updated_by' => 'required|exists:users,id'
+            'product_id' => ['required', 'string', 'unique:assetlabs'],
+            'product_name' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'string', 'max:255'],
+            'location' => ['required', 'string', 'max:255']
         ]);
 
-        $assetLab = new AssetLab($request->all());
-        $assetLab->updated_by = auth()->user()->id;
-        $assetLab->save();
-
-        return redirect()->route('data-aset')->with('success', 'AssetLab created successfully.');
-    }
-
-    public function show(AssetLab $assetLab)
-    {
-        return view('dataaset', compact('assetLab'));
-    }
-
-    public function edit(AssetLab $assetLab)
-    {
-        return view('dataaset', compact('assetLab'));
-    }
-
-    public function update(Request $request, AssetLab $assetLab)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'type' => 'required|string',
-            'stock' => 'required|string',
-            'location' => 'required|string',
-            'created_by' => 'required|exists:users,id',
-            'updated_by' => 'required|exists:users,id'
+        Assetlab::create([
+            'product_id' => $request->product_id,
+            'product_name' => $request->product_name,
+            'merk' => $request->merk,
+            'type' => $request->type,
+            'stock' => $request->stock,
+            'location' => $request->location,
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id(),
         ]);
 
-        $assetLab->fill($request->all());
-        $assetLab->updated_by = auth()->user()->id;
-        $assetLab->save();
+        if ($request->type == 'bhp') {
+            return redirect(route('data-bhp', absolute: false));
+        }
 
-        return redirect()->route('data-aset')->with('success', 'AssetLab updated successfully.');
+        return redirect(route('data-aset', absolute: false));
     }
 
-    public function destroy(AssetLab $assetLab)
+    public function destroy($id)
     {
-        $assetLab->delete();
+        $assetlab = Assetlab::findOrFail($id);
+        $type = $assetlab->type;
+        $assetlab->delete();
 
-        return redirect()->route('data-aset')->with('success', 'AssetLab deleted successfully.');
+        if ($type === 'bhp') {
+            return redirect()->route('data-bhp')->with('success', 'Barang deleted successfully');
+        }
+
+        return redirect()->route('data-aset')->with('success', 'Barang deleted successfully');
     }
 }

@@ -28,14 +28,14 @@
                                 placeholder="Search for items" autocomplete="off">
                         </div>
                         <div>
-                            <a href="/add-product"
+                            <a href="/add-aset-bhp"
                                 class="inline-flex items-center px-4 py-3 rounded-lg text-white bg-uinBlue hover:bg-uinNavy w-full">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
                                     <path
                                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                 </svg>
-                                Tambah Asset Inventaris
+                                Tambah Asset BHP
                             </a>
                         </div>
                     </div>
@@ -46,7 +46,13 @@
                                     No
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Kode Barang
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Nama Barang
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Merk
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Stok
@@ -67,8 +73,7 @@
                         </thead>
                         <tbody>
                             @php
-                                // $counter = ($assetLabs->currentPage() - 1) * $assetLabs->perPage() + 1;
-                                $counter = 1;
+                                $counter = ($assetLabs->currentPage() - 1) * $assetLabs->perPage() + 1;
                             @endphp
                             @forelse ($assetLabs as $assetLab)
                                 <tr class="bg-white border-b hover:bg-gray-50">
@@ -76,7 +81,13 @@
                                         {{ $counter }}
                                     </th>
                                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                        {{ $assetLab->product->product_name }}
+                                        {{ $assetLab->product_id }}
+                                    </td>
+                                    <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                        {{ $assetLab->product_name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->merk}}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $assetLab->stock}}
@@ -85,8 +96,14 @@
                                         {{ $assetLab->location }}
                                     </td>
                                     <td class="px-6 py-4">
+                                        {{ $assetLab->creator->name }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->updater->name }}
+                                    </td>
+                                    <td class="px-6 py-4">
                                         <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                                        <form action="{{ route('destroy-product', $assetLab->id) }}" method="POST">
+                                        <form action="{{ route('destroy-aset', $assetLab->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:underline">Delete</button>
@@ -98,7 +115,7 @@
                                 @endphp
                             @empty
                                 <tr class="bg-white border-b hover:bg-gray-50">
-                                    <th colspan="7" class="px-6 py-4 text-center">
+                                    <th colspan="9" class="px-6 py-4 text-center">
                                         Data Tidak Ditemukan
                                     </th>
                                 </tr>
@@ -106,7 +123,7 @@
                         </tbody>
                     </table>
                     <div class="mt-4">
-                        {{-- {{ $assetLabs->appends(['search' => request('search')])->links('pagination::tailwind') }} --}}
+                        {{ $assetLabs->appends(['search' => request('search')])->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

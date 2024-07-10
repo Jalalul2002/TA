@@ -28,7 +28,7 @@
                                 placeholder="Search for items" autocomplete="off">
                         </div>
                         <div>
-                            <a href="/add-product"
+                            <a href="/add-aset-inventaris"
                                 class="inline-flex items-center px-4 py-3 rounded-lg text-white bg-uinBlue hover:bg-uinNavy w-full">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
@@ -46,7 +46,13 @@
                                     No
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Kode Barang
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Nama Barang
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Merk
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Stok
@@ -75,10 +81,16 @@
                                         {{ $counter }}
                                     </th>
                                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                        {{ $assetLab->product->product_name }}
+                                        {{ $assetLab->product_id }}
+                                    </td>
+                                    <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                        {{ $assetLab->product_name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->stock}}
+                                        {{ $assetLab->merk }}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->stock }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $assetLab->location }}
@@ -91,7 +103,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                                        <form action="{{ route('destroy-product', $assetLab->id) }}" method="POST">
+                                        <form action="{{ route('destroy-aset', $assetLab->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:underline">Delete</button>
@@ -103,7 +115,7 @@
                                 @endphp
                             @empty
                                 <tr class="bg-white border-b hover:bg-gray-50">
-                                    <th colspan="7" class="px-6 py-4 text-center">
+                                    <th colspan="9" class="px-6 py-4 text-center">
                                         Data Tidak Ditemukan
                                     </th>
                                 </tr>

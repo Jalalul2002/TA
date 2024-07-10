@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\RegisterStaffController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DataStaffController;
+use App\Http\Controllers\PerencanaanController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\StaffController;
@@ -24,10 +25,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/data-product/{id}', [ProductController::class, 'destroy'])->name('destroy-product');
 
     Route::get('/data-aset', [AssetController::class, 'indexInv'])->name('data-aset');
+    Route::get('/add-aset-inventaris', [AssetController::class, 'addInv'])->name('add-aset-inv');
+    Route::post('/add-aset-inventaris', [AssetController::class, 'store']);
     Route::get('/data-barang-habis-pakai', [AssetController::class, 'indexBhp'])->name('data-bhp');
+    Route::get('/add-aset-bhp', [AssetController::class, 'addBhp'])->name('add-aset-bhp');
+    Route::post('/add-aset-bhp', [AssetController::class, 'store']);
+    Route::delete('/delete-aset/{id}', [AssetController::class, 'destroy'])->name('destroy-aset');
+
+    Route::get('/perencanaan-inv', [PerencanaanController::class, 'indexInv'])->name('perencanaan-inv');
+    Route::get('/perencanaan-bhp', [PerencanaanController::class, 'indexBhp'])->name('perencanaan-bhp');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 //Staff Route
 Route::middleware(['auth', 'staffMiddleware'])->group(function () {

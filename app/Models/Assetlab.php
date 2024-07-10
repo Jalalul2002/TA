@@ -12,6 +12,8 @@ class Assetlab extends Model
 
     protected $fillable = [
         'product_id',
+        'product_name',
+        'merk',
         'type',
         'stock',
         'location',
@@ -19,10 +21,10 @@ class Assetlab extends Model
         'updated_by'
     ];
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
+    // public function product()
+    // {
+    //     return $this->belongsTo(Product::class);
+    // }
 
     public function creator()
     {
@@ -32,5 +34,20 @@ class Assetlab extends Model
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function scopeOfType($query, $type)
+    {
+        return $query->where('type', $type);
+    }
+
+    public function scopeOfLocation($query, $location)
+    {
+        return $query->where('location', $location);
+    }
+
+    public function scopeSearch($query, $searchTerm)
+    {
+        return $query->where('product_name', 'LIKE', "%{$searchTerm}%");
     }
 }

@@ -11,25 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assetlabs', function (Blueprint $table) {
+        Schema::create('data_perencanaans', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('product_id')->constrained(
-            //     table: 'products',
-            //     indexName: 'aset_product'
-            // );
-            $table->string('product_id')->unique();
-            $table->string('product_name');
-            $table->string('merk')->nullable();
-            $table->string('type');
-            $table->integer('stock')->default(0);
-            $table->string('location');
+            $table->string('nama_perencanaan');
+            $table->string('prodi');
             $table->foreignId('created_by')->constrained(
                 table: 'users',
-                indexName: 'create_asset_user'
+                indexName: 'data_create_user'
             );
             $table->foreignId('updated_by')->constrained(
                 table: 'users',
-                indexName: 'update_asset_user'
+                indexName: 'data_update_user'
             );
             $table->timestamps();
         });
@@ -40,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('assetlabs');
+        Schema::dropIfExists('data_perencanaans');
     }
 };

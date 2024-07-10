@@ -65,7 +65,7 @@
                             @php
                                 $counter = 1;
                             @endphp
-                            @foreach ($users as $user)
+                            @forelse ($users as $user)
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <th class="px-6 py-4">
                                         {{ $counter }}
@@ -94,7 +94,13 @@
                                 @php
                                     $counter++;
                                 @endphp
-                            @endforeach
+                            @empty
+                                <tr class="bg-white border-b hover:bg-gray-50">
+                                    <th colspan="6" class="px-6 py-4 text-center">
+                                        Data Tidak Ditemukan
+                                    </th>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

@@ -18,6 +18,7 @@ return new class extends Migration
                 indexName: 'create_perencanaan_data'
             );
             $table->string('prodi');
+            $table->string('type');
             $table->foreignId('product_id')->constrained(
                 table: 'assetlabs',
                 indexName: 'create_perencanaan_product'

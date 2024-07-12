@@ -21,6 +21,11 @@ class Product extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function planItem() 
+    {
+        return $this->hasMany(Perencanaan::class);
+    }
+
     public function scopeSearch(Builder $builder, $search = null): void
     {
         $builder->when(

@@ -63,8 +63,11 @@ class AssetController extends Controller
             'location' => ['required', 'string', 'max:255']
         ]);
 
+        // Convert product_id to lowercase
+        $product_id_lower = strtolower($request->product_id);
+
         Assetlab::create([
-            'product_id' => $request->product_id,
+            'product_id' => $product_id_lower,
             'product_name' => $request->product_name,
             'merk' => $request->merk,
             'type' => $request->type,

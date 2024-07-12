@@ -1,9 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Aset Perencanaan Aset Inventaris') }}
+            {{ __('Data Perencanaan Barang Habis Pakai') }}
         </h2>
     </x-slot>
+
+    @dump($assetbhps)
 
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
@@ -35,7 +37,7 @@
                                     <path
                                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                 </svg>
-                                Tambah Perencanaan Asset Inventaris
+                                Tambah Perencanaan BHP
                             </a>
                         </div>
                     </div>
@@ -52,13 +54,7 @@
                                     Program Studi
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Merk
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Stok
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Lokasi
+                                    Total Barang
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Dibuat Oleh

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama_perencanaan');
             $table->string('prodi');
+            $table->string('type');
+            $table->string('status')->default('belum');
             $table->foreignId('created_by')->constrained(
                 table: 'users',
                 indexName: 'data_create_user'

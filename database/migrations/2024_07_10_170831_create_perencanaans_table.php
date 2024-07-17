@@ -17,22 +17,14 @@ return new class extends Migration
                 table: 'data_perencanaans',
                 indexName: 'create_perencanaan_data'
             );
-            $table->string('prodi');
-            $table->string('type');
-            $table->foreignId('product_id')->constrained(
-                table: 'assetlabs',
-                indexName: 'create_perencanaan_product'
-            );
+            $table->string('product_code');
+            $table->foreign('product_code')->references('product_code')->on('assetlabs')->onDelete('cascade');
+            // $table->foreignId('product_id')->constrained(
+            //     table: 'assetlabs',
+            //     indexName: 'create_perencanaan_product'
+            // );
             $table->integer('stok');
             $table->integer('jumlah_kebutuhan');
-            $table->foreignId('created_by')->constrained(
-                table: 'users',
-                indexName: 'create_perencanaan_user'
-            );
-            $table->foreignId('updated_by')->constrained(
-                table: 'users',
-                indexName: 'update_perencanaan_user'
-            );
             $table->timestamps();
         });
     }

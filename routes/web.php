@@ -30,10 +30,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/data-barang-habis-pakai', [AssetController::class, 'indexBhp'])->name('data-bhp');
     Route::get('/add-aset-bhp', [AssetController::class, 'addBhp'])->name('add-aset-bhp');
     Route::post('/add-aset-bhp', [AssetController::class, 'store']);
-    Route::delete('/delete-aset/{id}', [AssetController::class, 'destroy'])->name('destroy-aset');
+    Route::delete('/delete-aset/{product_code}', [AssetController::class, 'destroy'])->name('destroy-aset');
 
     Route::get('/perencanaan-inv', [PerencanaanController::class, 'indexInv'])->name('perencanaan-inv');
     Route::get('/perencanaan-bhp', [PerencanaanController::class, 'indexBhp'])->name('perencanaan-bhp');
+    Route::get('/add-perencanaan-bhp', [PerencanaanController::class, 'createBhp'])->name('add-perencanaan-bhp');
+    Route::post('/add-perencanaan-bhp', [PerencanaanController::class, 'store']);
+    Route::get('/perencanaan-bhp/{id}', [PerencanaanController::class, 'show'])->name('detail-perencanaan-bhp');
+    Route::delete('/delete-perencanaan/{id}', [PerencanaanController::class, 'destroy'])->name('destroy-rencana');
+    Route::delete('/perencanaan-bhp/destroy-item/{id}', [PerencanaanController::class, 'destroyItem'])->name('rencana.destroy-item');
 });
 
 require __DIR__ . '/auth.php';

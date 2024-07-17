@@ -10,8 +10,11 @@ class Assetlab extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'product_code';
+    public $incrementing = false;
+
     protected $fillable = [
-        'product_id',
+        'product_code',
         'product_name',
         'merk',
         'type',
@@ -25,6 +28,11 @@ class Assetlab extends Model
     // {
     //     return $this->belongsTo(Product::class);
     // }
+
+    public function plans()
+    {
+        return $this->hasMany(Perencanaan::class, 'product_code');
+    }
 
     public function creator()
     {

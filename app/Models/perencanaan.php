@@ -10,7 +10,7 @@ class Perencanaan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rencana_id', 'prodi', 'type', 'product_id', 'stok', 'jumlah_kebutuhan', 'created_by', 'updated_by'
+        'rencana_id', 'product_code', 'stok', 'jumlah_kebutuhan'
     ];
 
     public function rencana()
@@ -20,16 +20,6 @@ class Perencanaan extends Model
 
     public function product()
     {
-        return $this->belongsTo(Assetlab::class, 'product_id');
-    }
-
-    public function creator()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function updater()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->belongsTo(Assetlab::class, 'product_code');
     }
 }

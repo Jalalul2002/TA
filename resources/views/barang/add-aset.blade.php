@@ -13,10 +13,10 @@
 
                     <!-- Kode -->
                     <div>
-                        <x-input-label for="product_id" :value="__('Kode Barang')" />
-                        <x-text-input id="product_id" class="block mt-1 w-full" type="text" name="product_id"
-                            :value="old('product_id')" required autofocus autocomplete="product_id" />
-                        <x-input-error :messages="$errors->get('product_id')" class="mt-2" />
+                        <x-input-label for="product_code" :value="__('Kode Barang')" />
+                        <x-text-input id="product_code" class="block mt-1 w-full" type="text" name="product_code"
+                            :value="old('product_code')" required autofocus autocomplete="product_code" />
+                        <x-input-error :messages="$errors->get('product_code')" class="mt-2" />
                     </div>
 
                     <!-- Name -->

@@ -14,6 +14,7 @@ class DataPerencanaan extends Model
     protected $fillable = [
         'nama_perencanaan',
         'prodi',
+        'type',
         'created_by',
         'updated_by',
     ];
@@ -28,8 +29,19 @@ class DataPerencanaan extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function plan() 
+    public function plans()
     {
-        return $this->hasMany(Perencanaan::class);
+        return $this->hasMany(Perencanaan::class, 'rencana_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($dataPerencanaan) {
+            $dataPerencanaan->plans()->each(function ($plan) {
+                $plan->delete();
+            });
+        });
     }
 }

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Aset Inventaris') }}
+            {{ __('Data Barang Habis Pakai') }}
         </h2>
     </x-slot>
 
@@ -28,14 +28,14 @@
                                 placeholder="Search for items" autocomplete="off">
                         </div>
                         <div>
-                            <a href="/add-aset-inventaris"
+                            <a href="/add-aset-bhp"
                                 class="inline-flex items-center px-4 py-3 rounded-lg text-white bg-uinBlue hover:bg-uinNavy w-full">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
                                     <path
                                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                 </svg>
-                                Tambah Asset Inventaris
+                                Tambah Asset BHP
                             </a>
                         </div>
                     </div>
@@ -81,16 +81,16 @@
                                         {{ $counter }}
                                     </th>
                                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                        {{ $assetLab->product_id }}
+                                        {{ $assetLab->product_code }}
                                     </td>
                                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                                         {{ $assetLab->product_name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->merk }}
+                                        {{ $assetLab->merk}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->stock }}
+                                        {{ $assetLab->stock}}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $assetLab->location }}
@@ -103,7 +103,7 @@
                                     </td>
                                     <td class="px-6 py-4">
                                         <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                                        <form action="{{ route('destroy-aset', $assetLab->id) }}" method="POST">
+                                        <form action="{{ route('destroy-aset', $assetLab->product_code) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:underline">Delete</button>

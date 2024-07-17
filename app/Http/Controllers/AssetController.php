@@ -23,7 +23,7 @@ class AssetController extends Controller
         }
 
         $assetLabs = $query->paginate(10);
-        return view('dataaset', compact('assetLabs'));
+        return view('barang.dataaset', compact('assetLabs'));
     }
 
     public function indexBhp(Request $request)
@@ -39,40 +39,42 @@ class AssetController extends Controller
         }
 
         $assetLabs = $query->paginate(10);
-        return view('baranghabispakai', compact('assetLabs'));
+        return view('barang.baranghabispakai', compact('assetLabs'));
     }
 
     public function addInv()
     {
         $prodi = Auth::user()->prodi;
-        return view('add-aset', compact('prodi'));
+        return view('barang.add-aset', compact('prodi'));
     }
 
     public function addBhp()
     {
         $prodi = Auth::user()->prodi;
-        return view('add-bhp', compact('prodi'));
+        return view('barang.add-bhp', compact('prodi'));
     }
 
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'product_id' => ['required', 'string', 'unique:assetlabs'],
+            'product_code' => ['required', 'string', 'unique:assetlabs'],
             'product_name' => ['required', 'string', 'max:255'],
             'type' => ['required', 'string', 'max:255'],
             'location' => ['required', 'string', 'max:255']
         ]);
 
         // Convert product_id to lowercase
-        $product_id_lower = strtolower($request->product_id);
+        $product_capitalyzed = ucwords(strtolower($request->product_name));
+        $product_code_lower = strtoupper($request->product_code);
+        $location_capitalized = ucwords(strtolower($request->location));
 
         Assetlab::create([
-            'product_id' => $product_id_lower,
-            'product_name' => $request->product_name,
+            'product_code' => $product_code_lower,
+            'product_name' => $product_capitalyzed,
             'merk' => $request->merk,
             'type' => $request->type,
             'stock' => $request->stock,
-            'location' => $request->location,
+            'location' => $location_capitalized,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),
         ]);
@@ -84,9 +86,9 @@ class AssetController extends Controller
         return redirect(route('data-aset', absolute: false));
     }
 
-    public function destroy($id)
+    public function destroy($product_code)
     {
-        $assetlab = Assetlab::findOrFail($id);
+        $assetlab = Assetlab::where('product_code', $product_code)->firstOrFail();
         $type = $assetlab->type;
         $assetlab->delete();
 

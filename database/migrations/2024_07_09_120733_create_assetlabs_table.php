@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('assetlabs', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             // $table->foreignId('product_id')->constrained(
             //     table: 'products',
             //     indexName: 'aset_product'
             // );
-            $table->string('product_id')->unique();
+            $table->string('product_code')->unique();
             $table->string('product_name');
             $table->string('merk')->nullable();
             $table->string('type');
@@ -32,6 +32,7 @@ return new class extends Migration
                 indexName: 'update_asset_user'
             );
             $table->timestamps();
+            $table->primary('product_code');
         });
     }
 

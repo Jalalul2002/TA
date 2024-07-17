@@ -1,11 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Perencanaan Barang Habis Pakai') }}
+            {{ __('Data Aset Inventaris') }}
         </h2>
     </x-slot>
-
-    @dump($assetbhps)
 
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
@@ -37,7 +35,7 @@
                                     <path
                                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                 </svg>
-                                Tambah Perencanaan BHP
+                                Tambah Asset Inventaris
                             </a>
                         </div>
                     </div>
@@ -48,13 +46,19 @@
                                     No
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Nama Perencanaan
+                                    Kode Barang
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Program Studi
+                                    Nama Barang
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Total Barang
+                                    Merk
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Stok
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Lokasi
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Dibuat Oleh
@@ -69,38 +73,37 @@
                         </thead>
                         <tbody>
                             @php
-                                // $counter = ($perencanaans->currentPage() - 1) * $perencanaans->perPage() + 1;
-                                $counter = 1;
+                                $counter = ($assetLabs->currentPage() - 1) * $assetLabs->perPage() + 1;
                             @endphp
-                            @forelse ($perencanaans as $perencanaan)
+                            @forelse ($assetLabs as $assetLab)
                                 <tr class="bg-white border-b hover:bg-gray-50">
                                     <th class="px-6 py-4">
                                         {{ $counter }}
                                     </th>
                                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                        {{ $perencanaan->product_id }}
+                                        {{ $assetLab->code }}
                                     </td>
                                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                        {{ $perencanaan->product_name }}
+                                        {{ $assetLab->product_name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $perencanaan->merk }}
+                                        {{ $assetLab->merk }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $perencanaan->stock }}
+                                        {{ $assetLab->stock }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $perencanaan->location }}
+                                        {{ $assetLab->location }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $perencanaan->creator->name }}
+                                        {{ $assetLab->creator->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $perencanaan->updater->name }}
+                                        {{ $assetLab->updater->name }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                                        <form action="{{ route('destroy-aset', $perencanaan->id) }}" method="POST">
+                                        <form action="{{ route('destroy-aset', $assetLab->product_code) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:underline">Delete</button>
@@ -120,7 +123,7 @@
                         </tbody>
                     </table>
                     <div class="mt-4">
-                        {{-- {{ $perencanaans->appends(['search' => request('search')])->links('pagination::tailwind') }} --}}
+                        {{ $assetLabs->appends(['search' => request('search')])->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\RegisterStaffController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DataStaffController;
 use App\Http\Controllers\PerencanaanController;
+use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\StaffController;
@@ -39,6 +40,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/perencanaan-bhp/{id}', [PerencanaanController::class, 'show'])->name('detail-perencanaan-bhp');
     Route::delete('/delete-perencanaan/{id}', [PerencanaanController::class, 'destroy'])->name('destroy-rencana');
     Route::delete('/perencanaan-bhp/destroy-item/{id}', [PerencanaanController::class, 'destroyItem'])->name('rencana.destroy-item');
+    Route::post('/perencanaan-bhp/add-item/{id}', [PerencanaanController::class, 'storeItem'])->name('rencana.store-item');
+
+    Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
+    Route::post('/send-data', [PredictionController::class, 'sendData']);
+
+
 });
 
 require __DIR__ . '/auth.php';

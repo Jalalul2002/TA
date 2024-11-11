@@ -15,6 +15,7 @@ class DataPerencanaan extends Model
         'nama_perencanaan',
         'prodi',
         'type',
+        'status',
         'created_by',
         'updated_by',
     ];

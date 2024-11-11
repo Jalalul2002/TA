@@ -19,7 +19,14 @@ class PerencanaanController extends Controller
 
     public function indexBhp()
     {
-        $perencanaans = DataPerencanaan::with('plans.product')->where('type', 'bhp')->paginate(10);
+        $query = DataPerencanaan::with('plans.product')->where('type', 'bhp');
+
+        if (Auth::user()->usertype !== 'admin') {
+            $query->where('prodi', Auth::user()->prodi);
+        }
+
+        $perencanaans = $query->paginate(10);
+
         return view('perencanaan.perencanaan-bhp', compact('perencanaans'));
     }
 
@@ -41,9 +48,7 @@ class PerencanaanController extends Controller
         return view('perencanaan.add-perencanaan', compact('assetbhps', 'prodi'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store Rencana + Item
     public function store(Request $request)
     {
         // dd($request->all());
@@ -62,40 +67,57 @@ class PerencanaanController extends Controller
         ]);
 
         $items = $request->items;
-        $result = [];
-        $temp = [];
+        if ($items) {
+            $result = [];
+            $temp = [];
 
-        foreach ($items as $item) {
-            // Check if the item contains a "product_code"
-            if (isset($item['product_code'])) {
-                // If $temp is not empty, push it to $result and reset $temp
-                if (!empty($temp)) {
-                    $result[] = $temp;
-                    $temp = [];
+            foreach ($items as $item) {
+                // Check if the item contains a "product_code"
+                if (isset($item['product_code'])) {
+                    // If $temp is not empty, push it to $result and reset $temp
+                    if (!empty($temp)) {
+                        $result[] = $temp;
+                        $temp = [];
+                    }
+                    $temp['product_code'] = $item['product_code'];
+                } else {
+                    // Merge the other attributes into $temp
+                    $temp = array_merge($temp, $item);
                 }
-                $temp['product_code'] = $item['product_code'];
-            } else {
-                // Merge the other attributes into $temp
-                $temp = array_merge($temp, $item);
             }
-        }
 
-        // Push the last temp array to result
-        if (!empty($temp)) {
-            $result[] = $temp;
-        }
+            // Push the last temp array to result
+            if (!empty($temp)) {
+                $result[] = $temp;
+            }
 
-        foreach ($result as $item) {
-            $data->plans()->create([
-                'product_code' => $item['product_code'],
-                'stok' => $item['stock'],
-                'jumlah_kebutuhan' => $item['quantity'],
-            ]);
+            foreach ($result as $item) {
+                $data->plans()->create([
+                    'product_code' => $item['product_code'],
+                    'stock' => $item['stock'],
+                    'jumlah_kebutuhan' => $item['quantity']
+
+                ]);
+            }
         }
 
         return redirect()->route('perencanaan-bhp')->with('success', 'Perencanaan created successfully.');
     }
 
+    // Store Item
+    public function storeItem(Request $request, $id)
+    {
+        Perencanaan::create([
+            'rencana_id' => $id,
+            'product_code' => $request->product_code,
+            'stock' => $request->stock,
+            'jumlah_kebutuhan' => $request->quantity
+        ]);
+
+        return redirect()->back()->with('success', 'Product added successfully.');
+    }
+
+    // Destroy Rencana + Item
     public function destroy($id)
     {
         $dataPerencanaan = DataPerencanaan::findOrFail($id);
@@ -104,6 +126,7 @@ class PerencanaanController extends Controller
         return redirect()->back();
     }
 
+    // Destroy Item
     public function destroyItem($id)
     {
         $perencanaan = Perencanaan::findOrFail($id);

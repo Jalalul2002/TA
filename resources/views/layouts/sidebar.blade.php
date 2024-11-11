@@ -60,6 +60,9 @@
                     <li>
                         <x-side-link href="/perencanaan-bhp" :active="request()->is('perencanaan-bhp')">Barang Habis Pakai</x-side-link>
                     </li>
+                    <li>
+                        <x-side-link href="/prediksi" :active="request()->is('prediksi')">Prediksi Barang Habis Pakai</x-side-link>
+                    </li>
                 </ul>
             </li>
             <li>

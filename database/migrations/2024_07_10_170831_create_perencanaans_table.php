@@ -23,8 +23,8 @@ return new class extends Migration
             //     table: 'assetlabs',
             //     indexName: 'create_perencanaan_product'
             // );
-            $table->integer('stok');
-            $table->integer('jumlah_kebutuhan');
+            $table->integer('stock')->default(0);
+            $table->integer('jumlah_kebutuhan')->default(0);
             $table->timestamps();
         });
     }

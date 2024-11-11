@@ -64,16 +64,25 @@ class AssetController extends Controller
         ]);
 
         // Convert product_id to lowercase
-        $product_capitalyzed = ucwords(strtolower($request->product_name));
-        $product_code_lower = strtoupper($request->product_code);
+        $product_code_upper = strtoupper($request->product_code);
+        $product_name_capitalized = ucwords(strtolower($request->product_name));
         $location_capitalized = ucwords(strtolower($request->location));
+        $formula_upper = strtoupper($request->formula);
+        $merk_capitalized = ucwords(strtolower($request->merk));
+        $type_lower = strtolower($request->type);
+        $product_type_capitalized = ucwords(strtolower($request->product_type));
+        $location_detail_capitalized = ucwords(strtolower($request->location_detail));
 
         Assetlab::create([
-            'product_code' => $product_code_lower,
-            'product_name' => $product_capitalyzed,
-            'merk' => $request->merk,
-            'type' => $request->type,
+            'product_code' => $product_code_upper,
+            'product_name' => $product_name_capitalized,
+            'formula' => $formula_upper,
+            'merk' => $merk_capitalized,
+            'type' => $type_lower,
+            'product_type' => $product_type_capitalized,
             'stock' => $request->stock,
+            'product_unit' => $request->product_unit,
+            'location_detail' => $location_detail_capitalized,
             'location' => $location_capitalized,
             'created_by' => Auth::id(),
             'updated_by' => Auth::id(),

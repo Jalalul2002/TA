@@ -53,12 +53,12 @@
                                         @foreach ($assetbhps as $product)
                                             <option value="{{ $product->product_code }}"
                                                 :data-stock="{{ $product->stock }}">
-                                                {{ $product->product_name }}
+                                                {{ $product->product_name }} ({{ $product->product_code }})
                                             </option>
                                         @endforeach
                                     </select>
                                     <input type="number" name="items[][stock]" placeholder="Stok" class="mr-2"
-                                        :id="'productStock' + index" required>
+                                        :id="'productStock' + index" required readonly>
                                     <input type="number" name="items[][quantity]" placeholder="Jumlah Kebutuhan"
                                         class="mr-2" required>
                                     <button type="button" @click="items.splice(index, 1)"

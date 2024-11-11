@@ -16,10 +16,14 @@ class Assetlab extends Model
     protected $fillable = [
         'product_code',
         'product_name',
+        'formula',
         'merk',
         'type',
+        'product_type',
         'stock',
+        'product_unit',
         'location',
+        'location_detail',
         'created_by',
         'updated_by'
     ];

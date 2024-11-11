@@ -52,10 +52,22 @@
                                     Nama Barang
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Rumus Kimia
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Merk
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Jenis
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Stok
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Satuan
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Lokasi Penyimpanan
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Lokasi
@@ -81,16 +93,28 @@
                                         {{ $counter }}
                                     </th>
                                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                        {{ $assetLab->code }}
+                                        {{ $assetLab->product_code }}
                                     </td>
                                     <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
                                         {{ $assetLab->product_name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->merk }}
+                                        {{ $assetLab->formula}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->stock }}
+                                        {{ $assetLab->merk}}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->product_type}}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->stock}}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->product_unit}}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->location_detail}}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $assetLab->location }}

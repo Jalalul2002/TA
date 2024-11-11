@@ -39,6 +39,9 @@
                             </a>
                         </div>
                     </div>
+                    <div class="mb-1">
+                        {{ $assetLabs->appends(['search' => request('search')])->links('pagination::tailwind') }}
+                    </div>
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-400">
                             <tr>
@@ -52,10 +55,22 @@
                                     Nama Barang
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Rumus Kimia
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Merk
                                 </th>
                                 <th scope="col" class="px-6 py-3">
+                                    Jenis
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Stok
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Satuan
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Lokasi Penyimpanan
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Lokasi
@@ -87,10 +102,22 @@
                                         {{ $assetLab->product_name }}
                                     </td>
                                     <td class="px-6 py-4">
+                                        {{ $assetLab->formula}}
+                                    </td>
+                                    <td class="px-6 py-4">
                                         {{ $assetLab->merk}}
                                     </td>
                                     <td class="px-6 py-4">
+                                        {{ $assetLab->product_type}}
+                                    </td>
+                                    <td class="px-6 py-4">
                                         {{ $assetLab->stock}}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->product_unit}}
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        {{ $assetLab->location_detail}}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $assetLab->location }}

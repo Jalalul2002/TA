@@ -10,7 +10,7 @@ class Perencanaan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'rencana_id', 'product_code', 'stok', 'jumlah_kebutuhan'
+        'rencana_id', 'product_code', 'stock', 'jumlah_kebutuhan'
     ];
 
     public function rencana()

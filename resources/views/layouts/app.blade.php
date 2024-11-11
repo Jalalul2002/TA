@@ -14,12 +14,17 @@
 
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
+    <style>
+        [x-cloak] { 
+            display: none !important; 
+        }
+    </style>    
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" x-data="{ openModal: false }" x-cloak>
     @include('layouts.navigation')
 
     @include('layouts.sidebar')

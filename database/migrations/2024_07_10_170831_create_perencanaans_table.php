@@ -25,6 +25,14 @@ return new class extends Migration
             // );
             $table->integer('stock')->default(0);
             $table->integer('jumlah_kebutuhan')->default(0);
+            $table->foreignId('created_by')->constrained(
+                table: 'users',
+                indexName: 'rencana_create_user'
+            );
+            $table->foreignId('updated_by')->constrained(
+                table: 'users',
+                indexName: 'rencana_update_user'
+            );
             $table->timestamps();
         });
     }

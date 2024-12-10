@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('data_prediksis', function (Blueprint $table) {
             $table->id();
+            $table->string("tahun_perencanaan");
             $table->string("product_code");
             $table->integer("kebutuhan");
             $table->timestamps();

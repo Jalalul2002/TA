@@ -74,7 +74,7 @@ class AssetController extends Controller
         $location_detail_capitalized = ucwords(strtolower($request->location_detail));
 
         Assetlab::create([
-            'product_code' => $product_code_upper,
+            'product_code' => "{$request->initial_code}-{$product_code_upper}",
             'product_name' => $product_name_capitalized,
             'formula' => $formula_upper,
             'merk' => $merk_capitalized,
@@ -106,5 +106,41 @@ class AssetController extends Controller
         }
 
         return redirect()->route('data-aset')->with('success', 'Barang deleted successfully');
+    }
+
+    public function edit($product_code)
+    {
+        $assetLab = Assetlab::where('product_code', $product_code)->firstOrFail();
+        return view('barang.edit-asset', compact('assetLab'));
+    }
+
+    public function update(Request $request, $product_code)
+    {
+        $assetLab = Assetlab::where('product_code', $product_code)->firstOrFail();
+
+        $request->validate([
+            'product_name' => ['required', 'string', 'max:255'],
+            'formula' => ['nullable', 'string', 'max:255'],
+            'merk' => ['nullable', 'string', 'max:255'],
+            'product_type' => ['required', 'string', 'max:255'],
+            'stock' => ['required', 'integer'],
+            'product_unit' => ['required', 'string', 'max:255'],
+            'location_detail' => ['nullable', 'string', 'max:255'],
+            'location' => ['required', 'string', 'max:255'],
+        ]);
+
+        $assetLab->update([
+            'product_name' => ucwords(strtolower($request->product_name)),
+            'formula' => strtoupper($request->formula),
+            'merk' => ucwords(strtolower($request->merk)),
+            'product_type' => ucwords(strtolower($request->product_type)),
+            'stock' => $request->stock,
+            'product_unit' => $request->product_unit,
+            'location_detail' => ucwords(strtolower($request->location_detail)),
+            'location' => ucwords(strtolower($request->location)),
+            'updated_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('data-bhp')->with('success', 'Data berhasil diperbarui');
     }
 }

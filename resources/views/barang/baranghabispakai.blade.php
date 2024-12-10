@@ -102,22 +102,22 @@
                                         {{ $assetLab->product_name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->formula}}
+                                        {{ empty($assetLab->formula) ? '-' : $assetLab->formula }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->merk}}
+                                        {{ empty($assetLab->merk) ? '-' : $assetLab->merk }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->product_type}}
+                                        {{ $assetLab->product_type }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->stock}}
+                                        {{ $assetLab->stock }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->product_unit}}
+                                        {{ $assetLab->product_unit }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $assetLab->location_detail}}
+                                        {{ empty($assetLab->location_detail) ? '-' : $assetLab->location_detail }}
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ $assetLab->location }}
@@ -129,8 +129,10 @@
                                         {{ $assetLab->updater->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <a href="#" class="font-medium text-blue-600 hover:underline">Edit</a>
-                                        <form action="{{ route('destroy-aset', $assetLab->product_code) }}" method="POST">
+                                        <a href="{{ route('edit-aset', $assetLab->product_code) }}"
+                                            class="font-medium text-blue-600 hover:underline">Edit</a>
+                                        <form action="{{ route('destroy-aset', $assetLab->product_code) }}"
+                                            method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:underline">Delete</button>
@@ -142,7 +144,7 @@
                                 @endphp
                             @empty
                                 <tr class="bg-white border-b hover:bg-gray-50">
-                                    <th colspan="9" class="px-6 py-4 text-center">
+                                    <th colspan="13" class="px-6 py-4 text-center">
                                         Data Tidak Ditemukan
                                     </th>
                                 </tr>

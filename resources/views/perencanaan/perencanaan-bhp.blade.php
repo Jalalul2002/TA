@@ -4,7 +4,6 @@
             {{ __('Data Perencanaan Barang Habis Pakai') }}
         </h2>
     </x-slot>
-
     <div class="py-12">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -46,7 +45,7 @@
                                     No
                                 </th>
                                 <th scope="col" class="px-6 py-3">
-                                    Nama Perencanaan
+                                    Tahun Perencanaan
                                 </th>
                                 <th scope="col" class="px-6 py-3">
                                     Program Studi
@@ -93,7 +92,7 @@
                                         {{ $perencanaan->creator->name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ $perencanaan->updater->name }}
+                                        {{ $perencanaan->latestUpdater?->updater?->name ?? 'Belum Ada' }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <a href="{{ route('detail-perencanaan-bhp', $perencanaan->id) }}"

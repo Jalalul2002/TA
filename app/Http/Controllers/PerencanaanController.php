@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PerencanaanExport;
 use App\Models\Assetlab;
 use App\Models\Perencanaan;
 use Illuminate\Http\Request;
 use App\Models\DataPerencanaan;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PerencanaanController extends Controller
 {
@@ -19,7 +21,7 @@ class PerencanaanController extends Controller
 
     public function indexBhp()
     {
-        $query = DataPerencanaan::with('plans.product')->where('type', 'bhp');
+        $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'bhp');
 
         if (Auth::user()->usertype !== 'admin') {
             $query->where('prodi', Auth::user()->prodi);
@@ -30,11 +32,17 @@ class PerencanaanController extends Controller
         return view('perencanaan.perencanaan-bhp', compact('perencanaans'));
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
-        $products = $dataPerencanaan->plans()->with('product')->paginate(10);
         $assetBhps = Assetlab::where('type', 'bhp')->get();
+        $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
+        $query = $dataPerencanaan->plans()->with('product');
+
+        if ($request->has('search')) {
+            $query->search($request->search);
+        }
+
+        $products = $query->paginate(10);
 
         return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'assetBhps'));
     }
@@ -95,8 +103,9 @@ class PerencanaanController extends Controller
                 $data->plans()->create([
                     'product_code' => $item['product_code'],
                     'stock' => $item['stock'],
-                    'jumlah_kebutuhan' => $item['quantity']
-
+                    'jumlah_kebutuhan' => $item['quantity'],
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
                 ]);
             }
         }
@@ -111,10 +120,34 @@ class PerencanaanController extends Controller
             'rencana_id' => $id,
             'product_code' => $request->product_code,
             'stock' => $request->stock,
-            'jumlah_kebutuhan' => $request->quantity
+            'jumlah_kebutuhan' => $request->quantity,
+            'created_by' => Auth::id(),
+            'updated_by' => Auth::id()
         ]);
 
         return redirect()->back()->with('success', 'Product added successfully.');
+    }
+
+    public function edit($id)
+    {
+        $item = Perencanaan::with(['rencana', 'product'])->where('id', $id)->firstOrFail();
+        return view('perencanaan.edit-rencana', compact('item'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $rencana = Perencanaan::where('id', $id)->firstOrFail();
+
+        $request->validate([
+            'jumlah_kebutuhan' => ['required', 'integer'],
+        ]);
+
+        $rencana->update([
+            'jumlah_kebutuhan' => $request->jumlah_kebutuhan,
+            'updated_by' => Auth::id(),
+        ]);
+
+        return redirect()->route('detail-perencanaan-bhp', ['id' => $rencana->rencana_id])->with('success', 'Data berhasil diperbarui');
     }
 
     // Destroy Rencana + Item
@@ -133,5 +166,14 @@ class PerencanaanController extends Controller
         $perencanaan->delete();
 
         return redirect()->back()->with('success', 'Product deleted successfully.');
+    }
+
+    public function download($id)
+    {
+        $perencanaan = Perencanaan::findOrFail($id);
+
+        $filename = 'Perencanaan_' . $perencanaan->nama_perencanaan . '.xlsx';
+
+        return Excel::download(new PerencanaanExport($id), $filename);
     }
 }

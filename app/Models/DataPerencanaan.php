@@ -44,5 +44,18 @@ class DataPerencanaan extends Model
                 $plan->delete();
             });
         });
+
+        static::saving(function ($dataPerencanaan) {
+            if ($dataPerencanaan->isDirty('updated_by') || $dataPerencanaan->isDirty('updated_at')) {
+                $dataPerencanaan->updated_at = now();
+            }
+        });
+    }
+
+    public function latestUpdater()
+    {
+        return $this->hasOne(Perencanaan::class, 'rencana_id')
+            ->latest('updated_at') // Ambil data berdasarkan timestamp terbaru
+            ->with('updater');     // Pastikan juga memuat data user (updater)
     }
 }

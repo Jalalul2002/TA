@@ -5,7 +5,9 @@ namespace Database\Seeders;
 use App\Models\Product;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -86,5 +88,21 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Product::factory(20)->create();
+
+        $filePath = database_path('seeders/Dataset.csv');
+
+        if (($handle = fopen($filePath, 'r')) !== FALSE) {
+            $header = fgetcsv($handle, 1000, ';');
+
+            while (($row = fgetcsv($handle, 1000, ';')) !== FALSE) {
+                // Gabungkan header dan data baris
+                $rowData = array_combine($header, $row);
+                // $rowData = array_map(function($value) {
+                //     return $value === '' ? null : $value;
+                // }, $rowData);
+                FacadesDB::table('assetlabs')->insert($rowData);
+            }
+            fclose($handle);
+        }
     }
 }

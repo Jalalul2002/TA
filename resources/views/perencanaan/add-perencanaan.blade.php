@@ -11,11 +11,17 @@
                 <form method="POST" action="{{ route('add-perencanaan-bhp') }}">
                     @csrf
 
+                    @php
+                        $currentYear = date('Y');
+                        $currentMonth = date('m');
+                        $semester = $currentMonth <= 6 ? '1' : '2';
+                        $namaPerencanaan = "{$currentYear}-{$semester}";
+                    @endphp
                     <!-- Nama Perencanaan -->
                     <div>
-                        <x-input-label for="nama_perencanaan" :value="__('Nama Perencanaan')" />
+                        <x-input-label for="nama_perencanaan" :value="__('Tahun Perencanaan')" />
                         <x-text-input id="nama_perencanaan" class="block mt-1 w-full" type="text"
-                            name="nama_perencanaan" :value="old('nama_perencanaan')" required autofocus
+                            name="nama_perencanaan" :value="old('nama_perencanaan', $namaPerencanaan)" required autofocus
                             autocomplete="nama_perencanaan" />
                         <x-input-error :messages="$errors->get('nama_perencanaan')" class="mt-2" />
                     </div>
@@ -27,8 +33,16 @@
                             <x-text-input id="location" class="block mt-1 w-full" type="text" name="location"
                                 :value="old('location', $prodi)" autofocus autocomplete="location" disabled />
                         @else
-                            <x-text-input id="location" class="block mt-1 w-full" type="text" name="location"
-                                :value="old('location')" autofocus autocomplete="location" />
+                            <select id="location" name="location" class="block mt-1 w-full" required>
+                                <option value="">-- Pilih Program Studi --</option>
+                                <option value="Matematika">701-Matematika</option>
+                                <option value="Biologi">702-Biologi</option>
+                                <option value="Fisika">703-Fisika</option>
+                                <option value="Kimia">704-Kimia</option>
+                                <option value="Teknik Informatika">705-Teknik Informatika</option>
+                                <option value="Agroteknologi">706-Agroteknologi</option>
+                                <option value="Teknik Elektro">707-Teknik Elektro</option>
+                            </select>
                         @endif
                         <x-input-error :messages="$errors->get('location')" class="mt-2" />
                     </div>
@@ -52,8 +66,12 @@
                                         <option value="">Select Product</option>
                                         @foreach ($assetbhps as $product)
                                             <option value="{{ $product->product_code }}"
-                                                :data-stock="{{ $product->stock }}">
+                                                data-stock="{{ $product->stock }}"
+                                                data-satuan="{{ $product->product_unit }}">
                                                 {{ $product->product_name }} ({{ $product->product_code }})
+                                                {{ empty($product->formula) ? '' : '(' . $product->formula . ')' }}
+                                                {{ empty($product->merk) ? '' : '(' . $product->merk . ')' }}
+                                                {{ empty($product->product_type) ? '' : '(' . $product->product_type . ')' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -61,6 +79,8 @@
                                         :id="'productStock' + index" required readonly>
                                     <input type="number" name="items[][quantity]" placeholder="Jumlah Kebutuhan"
                                         class="mr-2" required>
+                                    <input type="text" name="items[][product_unit]" placeholder="Satuan"
+                                        class="mr-2" :id="'productUnit' + index" readonly>
                                     <button type="button" @click="items.splice(index, 1)"
                                         class="bg-red-500 text-white px-4 py-2 rounded">Remove</button>
                                 </div>
@@ -69,10 +89,11 @@
                                 class="bg-blue-500 text-white px-4 py-2 rounded">Tambah Barang</button>
                         </div>
                     </div>
-
                     <!-- Submit Button -->
                     <div class="flex items-center justify-end mt-4">
-                        <x-primary-button class="ms-4">
+                        <a href="{{ route('perencanaan-bhp') }}"
+                            class="px-4 py-2 bg-uinRed border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">Kembali</a>
+                        <x-primary-button class="ms-2">
                             {{ __('Tambah Data') }}
                         </x-primary-button>
                     </div>
@@ -89,9 +110,12 @@
             updateStock(index) {
                 const productSelect = document.getElementById('productSelect' + index);
                 const productStock = document.getElementById('productStock' + index);
+                const productUnit = document.getElementById('productUnit' + index);
                 const selectedOption = productSelect.options[productSelect.selectedIndex];
                 const stock = selectedOption.getAttribute('data-stock');
+                const satuan = selectedOption.getAttribute('data-satuan');
                 productStock.value = stock ? stock : '';
+                productUnit.value = satuan ? satuan : '';
             }
         }
     }

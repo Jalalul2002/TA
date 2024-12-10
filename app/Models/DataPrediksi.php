@@ -8,4 +8,23 @@ use Illuminate\Database\Eloquent\Model;
 class DataPrediksi extends Model
 {
     use HasFactory;
+
+    public function asset()
+    {
+        return $this->belongsTo(Assetlab::class, 'product_code');
+    }
+
+    public function scopeSearch($query, $searchTerm)
+    {
+        return $query->where(function ($q) use ($searchTerm) {
+            $q->where('product_code', 'LIKE', "%{$searchTerm}%")
+                ->orWhereHas('asset', function ($q) use ($searchTerm) {
+                    $q->where('product_name', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('formula', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('merk', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('product_type', 'LIKE', "%{$searchTerm}%")
+                      ->orWhere('location', 'LIKE', "%{$searchTerm}%");
+                });
+        });
+    }
 }

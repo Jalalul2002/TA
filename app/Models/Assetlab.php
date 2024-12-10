@@ -38,6 +38,11 @@ class Assetlab extends Model
         return $this->hasMany(Perencanaan::class, 'product_code');
     }
 
+    public function predict()
+    {
+        return $this->hasMany(DataPrediksi::class, 'product_code');
+    }
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -60,6 +65,10 @@ class Assetlab extends Model
 
     public function scopeSearch($query, $searchTerm)
     {
-        return $query->where('product_name', 'LIKE', "%{$searchTerm}%");
+        return $query->where('product_name', 'LIKE', "%{$searchTerm}%")->orWhere('product_name', 'LIKE', "%{$searchTerm}%")
+        ->orWhere('formula', 'LIKE', "%{$searchTerm}%")
+        ->orWhere('merk', 'LIKE', "%{$searchTerm}%")
+        ->orWhere('product_type', 'LIKE', "%{$searchTerm}%")
+        ->orWhere('location', 'LIKE', "%{$searchTerm}%");
     }
 }

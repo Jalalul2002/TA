@@ -1,16 +1,21 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            <a href="{{ route('perencanaan-bhp') }}" class="mr-3">
-                <<<< /a>
-                    {{ __('Detail Perencanaan Barang Habis Pakai') }}
+            <a href="{{ route('perencanaan-bhp') }}" class="flex">
+                <p class="mr-3">
+                    <<< </p> {{ __('Detail Perencanaan Barang Habis Pakai') }}
+            </a>
         </h2>
     </x-slot>
 
-    <div class="py-12">
+    <div class="py-8">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg py-4 px-16 mb-4">
                 <div class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between">
+                    <form id="complete-form" action="{{ route('perencanaan.complete', $dataPerencanaan->id) }}"
+                        method="POST" style="display: none;">
+                        @csrf
+                    </form>
                     <div>
                         <h1 class="font-medium mb-2">Tahun Perencanaan</h1>
                         <h1 class="text-lg font-bold">{{ $dataPerencanaan->nama_perencanaan }}</h1>
@@ -52,7 +57,8 @@
                                 class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Search for items" autocomplete="off">
                         </div>
-                        <div>
+                        <div class="flex items-center space-x-2">
+                            
                             <a href="{{ route('perencanaan.download', $dataPerencanaan->id) }}"
                                 class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
@@ -70,6 +76,10 @@
                                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                 </svg>
                                 Tambah Produk
+                            </button>
+                            <button onclick="event.preventDefault(); document.getElementById('complete-form').submit();"
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Selesaikan Perencanaan
                             </button>
                         </div>
                     </div>
@@ -148,7 +158,8 @@
                                             method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:underline">Delete</button>
+                                            <button type="submit"
+                                                class="text-red-600 hover:underline">Delete</button>
                                         </form>
                                     </td>
                                 </tr>

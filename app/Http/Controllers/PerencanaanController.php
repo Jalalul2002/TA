@@ -176,4 +176,48 @@ class PerencanaanController extends Controller
 
         return Excel::download(new PerencanaanExport($id), $filename);
     }
+
+    public function complete($id)
+    {
+        // Temukan data perencanaan
+        $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
+
+        // Periksa apakah sudah selesai
+        if ($dataPerencanaan->status === 'selesai') {
+            return redirect()->back()->with('error', 'Perencanaan ini sudah selesai.');
+        }
+
+        // Ambil semua produk dalam perencanaan
+        foreach ($dataPerencanaan->plans as $perencanaan) {
+            $productDetails = $perencanaan->product;
+
+            if ($productDetails) {
+                // Update stok produk (kurangi jumlah kebutuhan)
+                $productDetails->stock += $perencanaan->jumlah_kebutuhan;
+
+                // Pastikan stok tidak negatif
+                if ($productDetails->stock < 0) {
+                    return redirect()->back()->with(
+                        'error',
+                        "Stok untuk produk {$productDetails->product_name} tidak mencukupi."
+                    );
+                }
+
+                $productDetails->save();
+            } else {
+                // Jika produk tidak ditemukan
+                return redirect()->back()->with(
+                    'error',
+                    "Produk dengan kode {$perencanaan->product_code} tidak ditemukan."
+                );
+            }
+        }
+
+        // Update status perencanaan
+        $dataPerencanaan->status = 'selesai';
+        $dataPerencanaan->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('perencanaan-bhp')->with('success', 'Perencanaan berhasil diselesaikan.');
+    }
 }

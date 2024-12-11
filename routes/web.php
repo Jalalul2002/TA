@@ -46,6 +46,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/edit-rencana/{id}', [PerencanaanController::class, 'edit'])->name('rencana.edit-rencana');
     Route::put('/update-rencana/{id}', [PerencanaanController::class, 'update'])->name('rencana.update-rencana');
     Route::get('/perencanaan/{id}/download', [PerencanaanController::class, 'download'])->name('perencanaan.download');
+    Route::post('/perencanaan/{id}/complete', [PerencanaanController::class, 'complete'])->name('perencanaan.complete');
+
 
 
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');

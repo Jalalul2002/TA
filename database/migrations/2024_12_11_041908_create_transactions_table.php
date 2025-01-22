@@ -13,6 +13,22 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->string('nim');
+            $table->string('name');
+            $table->string('telp');
+            $table->string('product_code');
+            $table->integer('stock');
+            $table->integer('jumlah_pemakaian');
+            $table->integer('updated_stock');
+            $table->string('detail');
+            $table->foreignId('created_by')->constrained(
+                table: 'users',
+                indexName: 'transaction_create_user'
+            );
+            $table->foreignId('updated_by')->constrained(
+                table: 'users',
+                indexName: 'transaction_update_user'
+            );
             $table->timestamps();
         });
     }

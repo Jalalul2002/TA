@@ -9,10 +9,12 @@ use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\StaffController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/login');
+    // return redirect('/login');
+    return view('landing');
 });
 
 Route::middleware('auth')->group(function () {
@@ -48,7 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/perencanaan/{id}/download', [PerencanaanController::class, 'download'])->name('perencanaan.download');
     Route::post('/perencanaan/{id}/complete', [PerencanaanController::class, 'complete'])->name('perencanaan.complete');
 
-
+    Route::post('/transaction-bhp', [TransactionController::class, 'index']);
+    Route::post('/add-transaction-bhp', [TransactionController::class, 'create'])->name('add-transaction');
 
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
     Route::post('/send-data', [PredictionController::class, 'sendData']);

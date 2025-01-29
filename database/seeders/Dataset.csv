@@ -1,185 +1,164 @@
 product_code;product_name;formula;merk;type;product_type;stock;product_unit;location_detail;location;created_by;updated_by
-706-GLU;Glukosa;C6H12O6;;bhp;Padatan;800;g;;Agroteknologi;1;1
-706-HCL;HCl 37%;HCL;;bhp;Cairan;420;ml;;Agroteknologi;1;1
-706-PHP;Potasium Hydrogen Phospate;;;bhp;Padatan;400;g;;Agroteknologi;1;1
-706-MNS;Mangan Sulfat;MnSO4;;bhp;Padatan;410;g;;Agroteknologi;1;1
-706-MTL-1;Metanol Teknis;CH?OH;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-GLU;Gula;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-HCL;HCl 37%;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-PHP;Potasium Hydrogen Phospate;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-MNS;Mangan Sulfat;MnSO4;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-MTL;Metanol Teknis;CH3OH;;bhp;Cairan;0;ml;;Agroteknologi;1;1
 706-CCH;Cobalt Chloride;;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-WPM;WPM;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-ALK-1;Alkohol 70%;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-MKJ;MS (Media Kultur Jaringan);;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-DCA;2,4 Dichlorophenoxyacetic Acid;;;bhp;Padatan;1;g;;Agroteknologi;1;1
-706-KNO;Kalium Nitrat;KNO3;;bhp;Padatan;2000;g;;Agroteknologi;1;1
-706-CNO;Kalsium Nitrat;CaNO3;;bhp;Padatan;1000;g;;Agroteknologi;1;1
-706-FEB;Besi;Fe;;bhp;Padatan;0;g;;Agroteknologi;1;1
-706-MNP;Mangan Fosfida;MnP;;bhp;Padatan;940;g;;Agroteknologi;1;1
-706-KSO;Kalium Sulfat;K2SO4;;bhp;Padatan;880;g;;Agroteknologi;1;1
+706-ALK;Alkohol;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-MMS;Media MS (Murashige and Skoog);;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-DCA;2,4 Dichlorophenoxyacetic Acid;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-KNO;Kalium Nitrat;KNO3;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-CNO;Kalsium Nitrat;CaNO3;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BES;Besi;Fe;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-MNP;Mangan Fosfida;MnP;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-KSO;Kalium Sulfat;K2SO4;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-AEN;Aenonin;;;bhp;Padatan;0;g;;Agroteknologi;1;1
-706-MGM;Magnesium;Mg;;bhp;Padatan;0;g;;Agroteknologi;1;1
-706-MNG;Mangan;Mn;;bhp;Padatan;0;g;;Agroteknologi;1;1
-706-CUP;Tembaga;Cu;;bhp;Padatan;500;g;;Agroteknologi;1;1
-706-ZNC;Seng;Zn;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-MAG;Magnesium;Mg;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-MAN;Mangan;Mn;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-TCU;Tembaga;Cu;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-SZN;Seng;Zn;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-ISO;Isoren;;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-AMO;Amonium;;;bhp;Padatan;0;g;;Agroteknologi;1;1
-706-PIS;P isag;;;bhp;Padatan;0;g;;Agroteknologi;1;1
-706-IOD;Iodine ;;;bhp;Cairan;1050;ml;;Agroteknologi;1;1
-706-MTH;Methylene Blue (Methylthioninium Chloride);;;bhp;Cairan;250;ml;;Agroteknologi;1;1
-706-EOS;Eosin 0,5% ;;;bhp;Cairan;50;ml;;Agroteknologi;1;1
+706-IOD;Iodine ;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-MET;Methylene Blue (Methylthioninium Chloride);;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-EOS;Eosin 0,5% ;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
 706-AQU;Aquades;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-BEN;6-Benzylaminopurine (BAP) 1 g;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BAP;6-Benzylaminopurine (BAP);;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-PRO;Probiotik;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-MBS;Mesran B Sae 40;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-BKN-1;Pertiwi Pingky Kangkung;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-DET;Deterjen;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-DDK;Dedak ;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BBD;You Fragrant Bawang Daun ;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BBY-1;PM Maestro SP Bayam;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BBY-2;PM Mira (Bayam Merah) ;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BSL-1;PM Amigo SP Seledri;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BTM-1;PM Vanesa (Timun) ;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BTM-2;PM Bella Reg F1 (Mentimun Hyb) 20;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BLC-1;PM Grand Rapids (Lettuce) ;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BCB-1;PM Bara Reg (Cabe Rawit) ;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BCM-1;PM Shinta (Caisim) ;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BPC-1;Takii Pakchoy Green 20 ml;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BLC-2;You Red Rapid Lettuce Selada;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BTT-1;BA Natama SP F1 Tomat Super 0.15;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BBC-1;CS Cauliflower Tropical 10 g;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BBS-1;Buncis ;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BTT-2;MF Tomato Red Cherry;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BCB-2;PM Panex SP Cabe Besar F1;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BJG-1;Pertiwi Talenta Jagung Manis F1 250;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BKM-1;Kemangi;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-TSP;TSP;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
+706-PHD;Plastik HD;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-TIS;Tissue;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
+706-TER;Terasi;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-LBK;Label Kertas;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
+706-DET;Deterjen;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-DED;Dedak ;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKG;Benih Kangkung;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BBD;Benih Bawang Daun;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BBY;Benih Bayam;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BBM;Benih Bayam Merah;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BSL;Benih Seledri;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BMN;Benih Mentimun;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BMH;Benih Mentimun Hibrida;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BSD;Benih Selada;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BCR;Benih Cabai Rawit;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BSW;Benih Sawi;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BPC;Benih Pakcoy;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BSM;Benih Selada Merah;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BTM;Benih Tomat;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKK;Benih Kembang Kol;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BBC;Benih Buncis;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BTC;Benih Tomat Ceri;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BCB;Benih Cabai Besar;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BJM;Benih Jagung Manis;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-KMG;Kemangi;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-TSP;TSP;;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-PPK-1;Pupuk Kandang;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
-706-BTT-3;Tomat Permata;;;bhp;Lainnya;0;bks;;Agroteknologi;1;1
-706-BTT-4;Tomat Tantyna;;;bhp;Lainnya;0;bks;;Agroteknologi;1;1
-706-BJG-2;Jagung Manis Bimmo 25 g;;;bhp;Lainnya;0;bks;;Agroteknologi;1;1
-706-TNH-1;Tanah;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
-706-CCP;Cocopeat;;;bhp;Lainnya;0;Karung;;Agroteknologi;1;1
-706-SKB;Sekam Bakar;;;bhp;Lainnya;0;Karung;;Agroteknologi;1;1
-706-PPK-2;Pupuk K Ksr;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PPK-3;Pupuk K Lils;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
+706-TNH;Tanah;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
+706-CCP;Cocopeat;;;bhp;Padatan;5000;g;;Agroteknologi;1;1
+706-SBK;Sekam Bakar;;;bhp;Lainnya;0;Karung;;Agroteknologi;1;1
+706-KSC;Kascing;;;bhp;Lainnya;0;Karung;;Agroteknologi;1;1
 706-TOB;TOB;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
-706-PPK-4;Kompos;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
-706-TNH-2;Tanah Lembang;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
-706-KAF;Klinpak Alumunium Foil;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
-706-FSW;Fresh Seal Ware SW-22;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
-706-LFX;Lem Fox Kaleng;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
-706-MDM;Madu Murni 150 g;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
-706-AGR;Swallow Agar Globe White;;;bhp;Lainnya;0;bungkus;;Agroteknologi;1;1
-706-DPX;Duplex Tebal;;;bhp;Lainnya;0;lembar;;Agroteknologi;1;1
-706-PLS-1;Plastik Parsel Tipis;;;bhp;Lainnya;0;rol;;Agroteknologi;1;1
-706-BTN-1;Batuan Sedimen;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BTN-2;Batuan Mineral;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BTN-3;Batuan Beku;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-KRS-1;Kertas Saring;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-AGR-2;Potato Dextrose Agar 100 g;;;bhp;Lainnya;1;Botol;;Agroteknologi;1;1
-706-AGR-3;Agar Lokal;;;bhp;Lainnya;500;g;;Agroteknologi;1;1
-706-ARG-1;Arang Sekam ;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
-706-ALK-2;Alkohol 95%;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-HNO;Asam Nitrat;HNO3;;bhp;Padatan;1000;g;;Agroteknologi;1;1
-706-BFR-1;Buffer 7;;;bhp;Cairan;100;ml;;Agroteknologi;1;1
-706-BFR-2;Buffer 4;;;bhp;Cairan;250;ml;;Agroteknologi;1;1
-706-DXT;Dextrose;;;bhp;Cairan;500;ml;;Agroteknologi;1;1
-706-SPR;Spirtus;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-PPK-5;Pupuk Hyponex;;;bhp;Lainnya;0;box;;Agroteknologi;1;1
-706-CLX;Clorox (byclean);;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
-706-MNA;Media NA;;;bhp;Lainnya;1;botol;;Agroteknologi;1;1
-706-KAM;Kalsium Amonium Nitrat;;;bhp;Padatan;2000;g;;Agroteknologi;1;1
-706-FEE;Fe - EDTA;;;bhp;Padatan;100;g;;Agroteknologi;1;1
-706-MKP;Monokalium Posfat (MKP);KH2PO4;;bhp;Padatan;2000;g;;Agroteknologi;1;1
-706-AMS;Amonium Sulfat;(NH4)2SO4;;bhp;Padatan;2000;g;;Agroteknologi;1;1
+706-MJK;Mulsa Juara K;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
+706-GUA;Guano;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
+706-GAB;Gabah;;;bhp;Lainnya;0;Karung;;Agroteknologi;1;1
+706-PHU;pH Universal;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-PPK-2;Kompos;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
+706-KSR;Kertas Saring;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-PDA;Media Potato Dextrose Agar;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-AGR;Agar Lokal;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-ASK;Arang Sekam ;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-HNO;Asam Nitrat;HNO3;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BFR-1;Buffer 7;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-BFR-2;Buffer 4;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-DEX;Dextrose;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-KAN;Kalsium Amonium Nitrat;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-FEE;Fe - EDTA;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-MKP;Monokalium Posfat (MKP);KH2PO4;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-ASF;Amonium Sulfat;(NH4)2SO4;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-MGS;Magnesium Sulfat;MgSO4;;bhp;Padatan;0;g;;Agroteknologi;1;1
-706-CUS;Tembaga Sulfat;CuSO4;;bhp;Padatan;200;g;;Agroteknologi;1;1
-706-ZNS;Seng Sulfat;ZnSO4;;bhp;Padatan;200;g;;Agroteknologi;1;1
-706-ASB;Asam Borat;H3BO3;;bhp;Padatan;200;g;;Agroteknologi;1;1
-706-AHM;Amonium Hepta Molibdat;;;bhp;Padatan;10;g;;Agroteknologi;1;1
-706-PRP;Parafin Padat/Lilin Malam;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
-706-SLG;Silika Gel;;;bhp;Lainnya;0;bungkus;;Agroteknologi;1;1
-706-LNL;Lanolin;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
-706-VSL;Vaselin ;;;bhp;Lainnya;1;botol;;Agroteknologi;1;1
-706-IAA;IAA (AUXIN);;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
-706-GA3;GA3 (GIBERELIN);;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
-706-AAS;Asam Sitrat;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-CUS;Tembaga Sulfat;CuSO4;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-ZNS;Seng Sulfat;ZnSO4;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-HBO;Asam Borat;H3BO3;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-AHM;Amonium Hepta Molibdat;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-ASS;Asam Sitrat;;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-NAA;Naphthalene Acetic Acid (NAA);;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-PPM;PPM;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-NMH;Natrium Hidroksida;NaOH;;bhp;Padatan;500;g;;Agroteknologi;1;1
-706-ARG-2;Arang/Carbon Aktif;;;bhp;Padatan;2000;g;;Agroteknologi;1;1
-706-BAG;Bakterisida Agrept;;;bhp;Padatan;1000;g;;Agroteknologi;1;1
-706-FAT;Fungisida Antracol;;;bhp;Padatan;750;g;;Agroteknologi;1;1
-706-SUC;Sukrosa;;;bhp;Padatan;1000;g;;Agroteknologi;1;1
-706-IBA;Indole Butyric Acid (IBA);;;bhp;Padatan;5;g;;Agroteknologi;1;1
-706-KCL;Kalium Klorida;KCl;;bhp;Padatan;1000;g;;Agroteknologi;1;1
-706-AAG;Asam Asetat Glasial;;;bhp;Lainnya;2;botol;;Agroteknologi;1;1
-706-AAT;Asam Asetat;;;bhp;Lainnya;2;botol;;Agroteknologi;1;1
-706-PAC;Paclobutrazol;;;bhp;Padatan;1;g;;Agroteknologi;1;1
-706-CAM;Citric Acid Monohydrate;;;bhp;Padatan;1;g;;Agroteknologi;1;1
-706-TKL;Teknis Lugol;;;bhp;Lainnya;1;botol;;Agroteknologi;1;1
-706-KOH;Kalium Hidroksida;KOH;;bhp;Lainnya;1;botol;;Agroteknologi;1;1
-706-BSS;Benih Sayuran;;;bhp;Lainnya;0;bks;;Agroteknologi;1;1
-706-BBG;Benih Bunga;;;bhp;Lainnya;0;bks;;Agroteknologi;1;1
-706-UBI;Ubi;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PTT;Kentang;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BBR-1;Macam- macam Batu Batre;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PLS-2;Plastik;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BBK;Bahan Bakar;;;bhp;Lainnya;0;ml;;Agroteknologi;1;1
+706-NOH;Natrium Hidroksida;NaOH;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-CAA;Arang/Carbon Aktif;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BAG;Bakterisida Agrept;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-SUC;Sukrosa;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-IBA;Indole Butyric Acid (IBA);;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-KCL;Kalium Klorida;KCl;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-AAG;Asam Asetat Glasial;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
+706-AAS;Asam Asetat;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
+706-PAC;Paclobutrazol;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-CAM;Citric Acid Monohydrate;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-LGL;Lugol;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-MER;Mercuri;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
+706-IAA;Indole Acetid Acid;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
+706-HAK;Hormon Akar;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
+706-KOH;Kalium Hidroksida;KOH;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
+706-BBA;Benih Bunga;;;bhp;Lainnya;0;bks;;Agroteknologi;1;1
+706-BUB;Benih Ubi;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKT;Benih Kentang;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BBK;Bahan Bakar;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
 706-BBT;Bibit;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-POL-1;Polybag;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BBR-2;Macam Macam Baterai;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
-706-PFT;Praktikum Fisiologi Tumbuhan;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-PDS;Praktikum Dasperlintan;;;bhp;Lainnya;0;paket;;Agroteknologi;1;1
+706-PLY;Polybag;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-BTR;Baterai;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-KPS;Kapas;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
 706-KRG;Karung;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
 706-GLM;Glumon;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
-706-ALK-3;Alkohol 90%;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
-706-BTM;Benih Tanaman;;;bhp;Lainnya;0;bks;;Agroteknologi;1;1
-706-BHT;Bahan Tanam;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PPK-6;Pupuk Organik;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PPK-7;Pupuk Kimia;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PPK-8;Pestisida;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BHK;Bahan Kimia;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-ATK;ATK;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-MBK;Media Bakteri;;;bhp;Lainnya;1;botol;;Agroteknologi;1;1
-706-MJM;Media Jamur;;;bhp;Lainnya;1;botol;;Agroteknologi;1;1
+706-BTN;Benih Tanaman;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-BTA;Bahan Tanam;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-PPK-3;Pupuk Kimia;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-PES;Pestisida;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BHK;Bahan Kimia;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-MBK;Media Bakteri;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
+706-MJM;Media Jamur;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
 706-BMM;Biakan Murni Mikroorganisme;;;bhp;Lainnya;0;petri;;Agroteknologi;1;1
 706-BFG;Biakan fungi;;;bhp;Lainnya;0;petri;;Agroteknologi;1;1
-706-MTM;Media Tanam;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
+706-MTN;Media Tanam;;;bhp;Lainnya;0;karung;;Agroteknologi;1;1
 706-ABM;AB MIX;;;bhp;Lainnya;0;paket;;Agroteknologi;1;1
 706-HER;Herbisida;;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
-706-INC;Insektisida Curacron;;;bhp;Lainnya;0;Botol;;Agroteknologi;1;1
-706-JSR;Jaring Serangga;;;bhp;Lainnya;0;lembar;;Agroteknologi;1;1
-706-PET;Petrogenol (Perangkap Serangga);;;bhp;Lainnya;0;botol;;Agroteknologi;1;1
-706-INM;Inokulum Mikoriza;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PPK-9;Pupuk NPK Mutiara;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PPK-10;Urea;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-PON;Ponska;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BJG-3;Benih Jagung Var Paragon;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BJG-4;Benih Jagung 4 Varietas;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BCB-3;Benih Cabai 6 Varietas;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BCB-4;Benih Cabai Rawit;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BBY-3;Benih Bayam;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BKP;Benih Kacang Panjang;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-SAW;Benih sawi;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BLC-3;Benih Selada;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BTM-3;Benih Mentimun;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BKN-2;Benih Kangkung;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BKAY;Benih Kaylan;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BBS-2;Benih Buncis;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BPC-2;Benih Pakcoy;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BKB-1;Benih Kubis;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BSM-1;Benih Semangka;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BML-1;Benih Melon;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BRS-1;Benih Rosela;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-TRS-1;Tray Semai 48 Lubang;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-PLS-3;Plastik Putih Ukuran 1kg;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-PLS-4;Plastik Putih Ukuran 1/2 kg;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-PLS-5;Plastik Zip Kecil;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-PLS-6;Plastik Kotak;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-CUR;Curacron;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-FUA;Fungisida Amistartop;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-FUR;Furadan;;;bhp;Lainnya;0;g;;Agroteknologi;1;1
-706-BKK-1;Kacang Kedelai;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-BKH-1;Kacang Hijau;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-ICR;Insektisida Curacron;;;bhp;Lainnya;0;Botol;;Agroteknologi;1;1
+706-INM;Inokulum Mikoriza;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-PPK-4;Pupuk Urea;;;bhp;Padatan;2000;g;;Agroteknologi;1;1
+706-PPK-5;Pupuk Phonska;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BJV;Benih Jagung 4 Varietas;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BCV;Benih Cabai 6 Varietas;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKP;Benih Kacang Panjang;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKA;Benih Kailan;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKU;Benih Kubis;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BSA;Benih Semangka;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BML;Benih Melon;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BRS;Benih Rosela;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-TRA;Tray Semai;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-PPU-1;Plastik Putih Ukuran 1kg;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-PPU-2;Plastik Putih Ukuran 1/2 kg;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-ZIP;Plastik Zip Kecil;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-PKK;Plastik Kotak;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-FUN;Fungisida;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-FUR;Furadan;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKI;Benih Kacang Kedelai;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKH;Benih Kacang Hijau;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BSY;Benih Sayuran;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
 706-AMP;AMP Samsons;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-PLS-7;Plastik 6 x 10 cm;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
-706-PBB;Praktikum BPO dan BTLJB;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-GUN;Gunting;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
+706-CUP;Cup;;;bhp;Lainnya;0;Pak;;Agroteknologi;1;1
+706-BBG;Benih Bengkuang;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BBB;Benih Bawang Bombay;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BLD;Benih Lada;;;bhp;Lainnya;0;pcs;;Agroteknologi;1;1
+706-ZPT;ZPT;;;bhp;Lainnya;0;pak;;Agroteknologi;1;1
+706-BPS;Benih Pisang;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BPP;Benih Pepaya;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-SEL;Seliwanoff;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-BUJ;Benih Ubi Jalar;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BAL;Benih Apel;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BKM;Benih Kemiri;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BMG;Benih Mangga;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-AOL;Asam Oleat;;;bhp;Cairan;200;ml;;Agroteknologi;1;1
+706-TRI;Trietanolamine;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
+706-BEE;Beez Wax;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BPI;Benih Pir;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+706-BJU;Benih Jambu;;;bhp;Padatan;0;g;;Agroteknologi;1;1

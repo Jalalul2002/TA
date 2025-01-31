@@ -1,5 +1,5 @@
-<nav x-data="{ open: false }" class="fixed top-0 z-50 w-full bg-white border-b border-gray-200">
-    <div class="px-3 py-3 lg:px-5 lg:pl-3">
+<nav x-data="{ open: false }" class="fixed top-0 z-50 w-full bg-uinBlue">
+    <div class="p-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
             <div class="flex items-center justify-start rtl:justify-end">
                 <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
@@ -13,20 +13,23 @@
                         </path>
                     </svg>
                 </button>
-                <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24">
-                    <img src="{{ asset('favicon.png') }}" class="h-8 me-3" alt="UIN SGD Logo" />
-                    <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">{{ config('app.name') }}</span>
+                <a href="{{ route('dashboard') }}" class="flex ms-2 md:me-24 text-white">
+                    <img src="{{ asset('Logo-UIN-Putih.png') }}" class="h-10 me-3" alt="UIN SGD Logo" />
+                    {{-- <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap">{{ config('app.name') }}</span> --}}
+                    <div class="flex flex-col justify-center">
+                        <h2 class="font-semibold text-base leading-none">Sistem Manajemen Aset</h2>
+                        <h1 class="text-lg leading-none">Laboratorium Saintek</h1>
+                    </div>
                 </a>
             </div>
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button
-                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-semibold rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
-
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-semibold rounded-md text-white hover:text-uinOrange focus:outline-none transition ease-in-out duration-150">
+                            {{ Auth::user()->name }}
                             <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
+                                <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 20 20">
                                     <path fill-rule="evenodd"
                                         d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -37,19 +40,34 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm/6 hover:bg-uinBlue">
+                            <div
+                                class="flex font-bold text-gray-900 size-11 leading-none flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-uinBlue">
+                                <p><i class="fi fi-rr-circle-user leading-none text-xl"></i></p>
+                            </div>
+                            <a href="{{ route('profile.edit') }}" class="block font-semibold text-gray-900 hover:text-white">
+                                Profile
+                                <span class="absolute inset-0"></span>
+                            </a>
+                        </div>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
+                            <div
+                                class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm/6 hover:bg-uinRed">
+                                <div
+                                    class="flex font-bold text-white size-11 leading-none flex-none items-center justify-center rounded-lg bg-uinRed group-hover:bg-white group-hover:text-uinRed">
+                                    <p><i class="fi fi-rr-exit leading-none text-xl"></i></p>
+                                </div>
+                                <a href="{{ route('logout') }}"
+                                    onclick="event.preventDefault();
+                                                this.closest('form').submit();"
+                                    class="block font-semibold text-uinRed hover:text-white">
+                                    Sign Out
+                                    <span class="absolute inset-0"></span>
+                                </a>
+                            </div>
                         </form>
                     </x-slot>
                 </x-dropdown>
@@ -87,7 +105,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                         onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Sign Out') }}
                     </x-responsive-nav-link>
                 </form>
             </div>

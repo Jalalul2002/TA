@@ -35,124 +35,144 @@
                                     <path
                                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                 </svg>
-                                Tambah Asset BHP
+                                Tambah Data
                             </a>
                         </div>
                     </div>
                     <div class="mb-1">
-                        {{ $assetLabs->appends(['search' => request('search')])->links('pagination::tailwind') }}
+                        {{ $assetLabs->onEachSide(1)->appends(['search' => request('search')])->links('pagination::tailwind') }}
                     </div>
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-400">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    No
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Kode Barang
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Nama Barang
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Rumus Kimia
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Merk
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Jenis
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Stok
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Satuan
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Lokasi Penyimpanan
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Lokasi
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Dibuat Oleh
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Diupdate Oleh
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $counter = ($assetLabs->currentPage() - 1) * $assetLabs->perPage() + 1;
-                            @endphp
-                            @forelse ($assetLabs as $assetLab)
-                                <tr class="bg-white border-b hover:bg-gray-50">
-                                    <th class="px-6 py-4">
-                                        {{ $counter }}
+                    <div class="relative overflow-x-auto sm:rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-white uppercase bg-uinTosca">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        No
                                     </th>
-                                    <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                        {{ $assetLab->product_code }}
-                                    </td>
-                                    <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
-                                        {{ $assetLab->product_name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ empty($assetLab->formula) ? '-' : $assetLab->formula }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ empty($assetLab->merk) ? '-' : $assetLab->merk }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $assetLab->product_type }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $assetLab->stock }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $assetLab->product_unit }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ empty($assetLab->location_detail) ? '-' : $assetLab->location_detail }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $assetLab->location }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $assetLab->creator->name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ $assetLab->updater->name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <a href="{{ route('edit-aset', $assetLab->product_code) }}"
-                                            class="font-medium text-blue-600 hover:underline">Edit</a>
-                                        <form action="{{ route('destroy-aset', $assetLab->product_code) }}"
-                                            method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:underline">Delete</button>
-                                        </form>
-                                    </td>
+                                    <th scope="col" class="px-6 py-3">
+                                        Kode Barang
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        <div class="flex items-center">
+                                            Nama Barang
+                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                                                </svg></a>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Rumus Kimia
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Merk
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        <div class="flex items-center">
+                                            Jenis
+                                            <a href="#"><svg class="w-3 h-3 ms-1.5" aria-hidden="true"
+                                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path
+                                                        d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                                                </svg></a>
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Stok
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Satuan
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Lokasi Penyimpanan
+                                    </th>
+                                    @if (Auth::user()->usertype == 'admin')
+                                        <th scope="col" class="px-6 py-3">Lokasi</th>
+                                    @endif
+                                    <th scope="col" class="px-6 py-3">
+                                        Diupdate Oleh
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Action
+                                    </th>
                                 </tr>
+                            </thead>
+                            <tbody>
                                 @php
-                                    $counter++;
+                                    $counter = ($assetLabs->currentPage() - 1) * $assetLabs->perPage() + 1;
                                 @endphp
-                            @empty
-                                <tr class="bg-white border-b hover:bg-gray-50">
-                                    <th colspan="13" class="px-6 py-4 text-center">
-                                        Data Tidak Ditemukan
-                                    </th>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                @forelse ($assetLabs as $assetLab)
+                                    <tr class="bg-white border-b hover:bg-gray-50">
+                                        <th class="px-6 py-4">
+                                            {{ $counter }}
+                                        </th>
+                                        <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                            {{ $assetLab->product_code }}
+                                        </td>
+                                        <td scope="row" class="px-6 py-4 font-medium whitespace-nowrap">
+                                            {{ $assetLab->product_name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ empty($assetLab->formula) ? '-' : $assetLab->formula }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ empty($assetLab->merk) ? '-' : $assetLab->merk }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $assetLab->product_type }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $assetLab->stock }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ $assetLab->product_unit }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            {{ empty($assetLab->location_detail) ? '-' : $assetLab->location_detail }}
+                                        </td>
+                                        @if (Auth::user()->usertype == 'admin')
+                                            <td class="px-6 py-4">
+                                                {{ $assetLab->location }}
+                                            </td>
+                                        @endif
+                                        <td class="px-6 py-4">
+                                            {{ $assetLab->updater->name }}
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <a href="{{ route('edit-aset', $assetLab->product_code) }}"
+                                                class="font-medium text-blue-600 hover:underline">Edit</a>
+                                            <form action="{{ route('destroy-aset', $assetLab->product_code) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="text-red-600 hover:underline">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @php
+                                        $counter++;
+                                    @endphp
+                                @empty
+                                    <tr class="bg-white border-b hover:bg-gray-50">
+                                        @if (Auth::user()->usertype == 'admin')
+                                            <th colspan="12" class="px-6 py-4 text-center">
+                                                Data Tidak Ditemukan
+                                            </th>
+                                        @endif
+                                        <th colspan="11" class="px-6 py-4 text-center">
+                                            Data Tidak Ditemukan
+                                        </th>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="mt-4">
-                        {{ $assetLabs->appends(['search' => request('search')])->links('pagination::tailwind') }}
+                        {{ $assetLabs->onEachSide(1)->appends(['search' => request('search')])->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

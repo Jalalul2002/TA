@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid lg:grid-cols-2 xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('add-aset-bhp') }}" x-data="{ location: '', initialCode: '' }" x-init="$watch('location', value => {
                     const locationToCodeMap = {
@@ -28,7 +28,7 @@
                             <x-text-input id="location" class="block mt-1 w-full" location="text" name="location"
                                 :value="old('location', $prodi)" autofocus autocomplete="location" disabled />
                         @else
-                            <select id="location" name="location" class="block mt-1 w-full" x-model="location"
+                            <select id="location" name="location" class="block mt-1 w-full text-sm" x-model="location"
                                 required>
                                 <option value="">-- Pilih Program Studi --</option>
                                 <option value="Matematika">701-Matematika</option>
@@ -45,8 +45,9 @@
                     <div class="mt-4">
                         <x-input-label for="product_code" :value="__('Kode Produk')" />
                         <div class="flex space-x-2 items-center">
-                            <x-text-input id="initial_code" class="block mt-1 w-[62px]" type="text" name="initial_code"
-                                x-model="initialCode" required autofocus autocomplete="initial_code" readonly />
+                            <x-text-input id="initial_code" class="block mt-1 w-[62px]" type="text"
+                                name="initial_code" x-model="initialCode" required autofocus autocomplete="initial_code"
+                                readonly />
                             <p>-</p>
                             <x-text-input id="product_code" class="block mt-1 w-full" type="text" name="product_code"
                                 :value="old('product_code')" required autofocus autocomplete="product_code" />
@@ -79,7 +80,7 @@
                     </div>
                     <div class="mt-4">
                         <x-input-label for="product_type" :value="__('Jenis Produk')" />
-                        <select id="product_type" name="product_type" class="block mt-1 w-full" required>
+                        <select id="product_type" name="product_type" class="block mt-1 w-full text-sm" required>
                             <option value="">-- Pilih Jenis Produk --</option>
                             <option value="Cairan">Cairan</option>
                             <option value="Padatan">Padatan</option>

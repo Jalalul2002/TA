@@ -27,9 +27,41 @@
                                 class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Search for items" autocomplete="off">
                         </div>
-                        <div>
+                        <div class="flex items-center gap-x-2">
+                            <form action="{{ route('export.bhp') }}" method="GET" class="flex items-center gap-2">
+                                <div>
+                                    <select id="product_type" name="product_type"
+                                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm">
+                                        <option value="">-- Pilih Jenis Produk --</option>
+                                        <option value="Cairan">Cairan</option>
+                                        <option value="Padatan">Padatan</option>
+                                        <option value="Lainnya">Lainnya</option>
+                                    </select>
+                                </div>
+                                @if (Auth::user()->usertype == 'admin')
+                                    <div>
+                                        <select id="location" name="location"
+                                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm">
+                                            <option value="">-- Pilih Lokasi --</option>
+                                            <option value="Matematika">Matematika</option>
+                                            <option value="Biologi">Biologi</option>
+                                            <option value="Fisika">Fisika</option>
+                                            <option value="Kimia">Kimia</option>
+                                            <option value="Teknik Informatika">Teknik Informatika</option>
+                                            <option value="Agroteknologi">Agroteknologi</option>
+                                            <option value="Teknik Elektro">Teknik Elektro</option>
+                                        </select>
+                                    </div>
+                                @endif
+                                <div>
+                                    <button type="submit"
+                                        class="inline-flex text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800">
+                                        Export Excel
+                                    </button>
+                                </div>
+                            </form>
                             <a href="/add-aset-bhp"
-                                class="inline-flex items-center px-4 py-3 rounded-lg text-white bg-uinBlue hover:bg-uinNavy w-full">
+                                class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
                                     <path
@@ -106,42 +138,42 @@
                                         <th class="px-2 py-4 text-center">
                                             {{ $counter }}
                                         </th>
-                                        <td scope="row" class=" px-2 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 font-medium whitespace-nowrap">
                                             {{ $assetLab->product_code }}
                                         </td>
-                                        <td scope="row" class=" px-2 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 font-medium whitespace-nowrap">
                                             {{ $assetLab->product_name }}
                                         </td>
-                                        <td class=" px-2 py-4">
+                                        <td class="px-2">
                                             {{ empty($assetLab->formula) ? '-' : $assetLab->formula }}
                                         </td>
-                                        <td class=" px-2 py-4">
+                                        <td class="px-2">
                                             {{ empty($assetLab->merk) ? '-' : $assetLab->merk }}
                                         </td>
-                                        <td class=" px-2 py-4">
+                                        <td class="px-2">
                                             {{ $assetLab->product_type }}
                                         </td>
-                                        <td class=" px-2 py-4">
+                                        <td class="px-2">
                                             {{ $assetLab->stock }}
                                         </td>
-                                        <td class=" px-2 py-4">
+                                        <td class="px-2">
                                             {{ $assetLab->product_unit }}
                                         </td>
-                                        <td class=" px-2 py-4">
+                                        <td class="px-2">
                                             {{ empty($assetLab->location_detail) ? '-' : $assetLab->location_detail }}
                                         </td>
                                         @if (Auth::user()->usertype == 'admin')
-                                            <td class=" px-2 py-4">
+                                            <td class="px-2">
                                                 {{ $assetLab->location }}
                                             </td>
                                         @endif
-                                        <td class=" px-2 py-4">
+                                        <td class="px-2">
                                             {{ $assetLab->updater->name }}
                                         </td>
-                                        <td class="py-4 flex flex-row gap-x-2 justify-center">
+                                        <td class="py-2 flex flex-row gap-x-2 justify-center">
                                             <a href="{{ route('edit-aset', $assetLab->product_code) }}">
                                                 <div class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400">
-                                                    <svg class="size-5 fill-white" xmlns="http://www.w3.org/2000/svg"
+                                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
                                                         id="Outline" viewBox="0 0 24 24" width="512"
                                                         height="512">
                                                         <path
@@ -155,8 +187,9 @@
                                                 method="POST">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="bg-uinRed p-2 rounded-lg hover:bg-red-500"><svg
-                                                        class="size-5 fill-white" xmlns="http://www.w3.org/2000/svg"
+                                                <button type="submit"
+                                                    class="bg-uinRed p-2 rounded-lg hover:bg-red-600"><svg
+                                                        class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
                                                         id="Outline" viewBox="0 0 24 24" width="512"
                                                         height="512">
                                                         <path

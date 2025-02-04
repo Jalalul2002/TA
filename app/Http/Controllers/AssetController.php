@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AssetBhpExport;
 use App\Http\Controllers\Controller;
 use App\Models\Assetlab;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AssetController extends Controller
 {
@@ -64,6 +67,13 @@ class AssetController extends Controller
         return view('barang.add-bhp', compact('prodi'));
     }
 
+    public function exportBhp(Request $request)
+    {
+        $productType = $request->input('product_type');
+        $location = $request->input('location');
+
+        return Excel::download(new AssetBhpExport($productType, $location), 'data_bhp.xlsx');
+    }
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -73,36 +83,43 @@ class AssetController extends Controller
             'location' => ['required', 'string', 'max:255']
         ]);
 
-        // Convert product_id to lowercase
-        $product_code_upper = strtoupper($request->product_code);
-        $product_name_capitalized = ucwords(strtolower($request->product_name));
-        $location_capitalized = ucwords(strtolower($request->location));
-        $formula_upper = strtoupper($request->formula);
-        $merk_capitalized = ucwords(strtolower($request->merk));
-        $type_lower = strtolower($request->type);
-        $product_type_capitalized = ucwords(strtolower($request->product_type));
-        $location_detail_capitalized = ucwords(strtolower($request->location_detail));
+        try {
+            // Convert product_id to lowercase
+            $product_code_upper = strtoupper($request->product_code);
+            $product_name_capitalized = ucwords(strtolower($request->product_name));
+            $location_capitalized = ucwords(strtolower($request->location));
+            $formula_upper = strtoupper($request->formula);
+            $merk_capitalized = ucwords(strtolower($request->merk));
+            $type_lower = strtolower($request->type);
+            $product_type_capitalized = ucwords(strtolower($request->product_type));
+            $location_detail_capitalized = ucwords(strtolower($request->location_detail));
 
-        Assetlab::create([
-            'product_code' => "{$request->initial_code}-{$product_code_upper}",
-            'product_name' => $product_name_capitalized,
-            'formula' => $formula_upper,
-            'merk' => $merk_capitalized,
-            'type' => $type_lower,
-            'product_type' => $product_type_capitalized,
-            'stock' => $request->stock,
-            'product_unit' => $request->product_unit,
-            'location_detail' => $location_detail_capitalized,
-            'location' => $location_capitalized,
-            'created_by' => Auth::id(),
-            'updated_by' => Auth::id(),
-        ]);
+            Assetlab::create([
+                'product_code' => "{$request->initial_code}-{$product_code_upper}",
+                'product_name' => $product_name_capitalized,
+                'formula' => $formula_upper,
+                'merk' => $merk_capitalized,
+                'type' => $type_lower,
+                'product_type' => $product_type_capitalized,
+                'stock' => $request->stock,
+                'product_unit' => $request->product_unit,
+                'location_detail' => $location_detail_capitalized,
+                'location' => $location_capitalized,
+                'created_by' => Auth::id(),
+                'updated_by' => Auth::id(),
+            ]);
 
-        if ($request->type == 'bhp') {
-            return redirect(route('data-bhp', absolute: false));
+            if ($request->type == 'bhp') {
+                return redirect(route('data-bhp', absolute: false));
+            }
+
+            return redirect(route('data-aset', absolute: false));
+        } catch (QueryException $e) {
+            if ($e->errorInfo[1] == 1062) { // Error kode 1062 untuk duplicate entry
+                return redirect()->back()->with('duplicate_error', 'Kode produk sudah ada!');
+            }
+            return redirect()->back()->with('error', 'Terjadi kesalahan pada database.');
         }
-
-        return redirect(route('data-aset', absolute: false));
     }
 
     public function destroy($product_code)

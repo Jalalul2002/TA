@@ -27,10 +27,11 @@
                                 class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Search for items" autocomplete="off">
                         </div>
-                        <div class="flex items-center gap-x-2">
+                        <div x-data="filterData()" class="flex items-center gap-x-2">
                             <form action="{{ route('export.bhp') }}" method="GET" class="flex items-center gap-2">
                                 <div>
-                                    <select id="product_type" name="product_type"
+                                    <select id="product_type" name="product_type" x-model="productType"
+                                        @change="applyFilter()"
                                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm">
                                         <option value="">-- Pilih Jenis Produk --</option>
                                         <option value="Cairan">Cairan</option>
@@ -40,7 +41,8 @@
                                 </div>
                                 @if (Auth::user()->usertype == 'admin')
                                     <div>
-                                        <select id="location" name="location"
+                                        <select id="location" name="location" x-model="location"
+                                            @change="applyFilter()"
                                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm">
                                             <option value="">-- Pilih Lokasi --</option>
                                             <option value="Matematika">Matematika</option>
@@ -211,10 +213,11 @@
                                             <th colspan="12" class="px-6 py-4 text-center">
                                                 Data Tidak Ditemukan
                                             </th>
+                                        @else
+                                            <th colspan="11" class="px-6 py-4 text-center">
+                                                Data Tidak Ditemukan
+                                            </th>
                                         @endif
-                                        <th colspan="11" class="px-6 py-4 text-center">
-                                            Data Tidak Ditemukan
-                                        </th>
                                     </tr>
                                 @endforelse
                             </tbody>

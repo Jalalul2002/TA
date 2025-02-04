@@ -15,32 +15,58 @@ class AssetController extends Controller
 {
     public function indexInv(Request $request)
     {
+        $productType = request('product_type');
+        $location = request('location');
         $query = AssetLab::ofType('inventaris');
-
-        if (Auth::user()->usertype === 'staff') {
-            $query->ofLocation(Auth::user()->prodi);
-        }
-
-        if ($request->has('search')) {
-            $query->search($request->search);
-        }
-
-        $assetLabs = $query->paginate(10);
-        return view('barang.dataaset', compact('assetLabs'));
-    }
-
-    public function indexBhp(Request $request)
-    {
-        $query = AssetLab::ofType('bhp');
-
         #filter user
         if (Auth::user()->usertype === 'staff') {
             $query->ofLocation(Auth::user()->prodi);
         }
-
         #filter search
         if ($request->has('search')) {
             $query->search($request->search);
+        }
+        #filter tipe
+        if ($request->has('product_type') && $request->product_type != '') {
+            $query->where('product_type', $request->product_type);
+        }
+        #filterlokasi
+        if ($request->has('location') && $request->location != '') {
+            $query->where('location', $request->location);
+        }
+
+        #Sorting
+        $sortField = $request->get('sort_field', 'product_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        $allowedFields = ['product_code', 'product_name', 'merk', 'product_type', 'location'];
+        if (in_array($sortField, $allowedFields)) {
+            $query->orderBy($sortField, $sortOrder);
+        }
+
+        $assetLabs = $query->paginate(10);
+        return view('barang.dataaset', compact('assetLabs', 'sortField', 'sortOrder'));
+    }
+
+    public function indexBhp(Request $request)
+    {
+        $productType = request('product_type');
+        $location = request('location');
+        $query = AssetLab::ofType('bhp');
+        #filter user
+        if (Auth::user()->usertype === 'staff') {
+            $query->ofLocation(Auth::user()->prodi);
+        }
+        #filter search
+        if ($request->has('search')) {
+            $query->search($request->search);
+        }
+        #filter tipe
+        if ($request->has('product_type') && $request->product_type != '') {
+            $query->where('product_type', $request->product_type);
+        }
+        #filterlokasi
+        if ($request->has('location') && $request->location != '') {
+            $query->where('location', $request->location);
         }
 
         #Sorting

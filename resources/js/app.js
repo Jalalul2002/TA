@@ -1,5 +1,6 @@
 import './bootstrap';
 import './search';
+import './filter';
 import 'flowbite';
 
 import Alpine from 'alpinejs';

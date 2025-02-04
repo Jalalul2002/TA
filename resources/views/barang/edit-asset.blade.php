@@ -1,12 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Data Aset') }}
-        </h2>
+        <a href="{{ $assetLab->type === 'bhp' ? route('data-bhp') : route('data-aset') }}">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('◀️ Edit Data Aset') }}
+            </h2>
+        </a>
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid lg:grid-cols-2 xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('update-aset', $assetLab->product_code) }}">
                     @csrf
@@ -30,13 +32,13 @@
                         <x-input-error :messages="$errors->get('product_name')" class="mt-2" />
                     </div>
                     <div class="mt-4">
-                        <x-input-label for="formula" :value="__('Formula')" />
+                        <x-input-label for="formula" :value="__('Formula (Optional)')" />
                         <x-text-input id="formula" class="block mt-1 w-full" type="text" name="formula"
                             :value="old('formula', $assetLab->formula)" autofocus autocomplete="formula" />
                         <x-input-error :messages="$errors->get('formula')" class="mt-2" />
                     </div>
                     <div class="mt-4">
-                        <x-input-label for="merk" :value="__('Merk')" />
+                        <x-input-label for="merk" :value="__('Merk (Optional)')" />
                         <x-text-input id="merk" class="block mt-1 w-full" type="text" name="merk"
                             :value="old('merk', $assetLab->merk)" autofocus autocomplete="merk" />
                         <x-input-error :messages="$errors->get('merk')" class="mt-2" />
@@ -49,7 +51,9 @@
                     </div>
                     <div class="mt-4">
                         <x-input-label for="product_type" :value="__('Jenis Produk')" />
-                        <select id="product_type" name="product_type" class="block mt-1 w-full" required>
+                        <select id="product_type" name="product_type"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
+                            required>
                             <option value="">-- Pilih Jenis Produk --</option>
                             <option value="Cairan"
                                 {{ old('product_type', $assetLab->product_type) == 'Cairan' ? 'selected' : '' }}>Cairan
@@ -65,7 +69,7 @@
                     </div>
 
                     <div class="mt-4">
-                        <x-input-label for="location_detail" :value="__('Lokasi Penyimpanan')" />
+                        <x-input-label for="location_detail" :value="__('Lokasi Penyimpanan (Optional)')" />
                         <x-text-input id="location_detail" class="block mt-1 w-full" type="text"
                             name="location_detail" :value="old('location_detail', $assetLab->location_detail)" autofocus autocomplete="location_detail" />
                         <x-input-error :messages="$errors->get('location_detail')" class="mt-2" />
@@ -83,8 +87,12 @@
                         <x-input-error :messages="$errors->get('product_unit')" class="mt-2" />
                     </div>
                     <div class="flex items-center justify-end mt-4">
+                        <a href="{{ $assetLab->type === 'bhp' ? route('data-bhp') : route('data-aset') }}"
+                            class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            Kembali
+                        </a>
                         <x-primary-button class="ms-4">
-                            {{ __('Simpan Data') }}
+                            {{ __('Simpan') }}
                         </x-primary-button>
                     </div>
                 </form>

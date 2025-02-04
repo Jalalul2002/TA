@@ -1,8 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Data Aset Barang Habis Pakai') }}
-        </h2>
+        <a href="{{ route('data-bhp') }}">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('◀️ Tambah Data Aset Barang Habis Pakai') }}
+            </h2>
+        </a>
     </x-slot>
 
     <div class="py-6">
@@ -10,7 +12,7 @@
             <!-- MODAL -->
             <div x-show="showModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
-                    <h2 class="text-lg font-semibold text-red-600">Gagal Menambahkan Data</h2>
+                    <h2 class="text-lg font-semibold text-red-600">❌ Gagal Menambahkan Data</h2>
                     <p class="mt-2 text-gray-600">{{ session('duplicate_error') }}</p>
                     <button @click="showModal = false"
                         class="mt-4 bg-red-500 text-white px-4 py-2 rounded">Tutup</button>

@@ -6,8 +6,9 @@ use App\Models\Assetlab;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class AssetBhpExport implements FromCollection, WithHeadings
+class AssetBhpExport implements FromCollection, WithHeadings, WithMapping
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -23,11 +24,11 @@ class AssetBhpExport implements FromCollection, WithHeadings
 
     public function collection()
     {
-        $query = AssetLab::ofType('bhp');
+        $query = AssetLab::ofType('bhp')->with(['creator', 'updater']);
+
         if ($this->productType) {
             $query->where('product_type', $this->productType);
         }
-
         if (Auth::user()->usertype === 'staff') {
             $query->where('location', Auth::user()->prodi);
         } else if ($this->location) {
@@ -44,12 +45,36 @@ class AssetBhpExport implements FromCollection, WithHeadings
             'Nama Barang',
             'Rumus Kimia',
             'Merk',
+            'Tipe',
             'Jenis',
             'Stok',
             'Satuan',
             'Lokasi Penyimpanan',
             'Lokasi',
+            'Dibuat Oleh',
             'Diupdate Oleh',
+            'Tanggal Dibuat',
+            'Tanggal Diupdate',
+        ];
+    }
+
+    public function map($row): array
+    {
+        return [
+            $row->product_code,
+            $row->product_name,
+            $row->formula,
+            $row->merk,
+            $row->type,
+            $row->product_type,
+            $row->stock > 0 ? $row->stock : 'Habis',
+            $row->product_unit,
+            $row->location_detail,
+            $row->location,
+            $row->creator?->name ?? 'N/A', // Mengambil nama creator, jika ada
+            $row->updater?->name ?? 'N/A', // Mengambil nama updater, jika ada
+            optional($row->created_at)->format('Y-m-d H:i') ?? 'N/A', // Format tanggal
+            optional($row->updated_at)->format('Y-m-d H:i') ?? 'N/A', // Format tanggal
         ];
     }
 }

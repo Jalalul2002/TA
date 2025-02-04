@@ -32,10 +32,10 @@
                         <x-input-error :messages="$errors->get('product_name')" class="mt-2" />
                     </div>
                     <div class="mt-4">
-                        <x-input-label for="formula" :value="__('Formula (Optional)')" />
-                        <x-text-input id="formula" class="block mt-1 w-full" type="text" name="formula"
-                            :value="old('formula', $assetLab->formula)" autofocus autocomplete="formula" />
-                        <x-input-error :messages="$errors->get('formula')" class="mt-2" />
+                        <x-input-label for="product_detail" :value="__('Keterangan/Formula (Optional)')" />
+                        <x-text-input id="product_detail" class="block mt-1 w-full" type="text" name="product_detail"
+                            :value="old('product_detail', $assetLab->product_detail)" autofocus autocomplete="product_detail" />
+                        <x-input-error :messages="$errors->get('product_detail')" class="mt-2" />
                     </div>
                     <div class="mt-4">
                         <x-input-label for="merk" :value="__('Merk (Optional)')" />

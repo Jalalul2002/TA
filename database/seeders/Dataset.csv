@@ -1,4 +1,4 @@
-product_code;product_name;formula;merk;type;product_type;stock;product_unit;location_detail;location;created_by;updated_by
+product_code;product_name;product_detail;merk;type;product_type;stock;product_unit;location_detail;location;created_by;updated_by
 706-GLU;Gula;;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-HCL;HCl 37%;;;bhp;Cairan;0;ml;;Agroteknologi;1;1
 706-PHP;Potasium Hydrogen Phospate;;;bhp;Padatan;0;g;;Agroteknologi;1;1
@@ -162,3 +162,4 @@ product_code;product_name;formula;merk;type;product_type;stock;product_unit;loca
 706-BEE;Beez Wax;;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-BPI;Benih Pir;;;bhp;Padatan;0;g;;Agroteknologi;1;1
 706-BJU;Benih Jambu;;;bhp;Padatan;0;g;;Agroteknologi;1;1
+700-BJU;Treadmill;Kondisi Baru;Speed;inventaris;Lainnya;1;Unit;Lobby;Umum;1;1

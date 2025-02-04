@@ -43,7 +43,7 @@ class Perencanaan extends Model
             $q->where('product_code', 'LIKE', "%{$searchTerm}%")
                 ->orWhereHas('product', function ($q) use ($searchTerm) {
                     $q->where('product_name', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('formula', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('product_detail', 'LIKE', "%{$searchTerm}%")
                         ->orWhere('merk', 'LIKE', "%{$searchTerm}%")
                         ->orWhere('product_type', 'LIKE', "%{$searchTerm}%")
                         ->orWhere('location', 'LIKE', "%{$searchTerm}%");

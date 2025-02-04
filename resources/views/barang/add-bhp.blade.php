@@ -25,6 +25,7 @@
                     location: '{{ $prodi ?? '' }}',
                     initialCode: '{{ $prodi
                         ? [
+                                'Umum' => '700',
                                 'Matematika' => '701',
                                 'Biologi' => '702',
                                 'Fisika' => '703',
@@ -37,6 +38,7 @@
                 }"
                     x-init="$watch('location', value => {
                         const locationToCodeMap = {
+                            'Umum' : '700',
                             'Matematika': '701',
                             'Biologi': '702',
                             'Fisika': '703',
@@ -58,6 +60,7 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
                                 x-model="location" required>
                                 <option value="">-- Pilih Program Studi --</option>
+                                <option value="Umum">700-Umum</option>
                                 <option value="Matematika">701-Matematika</option>
                                 <option value="Biologi">702-Biologi</option>
                                 <option value="Fisika">703-Fisika</option>
@@ -88,10 +91,10 @@
                         <x-input-error :messages="$errors->get('product_name')" class="mt-2" />
                     </div>
                     <div class="mt-4">
-                        <x-input-label for="formula" :value="__('Formula (Optional)')" />
-                        <x-text-input id="formula" class="block mt-1 w-full" type="text" name="formula"
-                            :value="old('formula')" autofocus autocomplete="formula" />
-                        <x-input-error :messages="$errors->get('formula')" class="mt-2" />
+                        <x-input-label for="product_detail" :value="__('Keterangan/Formula (Optional)')" />
+                        <x-text-input id="product_detail" class="block mt-1 w-full" type="text" name="product_detail"
+                            :value="old('product_detail')" autofocus autocomplete="product_detail" />
+                        <x-input-error :messages="$errors->get('product_detail')" class="mt-2" />
                     </div>
                     <div class="mt-4">
                         <x-input-label for="merk" :value="__('Merk (Optional)')" />

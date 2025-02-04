@@ -16,7 +16,7 @@ class Assetlab extends Model
     protected $fillable = [
         'product_code',
         'product_name',
-        'formula',
+        'product_detail',
         'merk',
         'type',
         'product_type',
@@ -66,7 +66,7 @@ class Assetlab extends Model
     public function scopeSearch($query, $searchTerm)
     {
         return $query->where('product_name', 'LIKE', "%{$searchTerm}%")->orWhere('product_name', 'LIKE', "%{$searchTerm}%")
-        ->orWhere('formula', 'LIKE', "%{$searchTerm}%")
+        ->orWhere('product_detail', 'LIKE', "%{$searchTerm}%")
         ->orWhere('merk', 'LIKE', "%{$searchTerm}%")
         ->orWhere('product_type', 'LIKE', "%{$searchTerm}%")
         ->orWhere('location', 'LIKE', "%{$searchTerm}%");

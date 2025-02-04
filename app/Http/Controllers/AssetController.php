@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\AssetBhpExport;
+use App\Exports\AssetInvExport;
 use App\Http\Controllers\Controller;
 use App\Models\Assetlab;
 use Illuminate\Database\QueryException;
@@ -93,6 +94,14 @@ class AssetController extends Controller
         return view('barang.add-bhp', compact('prodi'));
     }
 
+    public function exportInv(Request $request)
+    {
+        $productType = $request->input('product_type');
+        $location = $request->input('location');
+
+        return Excel::download(new AssetInvExport($productType, $location), 'data_Inventaris.xlsx');
+    }
+
     public function exportBhp(Request $request)
     {
         $productType = $request->input('product_type');
@@ -114,7 +123,6 @@ class AssetController extends Controller
             $product_code_upper = strtoupper($request->product_code);
             $product_name_capitalized = ucwords(strtolower($request->product_name));
             $location_capitalized = ucwords(strtolower($request->location));
-            $formula_upper = strtoupper($request->formula);
             $merk_capitalized = ucwords(strtolower($request->merk));
             $type_lower = strtolower($request->type);
             $product_type_capitalized = ucwords(strtolower($request->product_type));
@@ -123,7 +131,7 @@ class AssetController extends Controller
             Assetlab::create([
                 'product_code' => "{$request->initial_code}-{$product_code_upper}",
                 'product_name' => $product_name_capitalized,
-                'formula' => $formula_upper,
+                'product_detail' => $request->product_detail,
                 'merk' => $merk_capitalized,
                 'type' => $type_lower,
                 'product_type' => $product_type_capitalized,
@@ -173,7 +181,7 @@ class AssetController extends Controller
 
         $request->validate([
             'product_name' => ['required', 'string', 'max:255'],
-            'formula' => ['nullable', 'string', 'max:255'],
+            'product_detail' => ['nullable', 'string', 'max:255'],
             'merk' => ['nullable', 'string', 'max:255'],
             'product_type' => ['required', 'string', 'max:255'],
             'stock' => ['required', 'integer'],
@@ -184,7 +192,7 @@ class AssetController extends Controller
 
         $assetLab->update([
             'product_name' => ucwords(strtolower($request->product_name)),
-            'formula' => strtoupper($request->formula),
+            'product_detail' => $request->product_detail,
             'merk' => ucwords(strtolower($request->merk)),
             'product_type' => ucwords(strtolower($request->product_type)),
             'stock' => $request->stock,
@@ -194,6 +202,12 @@ class AssetController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->route('data-bhp')->with('success', 'Data berhasil diperbarui');
+        $assetLab->refresh();
+
+        if (strtolower($assetLab->type) === 'bhp') {
+            return redirect()->route('data-bhp')->with('success', 'Data berhasil diperbarui');
+        } else {
+            return redirect()->route('data-aset')->with('success', 'Data berhasil diperbarui');
+        }
     }
 }

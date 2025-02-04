@@ -28,7 +28,7 @@
                                 placeholder="Search for items" autocomplete="off">
                         </div>
                         <div x-data="filterData()" class="flex items-center gap-x-2">
-                            <form action="{{ route('export.bhp') }}" method="GET" class="flex items-center gap-2">
+                            <form action="{{ route('export.inv') }}" method="GET" class="flex items-center gap-2">
                                 <div>
                                     <select id="product_type" name="product_type" x-model="productType"
                                         @change="applyFilter()"
@@ -45,6 +45,7 @@
                                             @change="applyFilter()"
                                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm">
                                             <option value="">-- Pilih Lokasi --</option>
+                                            <option value="Umum">Umum</option>
                                             <option value="Matematika">Matematika</option>
                                             <option value="Biologi">Biologi</option>
                                             <option value="Fisika">Fisika</option>
@@ -81,7 +82,7 @@
                             $columns = [
                                 'product_code' => 'Kode Barang',
                                 'product_name' => 'Nama Barang',
-                                'formula' => 'Rumus Kimia',
+                                'product_detail' => 'Keterangan/Formula',
                                 'merk' => 'Merk',
                                 'product_type' => 'Jenis',
                                 'stock' => 'stok',
@@ -137,39 +138,39 @@
                                 @endphp
                                 @forelse ($assetLabs as $assetLab)
                                     <tr class="bg-white border-b hover:bg-gray-50">
-                                        <th class="px-2 py-4 text-center">
+                                        <th class="px-1 py-4 text-center">
                                             {{ $counter }}
                                         </th>
-                                        <td scope="row" class="px-2 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-1 font-medium whitespace-nowrap">
                                             {{ $assetLab->product_code }}
                                         </td>
-                                        <td scope="row" class="px-2 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-1 font-medium whitespace-nowrap">
                                             {{ $assetLab->product_name }}
                                         </td>
-                                        <td class="px-2">
-                                            {{ empty($assetLab->formula) ? '-' : $assetLab->formula }}
+                                        <td class="px-1">
+                                            {{ empty($assetLab->product_detail) ? '-' : $assetLab->product_detail }}
                                         </td>
-                                        <td class="px-2">
+                                        <td class="px-1">
                                             {{ empty($assetLab->merk) ? '-' : $assetLab->merk }}
                                         </td>
-                                        <td class="px-2">
+                                        <td class="px-1">
                                             {{ $assetLab->product_type }}
                                         </td>
-                                        <td class="px-2">
+                                        <td class="px-1">
                                             {{ $assetLab->stock }}
                                         </td>
-                                        <td class="px-2">
+                                        <td class="px-1">
                                             {{ $assetLab->product_unit }}
                                         </td>
-                                        <td class="px-2">
+                                        <td class="px-1">
                                             {{ empty($assetLab->location_detail) ? '-' : $assetLab->location_detail }}
                                         </td>
                                         @if (Auth::user()->usertype == 'admin')
-                                            <td class="px-2">
+                                            <td class="px-1">
                                                 {{ $assetLab->location }}
                                             </td>
                                         @endif
-                                        <td class="px-2">
+                                        <td class="px-1">
                                             {{ $assetLab->updater->name }}
                                         </td>
                                         <td class="py-2 flex flex-row gap-x-2 justify-center">

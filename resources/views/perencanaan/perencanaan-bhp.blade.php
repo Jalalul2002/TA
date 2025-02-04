@@ -28,7 +28,7 @@
                         </div>
                         <div>
                             <a href="/add-perencanaan-bhp"
-                                class="inline-flex items-center px-4 py-3 rounded-lg text-white bg-uinBlue hover:bg-uinNavy w-full">
+                                class="inline-flex items-center px-4 py-2 rounded-md text-white bg-uinBlue hover:bg-uinNavy w-full">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
                                     <path

@@ -19,7 +19,7 @@ return new class extends Migration
             // );
             $table->string('product_code')->unique();
             $table->string('product_name');
-            $table->string('formula')->nullable();
+            $table->string('product_detail')->nullable();
             $table->string('merk')->nullable();
             $table->string('type');
             $table->string('product_type');

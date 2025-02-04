@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class AssetBhpExport implements FromCollection, WithHeadings, WithMapping
+class AssetInvExport implements FromCollection, WithHeadings, WithMapping
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -24,7 +24,7 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping
 
     public function collection()
     {
-        $query = AssetLab::ofType('bhp')->with(['creator', 'updater']);
+        $query = AssetLab::ofType('inventaris')->with(['creator', 'updater']);
 
         if ($this->productType) {
             $query->where('product_type', $this->productType);
@@ -43,7 +43,7 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping
         return [
             'Kode Barang',
             'Nama Barang',
-            'Keterangan/Formula',
+            'Keterangan',
             'Merk',
             'Tipe',
             'Jenis',

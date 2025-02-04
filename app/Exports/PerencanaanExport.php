@@ -31,7 +31,7 @@ class PerencanaanExport implements FromCollection, WithHeadings, WithMapping
         return [
             'Produk Kode',
             'Nama Produk',
-            'Rumus Kimia',
+            'Keterangan/Formula',
             'Merk',
             'Jenis Produk',
             'Stok',
@@ -63,7 +63,7 @@ class PerencanaanExport implements FromCollection, WithHeadings, WithMapping
         return [
             $perencanaan->product_code,
             $perencanaan->product->product_name ?? '-',
-            $perencanaan->product->formula ?? '-',
+            $perencanaan->product->product_detail ?? '-',
             $perencanaan->product->merk ?? '-',
             $perencanaan->product->product_type ?? '-',
             $perencanaan->stock ?? '-',

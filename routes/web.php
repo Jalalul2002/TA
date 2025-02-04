@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/edit-aset/{product_code}', [AssetController::class, 'edit'])->name('edit-aset');
     Route::put('/update-aset/{product_code}', [AssetController::class, 'update'])->name('update-aset');
     Route::delete('/delete-aset/{product_code}', [AssetController::class, 'destroy'])->name('destroy-aset');
+    Route::get('/export-inv', [AssetController::class, 'exportInv'])->name('export.inv');
     Route::get('/export-bhp', [AssetController::class, 'exportBhp'])->name('export.bhp');
 
     Route::get('/perencanaan-inv', [PerencanaanController::class, 'indexInv'])->name('perencanaan-inv');

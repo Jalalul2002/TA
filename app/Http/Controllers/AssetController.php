@@ -30,16 +30,26 @@ class AssetController extends Controller
     {
         $query = AssetLab::ofType('bhp');
 
+        #filter user
         if (Auth::user()->usertype === 'staff') {
             $query->ofLocation(Auth::user()->prodi);
         }
 
+        #filter search
         if ($request->has('search')) {
             $query->search($request->search);
         }
 
+        #Sorting
+        $sortField = $request->get('sort_field', 'product_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        $allowedFields = ['product_code', 'product_name', 'merk', 'product_type', 'location'];
+        if (in_array($sortField, $allowedFields)) {
+            $query->orderBy($sortField, $sortOrder);
+        }
+
         $assetLabs = $query->paginate(10);
-        return view('barang.baranghabispakai', compact('assetLabs'));
+        return view('barang.baranghabispakai', compact('assetLabs', 'sortField', 'sortOrder'));
     }
 
     public function addInv()

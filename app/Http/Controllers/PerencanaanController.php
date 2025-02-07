@@ -13,18 +13,32 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PerencanaanController extends Controller
 {
-    public function indexInv()
+    public function indexInv(Request $request)
     {
-        $perencanaans = Perencanaan::with(['rencana', 'product'])->get();
-        return view('perencanaan.perencanaan-bhp', compact('perencanaans'));
+        $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'inventaris');
+
+        if (Auth::user()->usertype !== 'admin') {
+            $query->where('prodi', Auth::user()->prodi);
+        }
+
+        if ($request->has('search')) {
+            $query->search($request->search);
+        }
+
+        $perencanaans = $query->paginate(10);
+        return view('perencanaan.perencanaan-aset', compact('perencanaans'));
     }
 
-    public function indexBhp()
+    public function indexBhp(Request $request)
     {
         $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'bhp');
 
         if (Auth::user()->usertype !== 'admin') {
             $query->where('prodi', Auth::user()->prodi);
+        }
+
+        if ($request->has('search')) {
+            $query->search($request->search);
         }
 
         $perencanaans = $query->paginate(10);
@@ -34,7 +48,6 @@ class PerencanaanController extends Controller
 
     public function show($id, Request $request)
     {
-        $assetBhps = Assetlab::where('type', 'bhp')->get();
         $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
         $query = $dataPerencanaan->plans()->with('product');
 
@@ -44,11 +57,22 @@ class PerencanaanController extends Controller
 
         $products = $query->paginate(10);
 
-        return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'assetBhps'));
+        if ($dataPerencanaan->type === 'bhp') {
+            $assets = Assetlab::where('type', 'bhp')->get();
+        } else {
+            $assets = Assetlab::where('type', 'inventaris')->get();
+        }
+
+        return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'assets'));
     }
-    /**
-     * Show the form for creating a new resource.
-     */
+
+    public function createInv()
+    {
+        $prodi = Auth::user()->prodi;
+        $assetsinv = Assetlab::where('type', 'inventaris')->get();
+        return view('perencanaan.add-perencanaan-inv', compact('assetsinv', 'prodi'));
+    }
+
     public function createBhp()
     {
         $prodi = Auth::user()->prodi;
@@ -110,7 +134,8 @@ class PerencanaanController extends Controller
             }
         }
 
-        return redirect()->route('perencanaan-bhp')->with('success', 'Perencanaan created successfully.');
+        return redirect()->route($request->type === 'bhp' ? 'perencanaan-bhp' : 'perencanaan-inv')
+            ->with('success', 'Perencanaan created successfully.');
     }
 
     // Store Item
@@ -147,7 +172,7 @@ class PerencanaanController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        return redirect()->route('detail-perencanaan-bhp', ['id' => $rencana->rencana_id])->with('success', 'Data berhasil diperbarui');
+        return redirect()->route('detail-perencanaan', ['id' => $rencana->rencana_id])->with('success', 'Data berhasil diperbarui');
     }
 
     // Destroy Rencana + Item
@@ -163,6 +188,12 @@ class PerencanaanController extends Controller
     public function destroyItem($id)
     {
         $perencanaan = Perencanaan::findOrFail($id);
+        $dataPerencanaan = $perencanaan->rencana;
+        if ($dataPerencanaan) {
+            $dataPerencanaan->updated_at = now();
+            $dataPerencanaan->updated_by = Auth::id();
+            $dataPerencanaan->save();
+        }
         $perencanaan->delete();
 
         return redirect()->back()->with('success', 'Product deleted successfully.');
@@ -170,32 +201,32 @@ class PerencanaanController extends Controller
 
     public function download($id)
     {
-        $perencanaan = Perencanaan::findOrFail($id);
+        $perencanaan = DataPerencanaan::find($id);
 
-        $filename = 'Perencanaan_' . $perencanaan->nama_perencanaan . '.xlsx';
+        $type = $perencanaan->type;
+        $namaPerencanaan = $perencanaan->nama_perencanaan;
+        $prodi = $perencanaan->prodi;
+
+        // Susun nama file yang lebih rapi
+        $filename = "Perencanaan_{$type}_{$namaPerencanaan}_{$prodi}.xlsx";
 
         return Excel::download(new PerencanaanExport($id), $filename);
     }
 
     public function complete($id)
     {
-        // Temukan data perencanaan
         $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
 
-        // Periksa apakah sudah selesai
         if ($dataPerencanaan->status === 'selesai') {
             return redirect()->back()->with('error', 'Perencanaan ini sudah selesai.');
         }
 
-        // Ambil semua produk dalam perencanaan
         foreach ($dataPerencanaan->plans as $perencanaan) {
             $productDetails = $perencanaan->product;
 
             if ($productDetails) {
-                // Update stok produk (kurangi jumlah kebutuhan)
                 $productDetails->stock += $perencanaan->jumlah_kebutuhan;
 
-                // Pastikan stok tidak negatif
                 if ($productDetails->stock < 0) {
                     return redirect()->back()->with(
                         'error',
@@ -205,7 +236,6 @@ class PerencanaanController extends Controller
 
                 $productDetails->save();
             } else {
-                // Jika produk tidak ditemukan
                 return redirect()->back()->with(
                     'error',
                     "Produk dengan kode {$perencanaan->product_code} tidak ditemukan."
@@ -213,11 +243,11 @@ class PerencanaanController extends Controller
             }
         }
 
-        // Update status perencanaan
         $dataPerencanaan->status = 'selesai';
+        $perencanaan->updated_by = Auth::id();
+        $perencanaan->updated_at = now();
         $dataPerencanaan->save();
 
-        // Redirect dengan pesan sukses
-        return redirect()->route('perencanaan-bhp')->with('success', 'Perencanaan berhasil diselesaikan.');
+        return redirect()->route($dataPerencanaan->type === 'bhp' ? 'perencanaan-bhp' : 'perencanaan-inv')->with('success', 'Perencanaan berhasil diselesaikan.');
     }
 }

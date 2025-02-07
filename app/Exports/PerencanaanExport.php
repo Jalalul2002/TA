@@ -40,34 +40,16 @@ class PerencanaanExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
-    // public function map($perencanaan): array
-    // {
-    //     $rows = [];
-    //     foreach ($perencanaan->product as $product) {
-    //         $rows[] = [
-    //             $perencanaan->product_code,
-    //             $product->product_name ?? '-',
-    //             $product->formula ?? '-',
-    //             $product->merk ?? '-',
-    //             $product->product_type ?? '-',
-    //             $perencanaan->stock,
-    //             $perencanaan->jumlah_kebutuhan,
-    //             $product->product_unit ?? '-',
-    //         ];
-    //     }
-    //     return $rows;
-    // }
     public function map($perencanaan): array
     {
-        // Mengembalikan satu baris data per produk
         return [
             $perencanaan->product_code,
             $perencanaan->product->product_name ?? '-',
-            $perencanaan->product->product_detail ?? '-',
-            $perencanaan->product->merk ?? '-',
+            $perencanaan->product->product_detail !== null && $perencanaan->product->product_detail !== '' ? $perencanaan->product->product_detail : '-',
+            $perencanaan->product->merk !== null && $perencanaan->product->merk !== '' ? $perencanaan->product->merk : '-',
             $perencanaan->product->product_type ?? '-',
-            $perencanaan->stock ?? '-',
-            $perencanaan->jumlah_kebutuhan ?? '-',
+            $perencanaan->stock > 0 ? $perencanaan->stock : '0',
+            $perencanaan->jumlah_kebutuhan,
             $perencanaan->product->product_unit ?? '-',
         ];
     }

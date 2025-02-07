@@ -41,9 +41,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/perencanaan-inv', [PerencanaanController::class, 'indexInv'])->name('perencanaan-inv');
     Route::get('/perencanaan-bhp', [PerencanaanController::class, 'indexBhp'])->name('perencanaan-bhp');
-    Route::get('/add-perencanaan-bhp', [PerencanaanController::class, 'createBhp'])->name('add-perencanaan-bhp');
+    Route::get('/add-perencanaan-inv', [PerencanaanController::class, 'createInv'])->name('add-perencanaan.inv');
+    Route::post('/add-perencanaan-inv', [PerencanaanController::class, 'store']);
+    Route::get('/add-perencanaan-bhp', [PerencanaanController::class, 'createBhp'])->name('add-perencanaan.bhp');
     Route::post('/add-perencanaan-bhp', [PerencanaanController::class, 'store']);
-    Route::get('/perencanaan-bhp/{id}', [PerencanaanController::class, 'show'])->name('detail-perencanaan-bhp');
+    Route::get('/detail-perencanaan/{id}', [PerencanaanController::class, 'show'])->name('detail-perencanaan');
     Route::delete('/delete-perencanaan/{id}', [PerencanaanController::class, 'destroy'])->name('destroy-rencana');
     Route::delete('/perencanaan-bhp/destroy-item/{id}', [PerencanaanController::class, 'destroyItem'])->name('rencana.destroy-item');
     Route::post('/perencanaan-bhp/add-item/{id}', [PerencanaanController::class, 'storeItem'])->name('rencana.store-item');
@@ -53,7 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/perencanaan/{id}/complete', [PerencanaanController::class, 'complete'])->name('perencanaan.complete');
 
     Route::post('/transaction-bhp', [TransactionController::class, 'index']);
-    Route::post('/add-transaction-bhp', [TransactionController::class, 'create'])->name('add-transaction');
+    Route::post('/add-transaction-bhp', [TransactionController::class, 'create'])->name('add-transaction.bhp');
 
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
     Route::post('/send-data', [PredictionController::class, 'sendData']);

@@ -2,7 +2,7 @@
     <x-slot name="header">
         <a href="{{ route('perencanaan-bhp') }}">
             <h2 class="font-semibold text-xl text-gray-900 leading-tight">
-                {{ __('◀️ Tambah Data Perencanaan BHP') }}
+                {{ __('◀️ Tambah Data Perencanaan Inventaris') }}
             </h2>
         </a>
     </x-slot>
@@ -10,7 +10,7 @@
     <div class="py-8">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid grid-cols-2">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <form method="POST" action="{{ route('add-perencanaan.bhp') }}">
+                <form method="POST" action="{{ route('add-perencanaan.inv') }}">
                     @csrf
 
                     @php
@@ -56,7 +56,7 @@
                     <div class="mt-4 hidden">
                         <x-input-label for="type" :value="__('Tipe')" />
                         <x-text-input id="type" class="block mt-1 w-full" type="text" name="type"
-                            :value="old('type', 'bhp')" autofocus autocomplete="type" />
+                            :value="old('type', 'inventaris')" autofocus autocomplete="type" />
                         <x-input-error :messages="$errors->get('type')" class="mt-2" />
                     </div>
 
@@ -70,7 +70,7 @@
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
                                         :id="'productSelect' + index" @change="updateStock(index)" required>
                                         <option value="">Select Product</option>
-                                        @foreach ($assetbhps as $product)
+                                        @foreach ($assetsinv as $product)
                                             <option value="{{ $product->product_code }}"
                                                 data-stock="{{ $product->stock }}"
                                                 data-satuan="{{ $product->product_unit }}">

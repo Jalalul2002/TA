@@ -13,7 +13,10 @@ class DataPrediksi extends Model
     {
         return $this->belongsTo(Assetlab::class, 'product_code');
     }
-
+    public function scopeOfLocation($query, $location)
+    {
+        return $query->where('location', $location);
+    }
     public function scopeSearch($query, $searchTerm)
     {
         return $query->where(function ($q) use ($searchTerm) {

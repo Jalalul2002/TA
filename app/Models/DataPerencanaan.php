@@ -55,7 +55,18 @@ class DataPerencanaan extends Model
     public function latestUpdater()
     {
         return $this->hasOne(Perencanaan::class, 'rencana_id')
-            ->latest('updated_at') // Ambil data berdasarkan timestamp terbaru
-            ->with('updater');     // Pastikan juga memuat data user (updater)
+            ->latest('updated_at')
+            ->with('updater');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        if (!empty($search)) {
+            return $query->where('nama_perencanaan', 'like', "%{$search}%")
+                ->orWhere('prodi', 'like', "%{$search}%")
+                ->orWhere('status', 'like', "%{$search}%");
+        }
+
+        return $query;
     }
 }

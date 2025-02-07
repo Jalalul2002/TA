@@ -51,9 +51,6 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping
             'Satuan',
             'Lokasi Penyimpanan',
             'Lokasi',
-            'Dibuat Oleh',
-            'Diupdate Oleh',
-            'Tanggal Dibuat',
             'Tanggal Diupdate',
         ];
     }
@@ -67,13 +64,10 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping
             $row->merk,
             $row->type,
             $row->product_type,
-            $row->stock > 0 ? $row->stock : 'Habis',
+            $row->stock > 0 ? $row->stock : '0',
             $row->product_unit,
             $row->location_detail,
             $row->location,
-            $row->creator?->name ?? 'N/A', // Mengambil nama creator, jika ada
-            $row->updater?->name ?? 'N/A', // Mengambil nama updater, jika ada
-            optional($row->created_at)->format('Y-m-d H:i') ?? 'N/A', // Format tanggal
             optional($row->updated_at)->format('Y-m-d H:i') ?? 'N/A', // Format tanggal
         ];
     }

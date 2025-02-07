@@ -99,15 +99,47 @@ class AssetController extends Controller
         $productType = $request->input('product_type');
         $location = $request->input('location');
 
-        return Excel::download(new AssetInvExport($productType, $location), 'data_Inventaris.xlsx');
+        if (Auth::user()->usertype !== 'admin') {
+            $location = Auth::user()->prodi;
+        }
+
+        $filename = "Data_Inventaris";
+
+        if ($productType) {
+            $filename .= "_{$productType}";
+        }
+
+        if ($location) {
+            $filename .= "_{$location}";
+        }
+
+        $filename .= ".xlsx";
+
+        return Excel::download(new AssetInvExport($productType, $location), $filename);
     }
 
     public function exportBhp(Request $request)
     {
         $productType = $request->input('product_type');
         $location = $request->input('location');
+        if (Auth::user()->usertype !== 'admin') {
+            $location = Auth::user()->prodi;
+        }
 
-        return Excel::download(new AssetBhpExport($productType, $location), 'data_bhp.xlsx');
+        $filename = "Data_BHP";
+
+        if ($productType) {
+            $filename .= "_{$productType}";
+        }
+
+        if ($location) {
+            $filename .= "_{$location}";
+        }
+
+        $filename .= ".xlsx";
+
+
+        return Excel::download(new AssetBhpExport($productType, $location), $filename);
     }
     public function store(Request $request): RedirectResponse
     {

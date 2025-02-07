@@ -15,6 +15,10 @@ class PredictionController extends Controller
     {
         $query = DataPrediksi::with("asset");
 
+        if (Auth::user()->usertype === 'staff') {
+            $query->ofLocation(Auth::user()->prodi);
+        }
+        
         if ($request->has('search')) {
             $query->search($request->search);
         }

@@ -60,8 +60,8 @@ class Perencanaan extends Model
             $dataPerencanaan = $perencanaan->rencana;
 
             if ($dataPerencanaan) {
-                $dataPerencanaan->updated_at = $perencanaan->updated_at; // Sinkronkan waktu update
-                $dataPerencanaan->updated_by = $perencanaan->updated_by; // Sinkronkan pengguna yang terakhir mengupdate
+                $dataPerencanaan->updated_at = $perencanaan->updated_at;
+                $dataPerencanaan->updated_by = $perencanaan->updated_by;
                 $dataPerencanaan->save();
             }
         });

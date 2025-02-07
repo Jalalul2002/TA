@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Perencanaan Barang Habis Pakai') }}
+            {{ __('Data Perencanaan Barang Inventaris') }}
         </h2>
     </x-slot>
     <div class="py-8">
@@ -27,7 +27,7 @@
                                 placeholder="Search for items" autocomplete="off">
                         </div>
                         <div>
-                            <a href="/add-perencanaan-bhp"
+                            <a href="/add-perencanaan-inv"
                                 class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">

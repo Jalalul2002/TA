@@ -62,16 +62,18 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
             <div class="flex gap-x-4 items-center lg:hidden">
                 @if (Route::has('login'))
                     @auth
-                        <a href="/dashboard"
-                            class="text-xs/6 font-semibold text-white py-2 px-4 bg-uinBlue rounded-full">SIMA
-                            Lab <span aria-hidden="true">&rarr;</span></a>
+                        <a href="{{ Auth::user()->usertype === 'admin' ? route('admin.dashboard') : route('dashboard') }}"
+                            class="text-xs font-semibold text-white py-2 px-4 bg-uinBlue rounded-full">
+                            SIMA Lab <span aria-hidden="true">&rarr;</span>
+                        </a>
                     @else
                         <a href="{{ route('login') }}"
-                            class="text-xs/6 font-semibold text-white py-2 px-4 bg-uinBlue rounded-full">SIMA
-                            Lab <span aria-hidden="true">&rarr;</span></a>
-
+                            class="text-xs font-semibold text-white py-2 px-4 bg-uinBlue rounded-full">
+                            SIMA Lab <span aria-hidden="true">&rarr;</span>
+                        </a>
                     @endauth
                 @endif
+
                 <button type="button" @click="isOpen = !isOpen"
                     class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
                     <span class="sr-only">Open main menu</span>
@@ -106,7 +108,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         <div class="p-4">
                             @foreach ($programs as $program)
                                 <div
-                                    class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm/6 hover:bg-gray-50">
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50">
                                     <div
                                         class="flex font-bold text-gray-900 size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-uinNavy">
                                         <p>{{ $program['code'] }}</p>
@@ -120,19 +122,19 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         </div>
                     </div>
                 </div>
-                <a href="#" class="text-sm/6 font-semibold text-gray-900 hover:text-uinBlue">Lokasi</a>
-                <a href="https://fst.uinsgd.ac.id/" class="text-sm/6 font-semibold text-gray-900 hover:text-uinBlue">Web
+                <a href="#" class="text-sm font-semibold text-gray-900 hover:text-uinBlue">Lokasi</a>
+                <a href="https://fst.uinsgd.ac.id/" class="text-sm font-semibold text-gray-900 hover:text-uinBlue">Web
                     Fakultas</a>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
                 @if (Route::has('login'))
                     @auth
-                        <a href="/dashboard"
-                            class="text-sm/6 font-semibold text-white py-3 px-8 bg-uinBlue hover:bg-uinYellow rounded-full">SIMA
+                        <a href="{{ Auth::user()->usertype === 'admin' ? route('admin.dashboard') : route('dashboard') }}"
+                            class="text-sm font-semibold text-white py-3 px-8 bg-uinBlue hover:bg-uinYellow rounded-full">SIMA
                             Lab <span aria-hidden="true">&rarr;</span></a>
                     @else
                         <a href="{{ route('login') }}"
-                            class="text-sm/6 font-semibold text-white py-3 px-8 bg-uinBlue hover:bg-uinYellow rounded-full">SIMA
+                            class="text-sm font-semibold text-white py-3 px-8 bg-uinBlue hover:bg-uinYellow rounded-full">SIMA
                             Lab <span aria-hidden="true">&rarr;</span></a>
                     @endauth
                 @endif
@@ -260,7 +262,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                     class="bg-white max-w-6xl py-6 px-6 lg:px-8 rounded-3xl shadow-md font-semibold text-base lg:text-xl sm:flex sm:gap-x-14 animate__animated animate__zoomIn animate__slow">
                     <div class="flex mb-2 sm:mb-0 gap-x-2 items-center">
                         <img src="icon/booking.png" alt="icon booking" class="w-10 md:w-14 lg:w-16">
-                        <h2 class="leading-none">Peminjaman Ruangan Lab</h2>
+                        <h2 class="leading-none">Penggunaan Ruangan Lab</h2>
                     </div>
                     <div class="flex mb-2 sm:mb-0 gap-x-2 items-center">
                         <img src="icon/lab-tool.png" alt="icon booking" class="w-10 md:w-14 lg:w-16">
@@ -287,8 +289,9 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         <div class="mx-auto max-w-6xl">
                             <div
                                 class="mx-auto grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-                                <img src="Lab3.png" alt="Product screenshot" class="w-80 max-w-xl md:w-[48rem] animate-on-scroll"
-                                    width="2432" height="1442">
+                                <img src="Lab3.png" alt="Product screenshot"
+                                    class="w-80 max-w-xl md:w-[48rem] animate-on-scroll" width="2432"
+                                    height="1442">
                                 <div class="lg:pt-4 lg:pr-8">
                                     <div class="lg:max-w-lg animate-on-scroll">
                                         <p
@@ -458,8 +461,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                     <a href="/" class="mr-5">
                         <img src="Logo-UIN-Putih.png" class="h-52 me-3" alt="UIN Logo Putih" />
                     </a>
-                    <div
-                        class="text-white text-4xl font-semibold text-justify col-span-2 max-w-72">
+                    <div class="text-white text-4xl font-semibold text-justify col-span-2 max-w-72">
                         <h3>Laboratorium</h3>
                         <h3 class="text-xl font-light">Fakultas Sains dan Teknologi</h3>
                         <div class="font-sans text-base py-4">

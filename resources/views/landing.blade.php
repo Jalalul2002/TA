@@ -50,7 +50,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 <a href="/" class="-m-1.5 p-1.5">
                     <div class="flex items-center">
                         <div class="mr-2">
-                            <img src="logo-uinsgd_official.png" alt="Logo UIN" class="w-auto h-10">
+                            <img src="{{ asset('logo-uinsgd_official.png') }}" alt="Logo UIN" class="w-auto h-10">
                         </div>
                         <div>
                             <p class="font-semibold text-base sm:text-lg leading-none">Laboratorium Terpadu</p>

@@ -110,7 +110,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                                 <div
                                     class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-uinBlue">
                                     <div
-                                        class="flex font-bold text-gray-900 size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-uinYellow group-hover:text-white">
+                                        class="flex font-bold text-gray-900 size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:text-uinYellow">
                                         <p>{{ $program['code'] }}</p>
                                     </div>
                                     <a href="{{ $program['link'] }}" class="block font-semibold text-gray-900 group-hover:text-white">

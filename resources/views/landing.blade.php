@@ -108,12 +108,12 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         <div class="p-4">
                             @foreach ($programs as $program)
                                 <div
-                                    class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-gray-50">
+                                    class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-uinBlue">
                                     <div
-                                        class="flex font-bold text-gray-900 size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-uinNavy">
+                                        class="flex font-bold text-gray-900 size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-uinOrange group-hover:text-white">
                                         <p>{{ $program['code'] }}</p>
                                     </div>
-                                    <a href="{{ $program['link'] }}" class="block font-semibold text-gray-900">
+                                    <a href="{{ $program['link'] }}" class="block font-semibold text-gray-900 group-hover:text-white">
                                         {{ $program['name'] }}
                                         <span class="absolute inset-0"></span>
                                     </a>
@@ -457,14 +457,14 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
         class="bg-center bg-cover bg-no-repeat bg-[url('https://uinsgd.ac.id/wp-content/uploads/elementor/thumbs/IMG_9146-scaled-qibumy4zfccfw6i2ubygu8lhlobxchr6yb3uoza79c.jpg')] bg-sky-600 bg-blend-multiply">
         <div class="mx-auto w-full max-w-6xl py-6 lg:py-8">
             <div class="md:flex md:justify-between">
-                <div class="mb-6 md:mb-0 p-6 grid grid-cols-3 gap-8">
+                <div class="px-6 md:px-0 mb-6 md:mb-0 md:p-6 grid grid-cols-3 gap-2 md:gap-6 lg:gap-8">
                     <a href="/" class="mr-5">
-                        <img src="Logo-UIN-Putih.png" class="h-52 me-3" alt="UIN Logo Putih" />
+                        <img src="Logo-UIN-Putih.png" class="h-40 md:h-52 me-3" alt="UIN Logo Putih" />
                     </a>
-                    <div class="text-white text-4xl font-semibold text-justify col-span-2 max-w-72">
+                    <div class="text-white text-2xl lg:text-4xl font-semibold text-justify col-span-2 max-w-72">
                         <h3>Laboratorium</h3>
-                        <h3 class="text-xl font-light">Fakultas Sains dan Teknologi</h3>
-                        <div class="font-sans text-base py-4">
+                        <h3 class="text-sm lg:text-xl font-light">Fakultas Sains dan Teknologi</h3>
+                        <div class="font-sans text-xs lg:text-base py-4">
                             <p>Jl. A.H. Nasution No. 105 Cibiru Kota Bandung 40614
                                 Jawa Barat – Indonesia</p>
                             <p class="pt-4">
@@ -473,10 +473,10 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
+                <div class="px-6 md:px-0 grid grid-cols-2 gap-1 xl:gap-8 lg:gap-6 lg:grid-cols-3">
                     <div>
-                        <h2 class="mb-6 text-sm font-semibold text-white uppercase">Program Studi</h2>
-                        <ul class="text-white font-medium">
+                        <h2 class="mb-6 text-xs lg:text-sm font-semibold text-white uppercase">Program Studi</h2>
+                        <ul class="text-white text-sm lg:text-base font-medium">
                             <li class="mb-4">
                                 <a href="https://math.uinsgd.ac.id/" class="hover:underline ">Matematika</a>
                             </li>
@@ -492,7 +492,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         </ul>
                     </div>
                     <div class="pt-11">
-                        <ul class="text-white font-medium">
+                        <ul class="text-white text-sm lg:text-base font-medium">
 
                             <li class="mb-4">
                                 <a href="https://if.uinsgd.ac.id/" class="hover:underline ">Teknik
@@ -511,7 +511,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 </div>
             </div>
             <hr class="my-6 border-white sm:mx-auto lg:my-8" />
-            <div class="sm:flex sm:items-center sm:justify-between">
+            <div class="sm:flex sm:items-center sm:justify-between px-6 md:px-0">
                 <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
                         class="hover:underline">Lab Fakultas Saintek</a>. UIN Sunan Gunung Djati Bandung.
                 </span>

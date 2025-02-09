@@ -122,7 +122,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         </div>
                     </div>
                 </div>
-                <a href="#" class="text-sm font-semibold text-gray-900 hover:text-uinBlue">Lokasi</a>
+                <a href="#" class="text-sm font-semibold text-gray-900 hover:text-uinBlue">Denah Lab</a>
                 <a href="https://fst.uinsgd.ac.id/" class="text-sm font-semibold text-gray-900 hover:text-uinBlue">Web
                     Fakultas</a>
             </div>
@@ -198,7 +198,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                                 </div>
                             </div>
                             <a href="#"
-                                class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Lokasi</a>
+                                class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Denah Lab</a>
                             <a href="https://fst.uinsgd.ac.id/"
                                 class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Web
                                 Fakultas</a>

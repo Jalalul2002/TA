@@ -71,7 +71,7 @@ Route::middleware(['auth', 'staffMiddleware'])->group(function () {
 
 //staff Route
 Route::middleware(['auth', 'userMiddleware'])->group(function () {
-    Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
+    Route::get('user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
 });
 
 //Admin Route

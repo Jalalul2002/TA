@@ -42,7 +42,7 @@ class PredictionController extends Controller
             $file->getClientOriginalName()
         // )->post('http://127.0.0.1:5001/predict', ['user_id' => $userid]);
         // )->post('http://103.186.1.191/predict', ['user_id' => $userid]);
-        )->post('httpa://labsaintek.icu/predict', ['user_id' => $userid]);
+        )->post('https://labsaintek.icu/predict', ['user_id' => $userid]);
 
         if ($response->successful()) {
             // $headers = [

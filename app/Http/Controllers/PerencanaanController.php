@@ -17,7 +17,7 @@ class PerencanaanController extends Controller
     {
         $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'inventaris');
 
-        if (Auth::user()->usertype !== 'admin') {
+        if (Auth::user()->usertype === 'staff') {
             $query->where('prodi', Auth::user()->prodi);
         }
 
@@ -33,7 +33,7 @@ class PerencanaanController extends Controller
     {
         $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'bhp');
 
-        if (Auth::user()->usertype !== 'admin') {
+        if (Auth::user()->usertype === 'staff') {
             $query->where('prodi', Auth::user()->prodi);
         }
 

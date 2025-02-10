@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -17,7 +18,7 @@ Route::get('/', function () {
     return view('landing');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -68,11 +69,18 @@ Route::middleware(['auth', 'staffMiddleware'])->group(function () {
     Route::get('dashboard', [StaffController::class, 'index'])->name('dashboard');
 });
 
+//staff Route
+Route::middleware(['auth', 'userMiddleware'])->group(function () {
+    Route::get('dashboard', [UserController::class, 'index'])->name('dashboard');
+});
+
 //Admin Route
 Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('admin/data-staff', [DataStaffController::class, 'index'])->name('admin.staff');
     Route::get('admin/add-staff', [RegisterStaffController::class, 'create'])->name('admin.add-staff');
     Route::post('admin/add-staff', [RegisterStaffController::class, 'store']);
+    Route::get('admin/edit-staff/{id}', [RegisterStaffController::class, 'edit'])->name('admin.edit-staff');
+    Route::put('admin/update-staff/{id}', [RegisterStaffController::class, 'update'])->name('admin.update-staff');
     Route::delete('admin/data-staff/{id}', [DataStaffController::class, 'destroy'])->name('admin.destroy-staff');
 });

@@ -40,7 +40,9 @@ class PredictionController extends Controller
             'csv_file',
             file_get_contents($file->getRealPath()),
             $file->getClientOriginalName()
-        )->post('http://103.186.1.191:5001/predict', ['user_id' => $userid]);
+        // )->post('http://127.0.0.1:5001/predict', ['user_id' => $userid]);
+        // )->post('http://103.186.1.191/predict', ['user_id' => $userid]);
+        )->post('httpa://labsaintek.icu/predict', ['user_id' => $userid]);
 
         if ($response->successful()) {
             // $headers = [

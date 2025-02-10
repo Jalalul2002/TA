@@ -55,7 +55,6 @@ class Perencanaan extends Model
     {
         parent::boot();
 
-        // Event untuk memperbarui updated_at DataPerencanaan
         static::updated(function ($perencanaan) {
             $dataPerencanaan = $perencanaan->rencana;
 

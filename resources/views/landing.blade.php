@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full scroll-smooth">
 
 <head>
     <meta charset="utf-8">
@@ -44,7 +44,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
     <header x-data="{ isOpen: false, hasScrolled: false }" @scroll.window="hasScrolled = (window.scrollY > 0)"
         :class="hasScrolled ? 'bg-white shadow-lg' : ''" class="fixed inset-x-0 top-0 z-50 transition-all duration-300">
         <nav :class="hasScrolled ? 'py-6' : 'py-6 lg:py-8'"
-            class="mx-auto flex max-w-6xl items-center justify-between px-3 lg:px-0 transition-all duration-300"
+            class="mx-auto flex max-w-6xl items-center justify-between px-6 xl:px-0 transition-all duration-300"
             aria-label="Global">
             <div class="flex lg:flex-1">
                 <a href="/" class="-m-1.5 p-1.5">
@@ -53,8 +53,8 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                             <img src="{{ asset('Logo-uinsgd_official.png') }}" alt="Logo UIN" class="w-auto h-10">
                         </div>
                         <div>
-                            <p class="font-semibold text-base sm:text-lg leading-none">Laboratorium Terpadu</p>
-                            <p class="text-xs sm:text-sm leading-none">Fakultas Sains dan Teknologi</p>
+                            <p class="font-semibold text-base sm:text-xl leading-none">Laboratorium</p>
+                            <p class="text-[8px] sm:text-[10px] leading-none">Fakultas Sains dan Teknologi</p>
                         </div>
                     </div>
                 </a>
@@ -62,7 +62,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
             <div class="flex gap-x-4 items-center lg:hidden">
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ Auth::user()->usertype === 'admin' ? route('admin.dashboard') : route('dashboard') }}"
+                        <a href="{{ Auth::user()->usertype === 'admin' ? route('admin.dashboard') : (Auth::user()->usertype === 'staff' ? route('dashboard') : route('user.dashboard')) }}"
                             class="text-xs font-semibold text-white py-2 px-4 bg-uinBlue rounded-full">
                             SIMA Lab <span aria-hidden="true">&rarr;</span>
                         </a>
@@ -85,18 +85,21 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 </button>
             </div>
             <div class="hidden lg:flex lg:gap-x-12">
-                <a href="/" class="text-sm/6 font-semibold text-gray-900 hover:text-uinBlue">Beranda</a>
-                <div class="relative">
+                <a href="/"
+                    class="text-sm font-semibold text-gray-900 hover:text-uinBlue transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-uinBlue after:transition-all after:duration-300 hover:after:w-full">Beranda</a>
+                <div class="relative inline-block">
                     <button type="button" @click="isOpen = !isOpen"
-                        class="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900 hover:text-uinBlue"
+                        class="-top-[2px] text-sm font-semibold text-gray-900 hover:text-uinBlue transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-uinBlue after:transition-all after:duration-300 hover:after:w-full"
                         aria-expanded="false">
-                        Program Studi
-                        <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-                            aria-hidden="true" data-slot="icon">
-                            <path fill-rule="evenodd"
-                                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-                                clip-rule="evenodd" />
-                        </svg>
+                        <div class="flex items-center gap-x-1 pb-1">
+                            <span>Program Studi</span>
+                            <svg class="size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                                aria-hidden="true" data-slot="icon">
+                                <path fill-rule="evenodd"
+                                    d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </div>
                     </button>
                     <div x-show="isOpen" x-cloak x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 translate-y-1"
@@ -110,10 +113,11 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                                 <div
                                     class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm hover:bg-uinBlue">
                                     <div
-                                        class="flex font-bold text-gray-900 size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:text-uinYellow">
+                                        class="flex font-bold text-gray-900 size-11 flex-none items-center justify-center rounded-lg bg-gray-100 group-hover:bg-uinYellow group-hover:text-white">
                                         <p>{{ $program['code'] }}</p>
                                     </div>
-                                    <a href="{{ $program['link'] }}" class="block font-semibold text-gray-900 group-hover:text-white">
+                                    <a href="{{ $program['link'] }}"
+                                        class="block font-semibold text-gray-900 group-hover:text-white">
                                         {{ $program['name'] }}
                                         <span class="absolute inset-0"></span>
                                     </a>
@@ -122,20 +126,42 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         </div>
                     </div>
                 </div>
-                <a href="#" class="text-sm font-semibold text-gray-900 hover:text-uinBlue">Denah Lab</a>
-                <a href="https://fst.uinsgd.ac.id/" class="text-sm font-semibold text-gray-900 hover:text-uinBlue">Web
+                <a href="#"
+                    class="text-sm font-semibold text-gray-900 hover:text-uinBlue transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-uinBlue after:transition-all after:duration-300 hover:after:w-full">Denah
+                    Lab</a>
+                <a href="https://fst.uinsgd.ac.id/"
+                    class="text-sm font-semibold text-gray-900 hover:text-uinBlue transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-uinBlue after:transition-all after:duration-300 hover:after:w-full">Web
                     Fakultas</a>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ Auth::user()->usertype === 'admin' ? route('admin.dashboard') : route('dashboard') }}"
-                            class="text-sm font-semibold text-white py-3 px-8 bg-uinBlue hover:bg-uinYellow rounded-full">SIMA
-                            Lab <span aria-hidden="true">&rarr;</span></a>
+                        <a
+                            href="{{ Auth::user()->usertype === 'admin' ? route('admin.dashboard') : (Auth::user()->usertype === 'staff' ? route('dashboard') : route('user.dashboard')) }}">
+                            <div
+                                class="text-sm group font-semibold bg-uinBlue text-white py-3 px-8 hover:bg-uinYellow rounded-full transition duration-300 flex items-center gap-1">
+                                <span>SIMA Lab</span><span aria-hidden="true"
+                                    class="inline-block transition-transform duration-300 group-hover:translate-x-1"><svg
+                                        class="w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                        viewBox="0 0 24 24" width="512" height="512">
+                                        <path
+                                            d="M23.12,9.91,19.25,6a1,1,0,0,0-1.42,0h0a1,1,0,0,0,0,1.41L21.39,11H1a1,1,0,0,0-1,1H0a1,1,0,0,0,1,1H21.45l-3.62,3.61a1,1,0,0,0,0,1.42h0a1,1,0,0,0,1.42,0l3.87-3.88A3,3,0,0,0,23.12,9.91Z" />
+                                    </svg></span>
+                            </div>
+                        </a>
                     @else
-                        <a href="{{ route('login') }}"
-                            class="text-sm font-semibold text-white py-3 px-8 bg-uinBlue hover:bg-uinYellow rounded-full">SIMA
-                            Lab <span aria-hidden="true">&rarr;</span></a>
+                        <a href="{{ route('login') }}">
+                            <div
+                                class="text-sm group font-semibold bg-uinBlue text-white py-3 px-8 hover:bg-uinYellow rounded-full transition duration-300 flex items-center gap-1">
+                                <span>SIMA Lab</span><span aria-hidden="true"
+                                    class="inline-block transition-transform duration-300 group-hover:translate-x-1"><svg
+                                        class="w-4 h-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                        viewBox="0 0 24 24" width="512" height="512">
+                                        <path
+                                            d="M23.12,9.91,19.25,6a1,1,0,0,0-1.42,0h0a1,1,0,0,0,0,1.41L21.39,11H1a1,1,0,0,0-1,1H0a1,1,0,0,0,1,1H21.45l-3.62,3.61a1,1,0,0,0,0,1.42h0a1,1,0,0,0,1.42,0l3.87-3.88A3,3,0,0,0,23.12,9.91Z" />
+                                    </svg></span>
+                            </div>
+                        </a>
                     @endauth
                 @endif
 
@@ -158,10 +184,11 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 <div class="flex items-center justify-between">
                     <a href="#" class="-m-1.5 p-1.5">
                         <div class="flex items-center">
-                            <img src="favicon.png" alt="Logo UIN" class="w-auto h-8 mr-4">
+                            <img src="{{ asset('Logo-uinsgd_official.png') }}" alt="Logo UIN"
+                                class="w-auto h-8 mr-4">
                             <div>
-                                <p class="font-semibold text-lg leading-none">Laboratorium Terpadu</p>
-                                <p class="text-sm">Fakultas Sains dan Teknologi</p>
+                                <p class="font-semibold text-xl leading-none">Laboratorium</p>
+                                <p class="text-[11px] leading-none">Fakultas Sains dan Teknologi</p>
                             </div>
                         </div>
                     </a>
@@ -177,10 +204,10 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                     <div class="-my-6 divide-y divide-white/10">
                         <div class="space-y-2 py-6">
                             <a href="/"
-                                class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Beranda</a>
+                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Beranda</a>
                             <div x-data="{ open: false }" class="-mx-3">
                                 <button type="button" @click="open = !open"
-                                    class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                                    class="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold text-gray-900 hover:bg-gray-50"
                                     aria-controls="disclosure-1" aria-expanded="false">
                                     Program Studi
                                     <svg :class="{ 'rotate-180': open }" class="size-5 flex-none" viewBox="0 0 20 20"
@@ -193,14 +220,15 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                                 <div x-show="open" x-collapse class="mt-2 space-y-2" id="disclosure-1">
                                     @foreach ($programs as $program)
                                         <a href="{{ $program['link'] }}"
-                                            class="block rounded-lg py-2 pl-6 pr-3 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50">{{ $program['code'] . ' ' . $program['name'] }}</a>
+                                            class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold text-gray-900 hover:bg-gray-50">{{ $program['code'] . ' ' . $program['name'] }}</a>
                                     @endforeach
                                 </div>
                             </div>
                             <a href="#"
-                                class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Denah Lab</a>
+                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Denah
+                                Lab</a>
                             <a href="https://fst.uinsgd.ac.id/"
-                                class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Web
+                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Web
                                 Fakultas</a>
                         </div>
                     </div>
@@ -221,23 +249,34 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 <div class="text-left py-24 sm:py-32 lg:py-56 animate__animated animate__zoomIn">
                     <h1
                         class="text-balance text-5xl lg:text-7xl font-semibold tracking-tight text-gray-900 font-[clash-display]">
-                        Laboratorium <br> Terpadu</h1>
+                        Laboratorium</h1>
                     <p class="mt-8 text-pretty text-lg font-base text-gray-900">Fakultas Sains dan
                         Teknologi UIN Sunan Gunung Djati Bandung</p>
                     <div class="mt-10 flex items-center gap-x-6">
                         @if (Route::has('login'))
                             @auth
-                                <a href="/dashboard"
-                                    class="rounded-md bg-uinYellow px-6 py-2.5 text-lg font-light text-white shadow-sm hover:bg-uinBlue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Masuk
+                                <a href="{{ Auth::user()->usertype === 'admin' ? route('admin.dashboard') : (Auth::user()->usertype === 'staff' ? route('dashboard') : route('user.dashboard')) }}"
+                                    class="rounded-xl bg-uinYellow px-6 py-2.5 text-lg font-light text-white shadow-sm hover:bg-uinBlue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-300">Masuk
                                     SIMA Lab</a>
                             @else
                                 <a href="{{ route('login') }}"
-                                    class="rounded-md bg-uinYellow px-6 py-2.5 text-lg font-light text-white shadow-sm hover:bg-uinBlue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Masuk
+                                    class="rounded-xl bg-uinYellow px-6 py-2.5 text-lg font-light text-white shadow-sm hover:bg-uinBlue focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-300">Masuk
                                     SIMA Lab</a>
                             @endauth
                         @endif
-                        <a href="#" class="text-sm/6 font-semibold text-gray-900 hover:text-uinBlue">Lihat lebih
-                            banyak <span aria-hidden="true">→</span></a>
+                        <a href="#layanan">
+                            <div
+                                class="text-sm group font-semibold text-gray-900 hover:text-uinBlue transition duration-300 flex items-center gap-1">
+                                <span>Lihat lebih banyak</span><span aria-hidden="true"
+                                    class="inline-block transition-transform duration-300 group-hover:translate-x-1"><svg
+                                        class="w-4 h-4 fill-gray-900 group-hover:fill-uinBlue transition duration-300"
+                                        xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24"
+                                        width="512" height="512">
+                                        <path
+                                            d="M23.12,9.91,19.25,6a1,1,0,0,0-1.42,0h0a1,1,0,0,0,0,1.41L21.39,11H1a1,1,0,0,0-1,1H0a1,1,0,0,0,1,1H21.45l-3.62,3.61a1,1,0,0,0,0,1.42h0a1,1,0,0,0,1.42,0l3.87-3.88A3,3,0,0,0,23.12,9.91Z" />
+                                    </svg></span>
+                            </div>
+                        </a>
                     </div>
                 </div>
                 <div class="h-full animate__animated animate__zoomIn animate__slow">
@@ -254,7 +293,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
         </div>
     </section>
 
-    <section class="layanan">
+    <section class="layanan" id="layanan">
         <div class="relative">
             <div
                 class="pt-10 md:pt-0 md:absolute inset-x-0 -top-16 z-20 transform-gpu md:flex justify-center items-center px-6">
@@ -478,16 +517,20 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         <h2 class="mb-6 text-xs lg:text-sm font-semibold text-white uppercase">Program Studi</h2>
                         <ul class="text-white text-sm lg:text-base font-medium">
                             <li class="mb-4">
-                                <a href="https://math.uinsgd.ac.id/" class="hover:underline ">Matematika</a>
+                                <a href="https://math.uinsgd.ac.id/"
+                                    class="hover:text-uinYellow transition duration-300">Matematika</a>
                             </li>
                             <li class="mb-4">
-                                <a href="http://bio.uinsgd.ac.id/" class="hover:underline ">Biologi</a>
+                                <a href="http://bio.uinsgd.ac.id/"
+                                    class="hover:text-uinYellow transition duration-300">Biologi</a>
                             </li>
                             <li class="mb-4">
-                                <a href="https://fi.uinsgd.ac.id/" class="hover:underline ">Fisika</a>
+                                <a href="https://fi.uinsgd.ac.id/"
+                                    class="hover:text-uinYellow transition duration-300">Fisika</a>
                             </li>
                             <li class="mb-4">
-                                <a href="https://chem.uinsgd.ac.id/" class="hover:underline ">Kimia</a>
+                                <a href="https://chem.uinsgd.ac.id/"
+                                    class="hover:text-uinYellow transition duration-300">Kimia</a>
                             </li>
                         </ul>
                     </div>
@@ -495,15 +538,18 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                         <ul class="text-white text-sm lg:text-base font-medium">
 
                             <li class="mb-4">
-                                <a href="https://if.uinsgd.ac.id/" class="hover:underline ">Teknik
+                                <a href="https://if.uinsgd.ac.id/"
+                                    class="hover:text-uinYellow transition duration-300">Teknik
                                     Informatika</a>
 
                             </li>
                             <li class="mb-4">
-                                <a href="https://agrotek.uinsgd.ac.id/" class="hover:underline ">Agroteknologi</a>
+                                <a href="https://agrotek.uinsgd.ac.id/"
+                                    class="hover:text-uinYellow transition duration-300">Agroteknologi</a>
                             </li>
                             <li class="mb-4">
-                                <a href="https://ee.uinsgd.ac.id/" class="hover:underline ">Teknik
+                                <a href="https://ee.uinsgd.ac.id/"
+                                    class="hover:text-uinYellow transition duration-300">Teknik
                                     Elektro</a>
                             </li>
                         </ul>
@@ -512,23 +558,24 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
             </div>
             <hr class="my-6 border-white sm:mx-auto lg:my-8" />
             <div class="sm:flex sm:items-center sm:justify-between px-6 md:px-0">
-                <span class="text-sm text-white sm:text-center">© 2024 <a href="https://flowbite.com/"
-                        class="hover:underline">Lab Fakultas Saintek</a>. UIN Sunan Gunung Djati Bandung.
+                <span class="text-sm text-white sm:text-center">© 2024 <a href="/"
+                        class="hover:text-uinYellow transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-uinYellow after:transition-all after:duration-300 hover:after:w-full">Laboratorium
+                        Fakultas Saintek</a>. UIN Sunan Gunung Djati Bandung.
                 </span>
                 <div class="flex mt-4 sm:justify-center sm:mt-0">
-                    <a href="#" class="text-white hover:text-uinYellow">
+                    <a href="#" class="text-white hover:text-uinYellow transition duration-300">
                         <i class="fi fi-brands-facebook"></i>
                         <span class="sr-only">Facebook page</span>
                     </a>
-                    <a href="#" class="text-white hover:text-uinYellow ms-5">
+                    <a href="#" class="text-white hover:text-uinYellow ms-5 transition duration-300">
                         <i class="fi fi-brands-instagram"></i>
                         <span class="sr-only">Instagram account</span>
                     </a>
-                    <a href="#" class="text-white hover:text-uinYellow ms-5">
+                    <a href="#" class="text-white hover:text-uinYellow ms-5 transition duration-300">
                         <i class="fi fi-brands-twitter-alt"></i>
                         <span class="sr-only">X account</span>
                     </a>
-                    <a href="#" class="text-white hover:text-uinYellow ms-5">
+                    <a href="#" class="text-white hover:text-uinYellow ms-5 transition duration-300">
                         <i class="fi fi-brands-youtube"></i>
                         <span class="sr-only">Youtube account</span>
                     </a>

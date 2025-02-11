@@ -15,7 +15,7 @@
             <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-gray-200">
                 <div class="flex flex-col space-y-4">
                     <div class="flex justify-between items-center border-b pb-4">
-                        <h1 class="text-2xl font-bold text-gray-900">Detail Perencanaan {{ strtoupper($dataPerencanaan->type) }}</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">Detail Perencanaan {{ $dataPerencanaan->type === 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}</h1>
                         <span
                             class="text-sm font-bold rounded-full px-4 py-2
                             {{ $dataPerencanaan->status == 'belum' ? 'bg-red-100 text-red-500' : 'bg-green-100 text-green-500' }}">{{ $dataPerencanaan->status == 'belum' ? 'Belum Diselesaikan' : 'Sudah Diselesaikan' }}

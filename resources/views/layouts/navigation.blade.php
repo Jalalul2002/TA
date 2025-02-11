@@ -40,12 +40,12 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm/6 hover:bg-uinBlue">
+                        <div class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm/6 hover:bg-uinBlue transition-all duration-300">
                             <div
-                                class="flex font-bold text-gray-900 size-11 leading-none flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-uinBlue">
+                                class="flex font-bold text-gray-900 size-11 leading-none flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white group-hover:text-uinBlue transition-all duration-300">
                                 <p><i class="fi fi-rr-circle-user leading-none text-xl"></i></p>
                             </div>
-                            <a href="{{ route('profile.edit') }}" class="block font-semibold text-gray-900 hover:text-white">
+                            <a href="{{ route('profile.edit') }}" class="block font-semibold text-gray-900 hover:text-white transition-all duration-300">
                                 Profile
                                 <span class="absolute inset-0"></span>
                             </a>
@@ -55,15 +55,15 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <div
-                                class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm/6 hover:bg-uinRed">
+                                class="group relative flex items-center gap-x-6 rounded-lg p-2 text-sm/6 hover:bg-uinRed duration-300 transition">
                                 <div
-                                    class="flex font-bold text-white size-11 leading-none flex-none items-center justify-center rounded-lg bg-uinRed group-hover:bg-white group-hover:text-uinRed">
+                                    class="flex font-bold text-white size-11 leading-none flex-none items-center justify-center rounded-lg bg-uinRed group-hover:bg-white group-hover:text-uinRed transition-all duration-300">
                                     <p><i class="fi fi-rr-exit leading-none text-xl"></i></p>
                                 </div>
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();"
-                                    class="block font-semibold text-uinRed hover:text-white">
+                                    class="block font-semibold text-uinRed hover:text-white transition-all duration-300">
                                     Sign Out
                                     <span class="absolute inset-0"></span>
                                 </a>

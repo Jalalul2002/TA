@@ -66,7 +66,7 @@
 
         <div class="flex items-center justify-end mt-4 mb-5">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300"
                     href="{{ route('password.request') }}">
                     {{ __('Forgot your password?') }}
                 </a>
@@ -74,7 +74,7 @@
         </div>
 
         <div>
-            <button class="bg-uinBlue hover:bg-uinOrange rounded-3xl font-semibold text-white w-full block py-3 text-base">Sign In to Account</button>
+            <button class="bg-uinBlue hover:bg-uinOrange rounded-3xl font-semibold text-white w-full block py-3 text-base transition duration-300">Sign In to Account</button>
         </div>
     </form>
 </x-guest-layout>

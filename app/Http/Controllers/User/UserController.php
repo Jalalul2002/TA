@@ -10,21 +10,45 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $totalInventaris = Assetlab::where('type', 'inventaris')->count();
-        $totalBhp = Assetlab::where('type', 'bhp')->count();
-        $totalPerencanaan = DataPerencanaan::count();
-        $recentAssets = Assetlab::latest()->limit(10)->get();
-        $Users = User::latest()->get();
+        $filter = $request->query('filter', 'all');
+        $query = Assetlab::query();
+
+        if ($filter !== 'all') {
+            $query->where('location', $filter);
+        }
+
+        $jumlahInventaris = (clone $query)->where('type', 'inventaris')->count();
+        $jumlahStokInventaris = (clone $query)->where('type', 'inventaris')->sum('stock');
+        $jumlahBhp = (clone $query)->where('type', 'bhp')->count();
+        $jumlahUsers = User::when($filter !== 'all', function ($q) use ($filter) {
+            if ($filter === 'Umum') {
+                return $q->whereNull('prodi');
+            }
+            return $q->where('prodi', $filter);
+        })->count();
+        $jumlahPerencanaan = DataPerencanaan::when($filter !== 'all', function ($q) use ($filter) {
+            return $q->where('prodi', $filter);
+        })->count();
+        $recentAssets = (clone $query)->latest()->limit(10)->get();
+        $Users = User::when($filter !== 'all', function ($q) use ($filter) {
+            if ($filter === 'Umum') {
+                return $q->whereNull('prodi');
+            }
+            return $q->where('prodi', $filter);
+        })->latest()->limit(5)->get();
 
 
-        return view('dashboard', compact(
-            'totalBhp',
-            'totalInventaris',
-            'totalPerencanaan',
+        return view('admin.dashboard', compact(
+            'jumlahBhp',
+            'jumlahInventaris',
+            'jumlahStokInventaris',
+            'jumlahUsers',
+            'jumlahPerencanaan',
             'recentAssets',
-            'Users'
+            'Users',
+            'filter'
         ));
     }
 }

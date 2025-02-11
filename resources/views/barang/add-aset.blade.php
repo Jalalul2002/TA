@@ -1,9 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        <a href="{{ route('data-aset') }}"></a>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('◀️ Tambah Data Aset Barang Inventaris') }}
-        </h2>
+        <a href="{{ route('data-aset') }}">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('◀️ Tambah Data Aset Barang Inventaris') }}
+            </h2>
+        </a>
     </x-slot>
 
     <div class="py-6">
@@ -37,7 +38,7 @@
                 }"
                     x-init="$watch('location', value => {
                         const locationToCodeMap = {
-                            'Umum' : '700',
+                            'Umum': '700',
                             'Matematika': '701',
                             'Biologi': '702',
                             'Fisika': '703',

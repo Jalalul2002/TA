@@ -26,17 +26,19 @@
                                 class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Search for items" autocomplete="off">
                         </div>
-                        <div>
-                            <a href="/add-perencanaan-inv"
-                                class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy">
-                                <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor" viewBox="0 0 448 512">
-                                    <path
-                                        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                </svg>
-                                Tambah Perencanaan
-                            </a>
-                        </div>
+                        @if (Auth::user()->usertype !== 'user')
+                            <div>
+                                <a href="/add-perencanaan-inv"
+                                    class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition-all duration-300">
+                                    <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 448 512">
+                                        <path
+                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                                    </svg>
+                                    Tambah Perencanaan
+                                </a>
+                            </div>
+                        @endif
                     </div>
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
@@ -98,8 +100,8 @@
                                         <td class="px-1 py-2">
                                             {{ $perencanaan->latestUpdater?->updater?->name ?? $perencanaan->updater->name }}
                                         </td>
-                                        <td class="py-2 flex flex-row gap-x-1 justify-end pr-3">
-                                            @if ($perencanaan->status === 'belum')
+                                        <td class="py-2 flex flex-row gap-x-1 justify-center">
+                                            @if ($perencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
                                                 <form id="complete-form"
                                                     action="{{ route('perencanaan.complete', $perencanaan->id) }}"
                                                     method="POST" style="display: none;">
@@ -107,7 +109,7 @@
                                                 </form>
                                                 <button title="Selesaikan Perencanaan"
                                                     onclick="event.preventDefault(); document.getElementById('complete-form').submit();"
-                                                    class="inline-flex items-center p-2 text-sm font-medium rounded-lg shadow-sm text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                                    class="inline-flex items-center p-2 text-sm font-medium rounded-lg shadow-sm text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
                                                         id="Capa_1" x="0px" y="0px" viewBox="0 0 507.506 507.506"
@@ -122,7 +124,8 @@
                                             @endif
                                             <a title="Lihat Detail"
                                                 href="{{ route('detail-perencanaan', $perencanaan->id) }}">
-                                                <div class="bg-amber-500 p-2 rounded-lg hover:bg-amber-700">
+                                                <div
+                                                    class="bg-amber-500 p-2 rounded-lg hover:bg-amber-700 transition-all duration-300">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
                                                         id="Outline" viewBox="0 0 24 24" width="512"
                                                         height="512">
@@ -135,7 +138,8 @@
                                             </a>
                                             <a title="Download Data"
                                                 href="{{ route('perencanaan.download', $perencanaan->id) }}">
-                                                <div class="bg-teal-500 p-2 rounded-lg hover:bg-teal-700">
+                                                <div
+                                                    class="bg-teal-500 p-2 rounded-lg hover:bg-teal-700 transition-all duration-300">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
                                                         id="Outline" viewBox="0 0 24 24" width="512"
                                                         height="512">
@@ -146,23 +150,25 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            <form action="{{ route('destroy-rencana', $perencanaan->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button title="Hapus Data" type="submit"
-                                                    class="bg-uinRed p-2 rounded-lg hover:bg-red-600"><svg
-                                                        class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
-                                                        id="Outline" viewBox="0 0 24 24" width="512"
-                                                        height="512">
-                                                        <path
-                                                            d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
-                                                        <path
-                                                            d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
-                                                        <path
-                                                            d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
-                                                    </svg></button>
-                                            </form>
+                                            @if (Auth::user()->usertype !== 'user')
+                                                <form action="{{ route('destroy-rencana', $perencanaan->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button title="Hapus Data" type="submit"
+                                                        class="bg-uinRed p-2 rounded-lg hover:bg-red-600"><svg
+                                                            class="size-4 fill-white"
+                                                            xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                                            viewBox="0 0 24 24" width="512" height="512">
+                                                            <path
+                                                                d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
+                                                            <path
+                                                                d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
+                                                            <path
+                                                                d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
+                                                        </svg></button>
+                                                </form>
+                                            @endif
                                         </td>
                                     </tr>
                                     @php

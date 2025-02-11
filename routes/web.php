@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/detail-perencanaan/{id}', [PerencanaanController::class, 'show'])->name('detail-perencanaan');
     Route::get('/perencanaan/{id}/download', [PerencanaanController::class, 'download'])->name('perencanaan.download');
 
-    Route::post('/transaction-bhp', [TransactionController::class, 'index']);
+    Route::get('/transaction-bhp', [TransactionController::class, 'index'])->name('penggunaan');
 
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
 });

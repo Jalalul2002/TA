@@ -32,7 +32,7 @@
                                 <div>
                                     <select id="product_type" name="product_type" x-model="productType"
                                         @change="applyFilter()"
-                                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm">
+                                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm text-gray-700">
                                         <option value="">-- Pilih Jenis Produk --</option>
                                         <option value="Cairan">Cairan</option>
                                         <option value="Padatan">Padatan</option>
@@ -43,7 +43,7 @@
                                     <div>
                                         <select id="location" name="location" x-model="location"
                                             @change="applyFilter()"
-                                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm">
+                                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm text-gray-700">
                                             <option value="">-- Pilih Lokasi --</option>
                                             <option value="Umum">Umum</option>
                                             <option value="Matematika">Matematika</option>
@@ -58,20 +58,22 @@
                                 @endif
                                 <div>
                                     <button type="submit"
-                                        class="inline-flex text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800">
+                                        class="inline-flex text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
                                         Export Excel
                                     </button>
                                 </div>
                             </form>
-                            <a href="{{ route('add-aset-inv') }}"
-                                class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy">
-                                <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor" viewBox="0 0 448 512">
-                                    <path
-                                        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                </svg>
-                                Tambah Data
-                            </a>
+                            @if (Auth::user()->usertype !== 'user')
+                                <a href="{{ route('add-aset-inv') }}"
+                                    class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition duration-300">
+                                    <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 448 512">
+                                        <path
+                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                                    </svg>
+                                    Tambah Data
+                                </a>
+                            @endif
                         </div>
                     </div>
                     <div class="mb-1">
@@ -127,9 +129,11 @@
                                     <th scope="col" class="py-3">
                                         Diupdate Oleh
                                     </th>
-                                    <th scope="col" class="py-3 text-center">
-                                        Action
-                                    </th>
+                                    @if (Auth::user()->usertype !== 'user')
+                                        <th scope="col" class="py-3 text-center">
+                                            Action
+                                        </th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -173,37 +177,40 @@
                                         <td class="px-1">
                                             {{ $assetLab->updater->name }}
                                         </td>
-                                        <td class="py-2 flex flex-row gap-x-2 justify-center">
-                                            <a href="{{ route('edit-aset', $assetLab->product_code) }}">
-                                                <div class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400">
-                                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
-                                                        id="Outline" viewBox="0 0 24 24" width="512"
-                                                        height="512">
-                                                        <path
-                                                            d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />
-                                                        <path
-                                                            d="M23,8.979a1,1,0,0,0-1,1V15H18a3,3,0,0,0-3,3v4H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2h9.042a1,1,0,0,0,0-2H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H16.343a4.968,4.968,0,0,0,3.536-1.464l2.656-2.658A4.968,4.968,0,0,0,24,16.343V9.979A1,1,0,0,0,23,8.979ZM18.465,21.122a2.975,2.975,0,0,1-1.465.8V18a1,1,0,0,1,1-1h3.925a3.016,3.016,0,0,1-.8,1.464Z" />
-                                                    </svg>
-                                                </div>
-                                            </a>
-                                            <form action="{{ route('destroy-aset', $assetLab->product_code) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="bg-uinRed p-2 rounded-lg hover:bg-red-600"><svg
-                                                        class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
-                                                        id="Outline" viewBox="0 0 24 24" width="512"
-                                                        height="512">
-                                                        <path
-                                                            d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
-                                                        <path
-                                                            d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
-                                                        <path
-                                                            d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
-                                                    </svg></button>
-                                            </form>
-                                        </td>
+                                        @if (Auth::user()->usertype !== 'user')
+                                            <td class="py-2 flex flex-row gap-x-2 justify-center">
+                                                <a href="{{ route('edit-aset', $assetLab->product_code) }}">
+                                                    <div
+                                                        class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400 transition duration-300">
+                                                        <svg class="size-4 fill-white"
+                                                            xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                                            viewBox="0 0 24 24" width="512" height="512">
+                                                            <path
+                                                                d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />
+                                                            <path
+                                                                d="M23,8.979a1,1,0,0,0-1,1V15H18a3,3,0,0,0-3,3v4H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2h9.042a1,1,0,0,0,0-2H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H16.343a4.968,4.968,0,0,0,3.536-1.464l2.656-2.658A4.968,4.968,0,0,0,24,16.343V9.979A1,1,0,0,0,23,8.979ZM18.465,21.122a2.975,2.975,0,0,1-1.465.8V18a1,1,0,0,1,1-1h3.925a3.016,3.016,0,0,1-.8,1.464Z" />
+                                                        </svg>
+                                                    </div>
+                                                </a>
+                                                <form action="{{ route('destroy-aset', $assetLab->product_code) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="bg-uinRed p-2 rounded-lg hover:bg-red-600 transition duration-300"><svg
+                                                            class="size-4 fill-white"
+                                                            xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                                            viewBox="0 0 24 24" width="512" height="512">
+                                                            <path
+                                                                d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
+                                                            <path
+                                                                d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
+                                                            <path
+                                                                d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
+                                                        </svg></button>
+                                                </form>
+                                            </td>
+                                        @endif
                                     </tr>
                                     @php
                                         $counter++;

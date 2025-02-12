@@ -1,7 +1,10 @@
 <x-app-layout>
+    @php
+        $type = $perencanaans[0]->type;
+    @endphp
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Perencanaan Barang Inventaris') }}
+            {{ __('Data Perencanaan') }} {{ $type == 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}
         </h2>
     </x-slot>
     <div class="py-8">
@@ -28,7 +31,7 @@
                         </div>
                         @if (Auth::user()->usertype !== 'user')
                             <div>
-                                <a href="/add-perencanaan-inv"
+                                <a href="{{ route('add-perencanaan.inv') }}"
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition-all duration-300">
                                     <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor" viewBox="0 0 448 512">

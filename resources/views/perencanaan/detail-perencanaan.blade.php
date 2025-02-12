@@ -15,7 +15,8 @@
             <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-gray-200">
                 <div class="flex flex-col space-y-4">
                     <div class="flex justify-between items-center border-b pb-4">
-                        <h1 class="text-2xl font-bold text-gray-900">Detail Perencanaan {{ $dataPerencanaan->type === 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}</h1>
+                        <h1 class="text-2xl font-bold text-gray-900">Detail Perencanaan
+                            {{ $dataPerencanaan->type === 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}</h1>
                         <span
                             class="text-sm font-bold rounded-full px-4 py-2
                             {{ $dataPerencanaan->status == 'belum' ? 'bg-red-100 text-red-500' : 'bg-green-100 text-green-500' }}">{{ $dataPerencanaan->status == 'belum' ? 'Belum Diselesaikan' : 'Sudah Diselesaikan' }}
@@ -34,28 +35,30 @@
                                 {{ ($dataPerencanaan->latestUpdater?->updater?->name ?? $dataPerencanaan->updater->name) . ' | ' . ($dataPerencanaan->latestUpdater?->updated_at ?? $dataPerencanaan->updated_at) }}
                             </h1>
                         </div>
-                        @if ($dataPerencanaan->status === 'belum')
-                            <div class="flex justify-end flex-row">
-                                <button
-                                    onclick="event.preventDefault(); document.getElementById('complete-form').submit();"
-                                    class="inline-flex items-center px-4 py-2 gap-x-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
-                                        viewBox="0 0 24 24" width="512" height="512">
-                                        <path
-                                            d="M12,10a4,4,0,1,0,4,4A4,4,0,0,0,12,10Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,16Z" />
-                                        <path
-                                            d="M22.536,4.122,19.878,1.464A4.966,4.966,0,0,0,16.343,0H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H19a5.006,5.006,0,0,0,5-5V7.657A4.966,4.966,0,0,0,22.536,4.122ZM17,2.08V3a3,3,0,0,1-3,3H10A3,3,0,0,1,7,3V2h9.343A2.953,2.953,0,0,1,17,2.08ZM22,19a3,3,0,0,1-3,3H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2V3a5.006,5.006,0,0,0,5,5h4a4.991,4.991,0,0,0,4.962-4.624l2.16,2.16A3.02,3.02,0,0,1,22,7.657Z" />
-                                    </svg>
-                                    <span>Selesaikan Perencanaan</span>
-                                </button>
-                            </div>
-                        @else
-                            <div>
-                                <h2 class="text-gray-500 text-sm font-medium">Diselesaikan</h2>
-                                <h1 class="text-lg font-semibold text-gray-900">
-                                    {{ $dataPerencanaan->updater->name . ' | ' . $dataPerencanaan->updated_at }}
-                                </h1>
-                            </div>
+                        @if (Auth::user()->usertype !== 'user')
+                            @if ($dataPerencanaan->status === 'belum')
+                                <div class="flex justify-end flex-row">
+                                    <button
+                                        onclick="event.preventDefault(); document.getElementById('complete-form').submit();"
+                                        class="inline-flex items-center px-4 py-2 gap-x-2 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 duration-300 transition-all">
+                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                            viewBox="0 0 24 24" width="512" height="512">
+                                            <path
+                                                d="M12,10a4,4,0,1,0,4,4A4,4,0,0,0,12,10Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,16Z" />
+                                            <path
+                                                d="M22.536,4.122,19.878,1.464A4.966,4.966,0,0,0,16.343,0H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H19a5.006,5.006,0,0,0,5-5V7.657A4.966,4.966,0,0,0,22.536,4.122ZM17,2.08V3a3,3,0,0,1-3,3H10A3,3,0,0,1,7,3V2h9.343A2.953,2.953,0,0,1,17,2.08ZM22,19a3,3,0,0,1-3,3H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2V3a5.006,5.006,0,0,0,5,5h4a4.991,4.991,0,0,0,4.962-4.624l2.16,2.16A3.02,3.02,0,0,1,22,7.657Z" />
+                                        </svg>
+                                        <span>Selesaikan Perencanaan</span>
+                                    </button>
+                                </div>
+                            @else
+                                <div>
+                                    <h2 class="text-gray-500 text-sm font-medium">Diselesaikan</h2>
+                                    <h1 class="text-lg font-semibold text-gray-900">
+                                        {{ $dataPerencanaan->updater->name . ' | ' . $dataPerencanaan->updated_at }}
+                                    </h1>
+                                </div>
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -82,7 +85,7 @@
                         </div>
                         <div class="flex items-center space-x-2">
                             <a href="{{ route('perencanaan.download', $dataPerencanaan->id) }}"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-500 hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 duration-300 transition-all">
                                 <svg class="size-4 me-2 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
                                     viewBox="0 0 24 24" width="512" height="512">
                                     <path
@@ -92,9 +95,9 @@
                                 </svg>
                                 Download Data
                             </a>
-                            @if ($dataPerencanaan->status === 'belum')
+                            @if ($dataPerencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
                                 <button @click="openModal = true"
-                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-uinBlue hover:bg-uinNavy focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-uinBlue hover:bg-uinNavy focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 duration-300 transition-all">
                                     <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor" viewBox="0 0 448 512">
                                         <path

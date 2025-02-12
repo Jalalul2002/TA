@@ -43,7 +43,7 @@ class PerencanaanController extends Controller
 
         $perencanaans = $query->paginate(10);
 
-        return view('perencanaan.perencanaan-bhp', compact('perencanaans'));
+        return view('perencanaan.perencanaan-aset', compact('perencanaans'));
     }
 
     public function show($id, Request $request)

@@ -30,11 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/data-barang-habis-pakai', [AssetController::class, 'indexBhp'])->name('data-bhp');
     Route::get('/export-inv', [AssetController::class, 'exportInv'])->name('export.inv');
     Route::get('/export-bhp', [AssetController::class, 'exportBhp'])->name('export.bhp');
+    Route::get('/print-bhp', [AssetController::class, 'printBhp'])->name('print.bhp');
+    Route::get('/print-inv', [AssetController::class, 'printInv'])->name('print.inv');
+
 
     Route::get('/perencanaan-inv', [PerencanaanController::class, 'indexInv'])->name('perencanaan-inv');
     Route::get('/perencanaan-bhp', [PerencanaanController::class, 'indexBhp'])->name('perencanaan-bhp');
     Route::get('/detail-perencanaan/{id}', [PerencanaanController::class, 'show'])->name('detail-perencanaan');
     Route::get('/perencanaan/{id}/download', [PerencanaanController::class, 'download'])->name('perencanaan.download');
+    Route::get('/perencanaan/{id}/print', [PerencanaanController::class, 'print'])->name('perencanaan.print');
+
 
     Route::get('/transaction-bhp', [TransactionController::class, 'index'])->name('penggunaan');
 
@@ -67,7 +72,7 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
 
     Route::post('/add-transaction-bhp', [TransactionController::class, 'create'])->name('add-transaction.bhp');
 
-    Route::post('/send-data', [PredictionController::class, 'sendData']);
+    Route::post('/prediksi', [PredictionController::class, 'sendData']);
 });
 
 //Staff Route

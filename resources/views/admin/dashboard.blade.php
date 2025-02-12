@@ -151,7 +151,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="p-2 text-center text-gray-500">Tidak ada aset
+                                        <td colspan="5" class="p-2 text-center text-gray-500">Tidak ada aset
                                             terbaru
                                         </td>
                                     </tr>

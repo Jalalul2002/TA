@@ -85,7 +85,7 @@
                         </div>
                         <div class="flex items-center space-x-2">
                             <a href="{{ route('perencanaan.download', $dataPerencanaan->id) }}"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 duration-300 transition-all">
+                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 duration-300 transition-all">
                                 <svg class="size-4 me-2 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
                                     viewBox="0 0 24 24" width="512" height="512">
                                     <path
@@ -93,7 +93,19 @@
                                     <path
                                         d="M23,16h0a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V17a1,1,0,0,0-1-1H1a1,1,0,0,0-1,1v4a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V17A1,1,0,0,0,23,16Z" />
                                 </svg>
-                                Download Data
+                                Export Data
+                            </a>
+                            <a href="{{ route('perencanaan.print', $dataPerencanaan->id) }}" target="_blank">
+                                <div
+                                    class="inline-flex gap-x-2 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-fuchsia-500 hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 duration-300 transition-all">
+                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                        viewBox="0 0 24 24" width="512" height="512">
+                                        <path
+                                            d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
+                                        <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
+                                    </svg>
+                                    Print Data
+                                </div>
                             </a>
                             @if ($dataPerencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
                                 <button @click="openModal = true"
@@ -108,41 +120,54 @@
                             @endif
                         </div>
                     </div>
-                    <div>
-                        {{ $products->appends(['search' => request('search')])->links('pagination::tailwind') }}
+                    <div class="pb-1">
+                        {{ $products->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            @php
+                                $columns = [
+                                    'product_code' => 'Kode Barang',
+                                    'product_name' => 'Nama Barang',
+                                    'product_detail' => 'Keterangan/Formula',
+                                    'merk' => 'Merk',
+                                    'product_type' => 'Jenis Produk',
+                                    'stock' => 'stok',
+                                    'jumlah_kebutuhan' => 'Jumlah Kebutuhan',
+                                    'product_unit' => 'satuan',
+                                ];
+                            @endphp
                             <thead class="text-xs text-white uppercase bg-uinTosca">
                                 <tr>
                                     <th scope="col" class="px-1 text-center py-3">
                                         No
                                     </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Kode Produk
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Nama Produk
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Keterangan/Formula
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Merk
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Jenis Produk
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Stok
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Jumlah Kebutuhan
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Satuan
-                                    </th>
-                                    @if ($dataPerencanaan->status === 'belum')
+                                    @foreach ($columns as $field => $name)
+                                        <th scope="col" class="py-3">
+                                            <div class="flex items-center">
+                                                {{ $name }}
+                                                @php
+                                                    // Tentukan arah sorting berdasarkan field yang sedang diurutkan
+                                                    $newSortOrder =
+                                                        request('sort_field') === $field &&
+                                                        request('sort_order') === 'asc'
+                                                            ? 'desc'
+                                                            : 'asc';
+                                                    $isActive = request('sort_field', 'jumlah_kebutuhan') === $field;
+                                                @endphp
+                                                <a title="Sort by {{ $name }}"
+                                                    href="{{ url()->current() }}?{{ http_build_query(array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
+                                                    <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
+                                                        xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
+                                                        viewBox="0 0 24 24" width="512" height="512">
+                                                        <path
+                                                            d="M18.873,11.021H5.127a2.126,2.126,0,0,1-1.568-3.56L10.046.872a2.669,2.669,0,0,1,3.939.034l6.431,6.528a2.126,2.126,0,0,1-1.543,3.587ZM12,24.011a2.667,2.667,0,0,1-1.985-.887L3.584,16.6a2.125,2.125,0,0,1,1.543-3.586H18.873a2.125,2.125,0,0,1,1.568,3.558l-6.487,6.589A2.641,2.641,0,0,1,12,24.011Z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </th>
+                                    @endforeach
+                                    @if ($dataPerencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
                                         <th scope="col" class="px-1 text-center py-3">
                                             Action
                                         </th>
@@ -183,11 +208,12 @@
                                             class="px-1 py-4 font-bold text-gray-600 whitespace-nowrap">
                                             {{ $product->product->product_unit }}
                                         </td>
-                                        @if ($dataPerencanaan->status === 'belum')
+                                        @if ($dataPerencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
                                             <td class="py-2 flex flex-row gap-x-2 justify-center">
                                                 <a title="Edit Data"
                                                     href="{{ route('rencana.edit-rencana', $product->id) }}">
-                                                    <div class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400">
+                                                    <div
+                                                        class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400 transition-all duration-300">
                                                         <svg class="size-4 fill-white"
                                                             xmlns="http://www.w3.org/2000/svg" id="Outline"
                                                             viewBox="0 0 24 24" width="512" height="512">
@@ -203,7 +229,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button title="Hapus Data" type="submit"
-                                                        class="bg-uinRed p-2 rounded-lg hover:bg-red-600"><svg
+                                                        class="bg-uinRed p-2 rounded-lg hover:bg-red-600 transition-all duration-300"><svg
                                                             class="size-4 fill-white"
                                                             xmlns="http://www.w3.org/2000/svg" id="Outline"
                                                             viewBox="0 0 24 24" width="512" height="512">
@@ -232,7 +258,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{ $products->appends(['search' => request('search')])->links('pagination::tailwind') }}
+                        {{ $products->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

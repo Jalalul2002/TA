@@ -1,37 +1,62 @@
 <x-app-layout>
     @php
-        $type = $perencanaans[0]->type;
+        $segment = request()->segment(1); // Ambil segment pertama dari URL
+        $type = $segment === 'perencanaan-inv' ? 'inv' : 'bhp';
     @endphp
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Data Perencanaan') }} {{ $type == 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}
         </h2>
     </x-slot>
+
     <div class="py-8">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
                     <div
                         class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
-                        <label for="search" class="sr-only">Search</label>
-                        <div class="relative">
-                            <div
-                                class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
+                        <div class="flex gap-1 items-center">
+                            <label for="search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div
+                                    class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                                    <svg class="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor"
+                                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <input x-data="{ search: '{{ request('search') }}' }" x-on:input="search = $event.target.value" type="text"
+                                    id="search" name="search" x-model="search"
+                                    class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                                    placeholder="Search for items" autocomplete="off">
                             </div>
-                            <input x-data="{ search: '{{ request('search') }}' }" x-on:input="search = $event.target.value" type="text"
-                                id="search" name="search" x-model="search"
-                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Search for items" autocomplete="off">
+                            <div
+                                class="flex flex-row items-center bg-white rounded-lg w-fit ps-4 border border-gray-300">
+                                <svg class="size-4 fill-gray-700" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
+                                    data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512">
+                                    <path
+                                        d="M24,3c0,.55-.45,1-1,1H1c-.55,0-1-.45-1-1s.45-1,1-1H23c.55,0,1,.45,1,1ZM15,20h-6c-.55,0-1,.45-1,1s.45,1,1,1h6c.55,0,1-.45,1-1s-.45-1-1-1Zm4-9H5c-.55,0-1,.45-1,1s.45,1,1,1h14c.55,0,1-.45,1-1s-.45-1-1-1Z" />
+                                </svg>
+                                <form x-data @change="$event.target.form.submit()" method="GET"
+                                    action="{{ $type === 'bhp' ? route('perencanaan-bhp') : route('perencanaan-inv') }}">
+                                    <select name="location" id="location"
+                                        class="font-medium text-sm text-gray-700 bg-transparent border-none focus:ring-0 cursor-pointer">
+                                        @foreach ($locations as $key => $value)
+                                            <option value="{{ $key }}"
+                                                {{ request('location') == $key ? 'selected' : '' }}>
+                                                {{ $value }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                            </div>
                         </div>
                         @if (Auth::user()->usertype !== 'user')
                             <div>
-                                <a href="{{ route('add-perencanaan.inv') }}"
+                                <a href="{{ $type === 'bhp' ? route('add-perencanaan.bhp') : route('add-perencanaan.inv') }}"
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition-all duration-300">
                                     <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor" viewBox="0 0 448 512">
@@ -45,23 +70,44 @@
                     </div>
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            @php
+                                $columns = [
+                                    'nama_perencanaan' => 'Tahun Perencanaan',
+                                    'prodi' => 'Program Studi',
+                                    'plans_count' => 'Total Barang',
+                                    'status' => 'Status',
+                                ];
+                            @endphp
                             <thead class="text-xs text-white uppercase bg-uinTosca">
                                 <tr>
                                     <th scope="col" class="text-center px-2 py-3">
                                         No
                                     </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Tahun Perencanaan
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Program Studi
-                                    </th>
-                                    <th scope="col" class="px-1 py-3">
-                                        Total Barang
-                                    </th>
-                                    <th scope="col" class="pl-5 px-1 py-3">
-                                        Status
-                                    </th>
+                                    @foreach ($columns as $field => $name)
+                                        <th scope="col" class="py-3">
+                                            <div class="flex items-center">
+                                                {{ $name }}
+                                                @php
+                                                    // Tentukan arah sorting berdasarkan field yang sedang diurutkan
+                                                    $newSortOrder =
+                                                        request('sort_field') === $field &&
+                                                        request('sort_order') === 'asc'
+                                                            ? 'desc'
+                                                            : 'asc';
+                                                    $isActive = request('sort_field', 'nama_perencanaan') === $field;
+                                                @endphp
+                                                <a title="Sort by {{ $name }}"
+                                                    href="{{ $type === 'bhp' ? route('perencanaan-bhp', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) : route('perencanaan-inv', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
+                                                    <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
+                                                        xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
+                                                        viewBox="0 0 24 24" width="512" height="512">
+                                                        <path
+                                                            d="M18.873,11.021H5.127a2.126,2.126,0,0,1-1.568-3.56L10.046.872a2.669,2.669,0,0,1,3.939.034l6.431,6.528a2.126,2.126,0,0,1-1.543,3.587ZM12,24.011a2.667,2.667,0,0,1-1.985-.887L3.584,16.6a2.125,2.125,0,0,1,1.543-3.586H18.873a2.125,2.125,0,0,1,1.568,3.558l-6.487,6.589A2.641,2.641,0,0,1,12,24.011Z" />
+                                                    </svg>
+                                                </a>
+                                            </div>
+                                        </th>
+                                    @endforeach
                                     <th scope="col" class="px-1 py-3">
                                         Dibuat Oleh
                                     </th>
@@ -89,7 +135,7 @@
                                             {{ $perencanaan->prodi }}
                                         </td>
                                         <td class="px-1 py-2">
-                                            {{ $perencanaan->plans->count() }}
+                                            {{ $perencanaan->plans_count }}
                                         </td>
                                         <td class="px-1 py-2">
                                             <span
@@ -153,6 +199,19 @@
                                                     </svg>
                                                 </div>
                                             </a>
+                                            <a href="{{ route('perencanaan.print', $perencanaan->id) }}"
+                                                target="_blank">
+                                                <div
+                                                    class="bg-fuchsia-500 p-2 rounded-lg hover:bg-fuchsia-700 transition-all duration-300">
+                                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
+                                                        id="Outline" viewBox="0 0 24 24" width="512"
+                                                        height="512">
+                                                        <path
+                                                            d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
+                                                        <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
+                                                    </svg>
+                                                </div>
+                                            </a>
                                             @if (Auth::user()->usertype !== 'user')
                                                 <form action="{{ route('destroy-rencana', $perencanaan->id) }}"
                                                     method="POST">
@@ -188,7 +247,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{ $perencanaans->appends(['search' => request('search')])->links('pagination::tailwind') }}
+                        {{ $perencanaans->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

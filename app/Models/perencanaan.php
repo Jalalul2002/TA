@@ -40,13 +40,13 @@ class Perencanaan extends Model
     public function scopeSearch($query, $searchTerm)
     {
         return $query->where(function ($q) use ($searchTerm) {
-            $q->where('product_code', 'LIKE', "%{$searchTerm}%")
+            $q->where('perencanaans.product_code', 'LIKE', "%{$searchTerm}%")
                 ->orWhereHas('product', function ($q) use ($searchTerm) {
-                    $q->where('product_name', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('product_detail', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('merk', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('product_type', 'LIKE', "%{$searchTerm}%")
-                        ->orWhere('location', 'LIKE', "%{$searchTerm}%");
+                    $q->where('assetlabs.product_name', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('assetlabs.product_detail', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('assetlabs.merk', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('assetlabs.product_type', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('assetlabs.location', 'LIKE', "%{$searchTerm}%");
                 });
         });
     }

@@ -22,13 +22,14 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input type="text" id="table-search"
+                            <input x-data="{ search: '{{ request('search') }}' }" x-on:input="search = $event.target.value" type="text"
+                                id="search" name="search" x-model="search"
                                 class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Search for items">
+                                placeholder="Search for items" autocomplete="off">
                         </div>
                         <div>
                             <a href="{{ route('admin.add-staff') }}"
-                                class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy">
+                                class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy duration-300 transition-all">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
                                     <path
@@ -85,7 +86,8 @@
                                         </td>
                                         <td class="py-2 flex flex-row gap-x-2 justify-center">
                                             <a href="{{ route('admin.edit-staff', $user->id) }}">
-                                                <div class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400">
+                                                <div
+                                                    class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400 duration-300 transition-all">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
                                                         id="Outline" viewBox="0 0 24 24" width="512"
                                                         height="512">
@@ -100,7 +102,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"
-                                                    class="bg-uinRed p-2 rounded-lg hover:bg-red-600"><svg
+                                                    class="bg-uinRed p-2 rounded-lg hover:bg-red-600 duration-300 transition-all"><svg
                                                         class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
                                                         id="Outline" viewBox="0 0 24 24" width="512"
                                                         height="512">
@@ -126,6 +128,9 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+                    <div class="mt-4">
+                        {{ $users->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

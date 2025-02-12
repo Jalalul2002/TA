@@ -1,7 +1,12 @@
 <x-app-layout>
+    @php
+        $segment = request()->segment(1); // Ambil segment pertama dari URL
+        $type = $segment === 'data-aset' ? 'inv' : 'bhp';
+    @endphp
+
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Barang Inventaris') }}
+            {{ __('Data ') }} {{ $type == 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}
         </h2>
     </x-slot>
 
@@ -28,7 +33,8 @@
                                 placeholder="Search for items" autocomplete="off">
                         </div>
                         <div x-data="filterData()" class="flex items-center gap-x-2">
-                            <form action="{{ route('export.inv') }}" method="GET" class="flex items-center gap-2">
+                            <form action="{{ $type == 'bhp' ? route('export.bhp') : route('export.inv') }}"
+                                method="GET" class="flex items-center gap-2">
                                 <div>
                                     <select id="product_type" name="product_type" x-model="productType"
                                         @change="applyFilter()"
@@ -39,7 +45,7 @@
                                         <option value="Lainnya">Lainnya</option>
                                     </select>
                                 </div>
-                                @if (Auth::user()->usertype == 'admin')
+                                @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'user')
                                     <div>
                                         <select id="location" name="location" x-model="location"
                                             @change="applyFilter()"
@@ -58,13 +64,33 @@
                                 @endif
                                 <div>
                                     <button type="submit"
-                                        class="inline-flex text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
-                                        Export Excel
+                                        class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
+                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                            viewBox="0 0 24 24" width="512" height="512">
+                                            <path
+                                                d="M9.878,18.122a3,3,0,0,0,4.244,0l3.211-3.211A1,1,0,0,0,15.919,13.5l-2.926,2.927L13,1a1,1,0,0,0-1-1h0a1,1,0,0,0-1,1l-.009,15.408L8.081,13.5a1,1,0,0,0-1.414,1.415Z" />
+                                            <path
+                                                d="M23,16h0a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V17a1,1,0,0,0-1-1H1a1,1,0,0,0-1,1v4a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V17A1,1,0,0,0,23,16Z" />
+                                        </svg>
+                                        <span>Export Excel</span>
                                     </button>
+                                </div>
+                                <div>
+                                    <a href="{{ $type == 'bhp' ? route('print.bhp', ['product_type' => request('product_type'), 'location' => request('location')]) : route('print.inv', ['product_type' => request('product_type'), 'location' => request('location')]) }}"
+                                        target="_blank"
+                                        class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-teal-500 border border-transparent rounded-md font-semibold text-white hover:bg-teal-600 transition duration-300">
+                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                            viewBox="0 0 24 24" width="512" height="512">
+                                            <path
+                                                d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
+                                            <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
+                                        </svg>
+                                        <span>Print Data</span>
+                                    </a>
                                 </div>
                             </form>
                             @if (Auth::user()->usertype !== 'user')
-                                <a href="{{ route('add-aset-inv') }}"
+                                <a href="{{ $type == 'bhp' ? route('add-aset-bhp') : route('add-aset-inv') }}"
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition duration-300">
                                     <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor" viewBox="0 0 448 512">
@@ -77,7 +103,7 @@
                         </div>
                     </div>
                     <div class="mb-1">
-                        {{ $assetLabs->onEachSide(1)->appends(['search' => request('search')])->links('pagination::tailwind') }}
+                        {{ $assetLabs->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         @php
@@ -91,7 +117,7 @@
                                 'product_unit' => 'satuan',
                                 'location_detail' => 'Lokasi Penyimpanan',
                             ];
-                            if (Auth::user()->usertype === 'admin') {
+                            if (Auth::user()->usertype === 'admin' || Auth::user()->usertype === 'user') {
                                 $columns['location'] = 'Lokasi';
                             }
                         @endphp
@@ -114,13 +140,13 @@
                                                             : 'asc';
                                                     $isActive = request('sort_field', 'product_name') === $field;
                                                 @endphp
-                                                <a
-                                                    href="{{ route('data-aset', ['sort_field' => $field, 'sort_order' => $newSortOrder]) }}">
-                                                    <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'text-uinOrange' : 'text-white' }}"
-                                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                        fill="currentColor" viewBox="0 0 24 24">
+                                                <a title="Sort by {{ $name }}"
+                                                    href="{{ $type === 'bhp' ? route('data-bhp', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) : route('data-aset', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
+                                                    <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
+                                                        xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
+                                                        viewBox="0 0 24 24" width="512" height="512">
                                                         <path
-                                                            d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                                                            d="M18.873,11.021H5.127a2.126,2.126,0,0,1-1.568-3.56L10.046.872a2.669,2.669,0,0,1,3.939.034l6.431,6.528a2.126,2.126,0,0,1-1.543,3.587ZM12,24.011a2.667,2.667,0,0,1-1.985-.887L3.584,16.6a2.125,2.125,0,0,1,1.543-3.586H18.873a2.125,2.125,0,0,1,1.568,3.558l-6.487,6.589A2.641,2.641,0,0,1,12,24.011Z" />
                                                     </svg>
                                                 </a>
                                             </div>
@@ -169,7 +195,7 @@
                                         <td class="px-1">
                                             {{ empty($assetLab->location_detail) ? '-' : $assetLab->location_detail }}
                                         </td>
-                                        @if (Auth::user()->usertype == 'admin')
+                                        @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype === 'user')
                                             <td class="px-1">
                                                 {{ $assetLab->location }}
                                             </td>
@@ -232,7 +258,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{ $assetLabs->onEachSide(1)->appends(['search' => request('search')])->links('pagination::tailwind') }}
+                        {{ $assetLabs->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

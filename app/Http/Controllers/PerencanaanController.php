@@ -8,6 +8,7 @@ use App\Models\Perencanaan;
 use Illuminate\Http\Request;
 use App\Models\DataPerencanaan;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -15,8 +16,9 @@ class PerencanaanController extends Controller
 {
     public function indexInv(Request $request)
     {
-        $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'inventaris');
-
+        $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'inventaris')->withCount('plans');
+        $locations = ['all' => 'Semua',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Kimia' => 'Kimia', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];
+        
         if (Auth::user()->usertype === 'staff') {
             $query->where('prodi', Auth::user()->prodi);
         }
@@ -25,13 +27,25 @@ class PerencanaanController extends Controller
             $query->search($request->search);
         }
 
+        if ($request->has('location') && $request->location != 'all') {
+            $query->where('prodi', $request->location);
+        }
+        #Sorting
+        $sortField = $request->get('sort_field', 'nama_perencanaan');
+        $sortOrder = $request->get('sort_order', 'asc');
+        $allowedFields = ['nama_perencanaan', 'product_name', 'prodi', 'plans_count', 'status'];
+        if (in_array($sortField, $allowedFields)) {
+            $query->orderBy($sortField, $sortOrder);
+        }
+
         $perencanaans = $query->paginate(10);
-        return view('perencanaan.perencanaan-aset', compact('perencanaans'));
+        return view('perencanaan.perencanaan-aset', compact('perencanaans', 'sortField', 'sortOrder', 'locations'));
     }
 
     public function indexBhp(Request $request)
     {
-        $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'bhp');
+        $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'bhp')->withCount('plans');
+        $locations = ['all' => 'Semua',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Kimia' => 'Kimia', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];
 
         if (Auth::user()->usertype === 'staff') {
             $query->where('prodi', Auth::user()->prodi);
@@ -41,9 +55,20 @@ class PerencanaanController extends Controller
             $query->search($request->search);
         }
 
+        if ($request->has('location') && $request->location != 'all') {
+            $query->where('prodi', $request->location);
+        }
+        #Sorting
+        $sortField = $request->get('sort_field', 'nama_perencanaan');
+        $sortOrder = $request->get('sort_order', 'asc');
+        $allowedFields = ['nama_perencanaan', 'product_name', 'prodi', 'plans_count', 'status'];
+        if (in_array($sortField, $allowedFields)) {
+            $query->orderBy($sortField, $sortOrder);
+        }
+
         $perencanaans = $query->paginate(10);
 
-        return view('perencanaan.perencanaan-aset', compact('perencanaans'));
+        return view('perencanaan.perencanaan-aset', compact('perencanaans', 'sortField', 'sortOrder', 'locations'));
     }
 
     public function show($id, Request $request)
@@ -51,19 +76,30 @@ class PerencanaanController extends Controller
         $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
         $query = $dataPerencanaan->plans()->with('product');
 
+        $sortField = $request->get('sort_field', 'jumlah_kebutuhan');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $allowedFields = ['product_code', 'product_name', 'product_detail', 'merk', 'product_type', 'stock', 'jumlah_kebutuhan', 'product_unit'];
+
         if ($request->has('search')) {
             $query->search($request->search);
         }
 
-        $products = $query->paginate(10);
-
-        if ($dataPerencanaan->type === 'bhp') {
-            $assets = Assetlab::where('type', 'bhp')->get();
-        } else {
-            $assets = Assetlab::where('type', 'inventaris')->get();
+        if (in_array($sortField, $allowedFields)) {
+            if (in_array($sortField, ['product_name', 'merk', 'product_type', 'product_unit'])) {
+                // Sorting berdasarkan tabel product
+                $query->join('assetlabs', 'perencanaans.product_code', '=', 'assetlabs.product_code')
+                    ->select('perencanaans.*', 'assetlabs.product_name', 'assetlabs.product_detail', 'assetlabs.merk', 'assetlabs.product_type', 'assetlabs.product_unit')
+                    ->orderBy("assetlabs.$sortField", $sortOrder);
+            } else {
+                // Sorting berdasarkan tabel plans
+                $query->orderBy($sortField, $sortOrder);
+            }
         }
 
-        return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'assets'));
+        $products = $query->paginate(10);
+        $assets = Assetlab::where('type', $dataPerencanaan->type === 'bhp' ? 'bhp' : 'inventaris')->get();
+
+        return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'assets', 'sortField', 'sortOrder'));
     }
 
     public function createInv()
@@ -213,6 +249,18 @@ class PerencanaanController extends Controller
         return Excel::download(new PerencanaanExport($id), $filename);
     }
 
+    public function print($id)
+    {
+        $perencanaan = DataPerencanaan::findOrFail($id);
+        $printDate = Carbon::now()->format('d M Y, H:i');
+
+        $data = Perencanaan::with(['product'])
+            ->where('rencana_id', $id)
+            ->get();
+
+        return view('print.perencanaan', compact('data', 'perencanaan', 'printDate'));
+    }
+
     public function complete($id)
     {
         $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
@@ -230,7 +278,7 @@ class PerencanaanController extends Controller
                 if ($productDetails->stock < 0) {
                     return redirect()->back()->with(
                         'error',
-                        "Stok untuk produk {$productDetails->product_name} tidak mencukupi."
+                        "Stok untuk produk {$productDetails->product_name} tidak normal."
                     );
                 }
 

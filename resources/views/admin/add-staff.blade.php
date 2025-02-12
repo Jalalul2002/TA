@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-6" x-data="{ usertype: '', prodiRequired: false }">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid grid-cols-2 lg:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('admin.add-staff') }}">
@@ -30,23 +30,33 @@
                     {{-- Role --}}
                     <div class="mt-4">
                         <x-input-label for="usertype" :value="__('Usertype')" />
-                        <select id="usertype" name="usertype"
+                        <select id="usertype" name="usertype" x-model="usertype"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
-                            required>
+                            @change="prodiRequired = (usertype === 'staff')">
                             <option value="">-- Pilih Tipe Pengguna --</option>
                             <option value="staff">Staff</option>
                             <option value="user">User</option>
                         </select>
                         <x-input-error :messages="$errors->get('usertype')" class="mt-2" />
                     </div>
-
+                    
                     <div class="mt-4">
-                        <x-input-label for="prodi" :value="__('Program Studi')" />
-                        <x-text-input id="prodi" class="block mt-1 w-full" type="text" name="prodi"
-                            :value="old('prodi')" autofocus autocomplete="prodi" />
+                        <x-input-label for="prodi" :value="__('Program Studi (staff wajib diisi)')" />
+                        <select id="prodi" name="prodi"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
+                            :required="prodiRequired">
+                            <option value="">-- Pilih Program Studi --</option>
+                            <option value="Matematika">701-Matematika</option>
+                            <option value="Biologi">702-Biologi</option>
+                            <option value="Fisika">703-Fisika</option>
+                            <option value="Kimia">704-Kimia</option>
+                            <option value="Teknik Informatika">705-Teknik Informatika</option>
+                            <option value="Agroteknologi">706-Agroteknologi</option>
+                            <option value="Teknik Elektro">707-Teknik Elektro</option>
+                        </select>
                         <x-input-error :messages="$errors->get('prodi')" class="mt-2" />
                     </div>
-
+                    
                     <!-- Password -->
                     <div class="mt-4">
                         <x-input-label for="password" :value="__('Password')" />

@@ -47,6 +47,18 @@ class User extends Authenticatable
         ];
     }
 
+    public function scopeSearch($query, $search)
+    {
+        if (!empty($search)) {
+            return $query->where('name', 'like', "%{$search}%")
+                ->orWhere('usertype', 'like', "%{$search}%")
+                ->orWhere('prodi', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%");
+        }
+
+        return $query;
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class, 'created_by');

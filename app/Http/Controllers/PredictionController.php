@@ -14,18 +14,23 @@ class PredictionController extends Controller
     public function index(Request $request)
     {
         $query = DataPrediksi::with("asset");
+        $locations = ['all' => 'Semua',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];
 
         if (Auth::user()->usertype === 'staff') {
             $query->ofLocation(Auth::user()->prodi);
         }
-        
+
         if ($request->has('search')) {
             $query->search($request->search);
         }
 
+        if ($request->has('location') && $request->location != 'all') {
+            $query->where('location', $request->location);
+        }
+
         $dataPrediksis = $query->paginate(10);
 
-        return view('prediksi.prediksi', compact("dataPrediksis"));
+        return view('prediksi.prediksi', compact("dataPrediksis", 'locations'));
     }
 
     public function sendData(Request $request)
@@ -40,8 +45,8 @@ class PredictionController extends Controller
             'csv_file',
             file_get_contents($file->getRealPath()),
             $file->getClientOriginalName()
-        // )->post('http://127.0.0.1:5001/predict', ['user_id' => $userid]);
-        // )->post('http://103.186.1.191/predict', ['user_id' => $userid]);
+            // )->post('http://127.0.0.1:5001/predict', ['user_id' => $userid]);
+            // )->post('http://103.186.1.191/predict', ['user_id' => $userid]);
         )->post('https://labsaintek.icu/predict', ['user_id' => $userid]);
 
         if ($response->successful()) {

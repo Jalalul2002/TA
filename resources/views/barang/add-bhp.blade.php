@@ -38,7 +38,7 @@
                 }"
                     x-init="$watch('location', value => {
                         const locationToCodeMap = {
-                            'Umum' : '700',
+                            'Umum': '700',
                             'Matematika': '701',
                             'Biologi': '702',
                             'Fisika': '703',
@@ -102,10 +102,10 @@
                             :value="old('merk')" autofocus autocomplete="merk" />
                         <x-input-error :messages="$errors->get('merk')" class="mt-2" />
                     </div>
-                    <div class="mt-4 hidden">
+                    <div class="mt-4">
                         <x-input-label for="type" :value="__('Tipe')" />
                         <x-text-input id="type" class="block mt-1 w-full" type="text" name="type"
-                            :value="old('type', 'bhp')" autofocus autocomplete="type" />
+                            :value="old('type', 'bhp')" autofocus readonly autocomplete="type" />
                         <x-input-error :messages="$errors->get('type')" class="mt-2" />
                     </div>
                     <div class="mt-4">
@@ -134,8 +134,31 @@
                     </div>
                     <div class="mt-4">
                         <x-input-label for="product_unit" :value="__('Satuan')" />
-                        <x-text-input id="product_unit" class="block mt-1 w-full" type="text" name="product_unit"
-                            :value="old('product_unit')" required autofocus autocomplete="product_unit" />
+                        @php
+                            $units = [
+                                'bks',
+                                'botol',
+                                'cm',
+                                'g',
+                                'pcs',
+                                'unit',
+                                'karung',
+                                'lembar',                                
+                                'ml',
+                                'pak',
+                                'paket',
+                                'petri',
+                                'rol',
+                                'set',
+                            ];
+                        @endphp
+                        <select id="product_unit" name="product_unit"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
+                            required>
+                            @foreach ($units as $unit)
+                                <option value="{{ $unit }}">{{ $unit }}</option>
+                            @endforeach
+                        </select>
                         <x-input-error :messages="$errors->get('product_unit')" class="mt-2" />
                     </div>
                     <div class="flex items-center justify-end mt-4">

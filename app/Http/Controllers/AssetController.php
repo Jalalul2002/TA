@@ -6,6 +6,7 @@ use App\Exports\AssetBhpExport;
 use App\Exports\AssetInvExport;
 use App\Http\Controllers\Controller;
 use App\Models\Assetlab;
+use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,9 +18,12 @@ class AssetController extends Controller
     public function indexInv(Request $request)
     {
         $productType = request('product_type');
-        $location = request('location');
         $query = AssetLab::ofType('inventaris');
-        #filter user
+        $sortField = $request->get('sort_field', 'product_name');
+        $sortOrder = $request->get('sort_order', 'asc');
+        $allowedFields = ['product_code', 'product_name', 'product_detail', 'merk', 'product_type', 'stock', 'product_unit', 'location_detail', 'location'];
+
+
         if (Auth::user()->usertype === 'staff') {
             $query->ofLocation(Auth::user()->prodi);
         }
@@ -36,10 +40,6 @@ class AssetController extends Controller
             $query->where('location', $request->location);
         }
 
-        #Sorting
-        $sortField = $request->get('sort_field', 'product_name');
-        $sortOrder = $request->get('sort_order', 'asc');
-        $allowedFields = ['product_code', 'product_name', 'merk', 'product_type', 'location'];
         if (in_array($sortField, $allowedFields)) {
             $query->orderBy($sortField, $sortOrder);
         }
@@ -51,7 +51,6 @@ class AssetController extends Controller
     public function indexBhp(Request $request)
     {
         $productType = request('product_type');
-        $location = request('location');
         $query = AssetLab::ofType('bhp');
         #filter user
         if (Auth::user()->usertype === 'staff') {
@@ -73,13 +72,13 @@ class AssetController extends Controller
         #Sorting
         $sortField = $request->get('sort_field', 'product_name');
         $sortOrder = $request->get('sort_order', 'asc');
-        $allowedFields = ['product_code', 'product_name', 'merk', 'product_type', 'location'];
+        $allowedFields = ['product_code', 'product_name', 'product_detail', 'merk', 'product_type', 'stock', 'product_unit', 'location_detail', 'location'];
         if (in_array($sortField, $allowedFields)) {
             $query->orderBy($sortField, $sortOrder);
         }
 
         $assetLabs = $query->paginate(10);
-        return view('barang.baranghabispakai', compact('assetLabs', 'sortField', 'sortOrder'));
+        return view('barang.dataaset', compact('assetLabs', 'sortField', 'sortOrder'));
     }
 
     public function addInv()
@@ -99,7 +98,7 @@ class AssetController extends Controller
         $productType = $request->input('product_type');
         $location = $request->input('location');
 
-        if (Auth::user()->usertype !== 'admin') {
+        if (Auth::user()->usertype === 'staff') {
             $location = Auth::user()->prodi;
         }
 
@@ -122,7 +121,7 @@ class AssetController extends Controller
     {
         $productType = $request->input('product_type');
         $location = $request->input('location');
-        if (Auth::user()->usertype !== 'admin') {
+        if (Auth::user()->usertype === 'staff') {
             $location = Auth::user()->prodi;
         }
 
@@ -141,6 +140,55 @@ class AssetController extends Controller
 
         return Excel::download(new AssetBhpExport($productType, $location), $filename);
     }
+
+    public function printBhp(Request $request)
+    {
+        $productType = $request->input('product_type');
+        $location = $request->input('location');
+        $printDate = Carbon::now()->format('d M Y, H:i');
+
+        if (Auth::user()->usertype === 'staff') {
+            $location = Auth::user()->prodi;
+        }
+
+        $query = AssetLab::ofType('bhp')->with(['creator', 'updater']);
+
+        if ($productType) {
+            $query->where('product_type', $productType);
+        }
+        if ($location) {
+            $query->where('location', $location);
+        }
+
+        $data = $query->get();
+
+        return view('print.aset', compact('data', 'productType', 'location', 'printDate'));
+    }
+
+    public function printInv(Request $request)
+    {
+        $productType = $request->input('product_type');
+        $location = $request->input('location');
+        $printDate = Carbon::now()->format('d M Y, H:i');
+
+        if (Auth::user()->usertype === 'staff') {
+            $location = Auth::user()->prodi;
+        }
+
+        $query = AssetLab::ofType('inventaris')->with(['creator', 'updater']);
+
+        if ($productType) {
+            $query->where('product_type', $productType);
+        }
+        if ($location) {
+            $query->where('location', $location);
+        }
+
+        $data = $query->get();
+
+        return view('print.aset', compact('data', 'productType', 'location', 'printDate'));
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([

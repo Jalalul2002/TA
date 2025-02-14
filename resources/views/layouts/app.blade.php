@@ -25,12 +25,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="font-sans antialiased" x-data="{ openModal: false }" x-cloak>
+<body class="font-sans antialiased" x-data="{ openModal: false, openSidebar: JSON.parse(localStorage.getItem('openSidebar')) ?? true }" x-init="$watch('openSidebar', value => localStorage.setItem('openSidebar', JSON.stringify(value)))" x-cloak>
     @include('layouts.navigation')
 
     @include('layouts.sidebar')
 
-    <div class="sm:ml-64 min-h-screen flex flex-col bg-gray-100">
+    <div :class="openSidebar ? 'sm:ml-64' : 'sm:ml-20'" class="min-h-screen flex flex-col bg-gray-100 transition-all duration-300">
         <div class="flex-grow">
             <!-- Page Heading -->
             @isset($header)

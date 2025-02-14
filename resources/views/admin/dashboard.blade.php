@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-6">
+    <div class="py-6 px-4 md:px-0">
         <div x-data="{ filter: '{{ $filter }}' }" class="max-w-full sm:px-6 lg:px-8 pb-4">
             <div class="flex flex-row items-center bg-white rounded-xl w-fit ps-4 shadow-md">
                 <svg class="w-4 h-4 fill-gray-600" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24"
@@ -31,7 +31,7 @@
                 </select>
             </div>
         </div>
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
             <!-- Card Jumlah Aset Inventaris -->
             <div class="col-span-1 row-span-1">
                 <div
@@ -118,7 +118,7 @@
                 </div>
             </div>
             {{-- Card Assets Terbaru --}}
-            <div class="col-span-2 row-span-4">
+            <div class="md:col-span-2 row-span-4">
                 <div class="bg-white p-4 rounded-lg shadow-md">
                     <h3 class="text-lg font-semibold mb-4">📦 Aset Terbaru</h3>
                     <div class="relative overflow-x-auto sm:rounded-lg">

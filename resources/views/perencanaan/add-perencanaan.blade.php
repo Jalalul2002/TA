@@ -8,7 +8,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid grid-cols-2">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 xl:grid xl:grid-cols-2">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('add-perencanaan.bhp') }}">
                     @csrf

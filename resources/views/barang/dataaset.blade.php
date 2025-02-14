@@ -9,13 +9,21 @@
             {{ __('Data ') }} {{ $type == 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}
         </h2>
     </x-slot>
-
+    @if (session('success') || session('error'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+            class="fixed top-20 right-10 p-3 rounded-md shadow-md transition-all duration-500"
+            :class="{ 'bg-green-500 text-white': '{{ session('success') }}', 'bg-red-500 text-white': '{{ session('error') }}' }"
+            x-transition:enter="transform ease-out duration-500" x-transition:enter-start="opacity-0 -translate-y-5"
+            x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transform ease-in duration-500"
+            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-5">
+            {{ session('success') ?? session('error') }}
+        </div>
+    @endif
     <div class="py-8">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
-                    <div
-                        class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+                    <div class="flex flex-col lg:flex-row space-y-1 space-x-1 lg:items-center justify-between pb-4">
                         <label for="search" class="sr-only">Search</label>
                         <div class="relative">
                             <div
@@ -29,28 +37,28 @@
                             </div>
                             <input x-data="{ search: '{{ request('search') }}' }" x-on:input="search = $event.target.value" type="text"
                                 id="search" name="search" x-model="search"
-                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 lg:w-52 xl:w-64 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Search for items" autocomplete="off">
                         </div>
-                        <div x-data="filterData()" class="flex items-center gap-x-2">
+                        <div x-data="filterData()"
+                            class="flex flex-col md:flex-row space-y-1 md:space-y-0 md:items-center gap-x-1 xl:gap-x-2 justify-end">
                             <form action="{{ $type == 'bhp' ? route('export.bhp') : route('export.inv') }}"
-                                method="GET" class="flex items-center gap-2">
-                                <div>
+                                method="GET"
+                                class="flex flex-col space-y-1 md:space-y-0 md:flex-row md:items-center gap-x-1 xl:gap-x-2">
+                                <div class="flex space-x-1 xl:space-x-2">
                                     <select id="product_type" name="product_type" x-model="productType"
                                         @change="applyFilter()"
-                                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm text-gray-700">
-                                        <option value="">-- Pilih Jenis Produk --</option>
+                                        class="block w-full p-2 border border-gray-300 rounded-md text-sm text-gray-700">
+                                        <option value="">-- Filter Jenis --</option>
                                         <option value="Cairan">Cairan</option>
                                         <option value="Padatan">Padatan</option>
                                         <option value="Lainnya">Lainnya</option>
                                     </select>
-                                </div>
-                                @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'user')
-                                    <div>
+                                    @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'user')
                                         <select id="location" name="location" x-model="location"
                                             @change="applyFilter()"
-                                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-sm text-gray-700">
-                                            <option value="">-- Pilih Lokasi --</option>
+                                            class="block w-full p-2 border border-gray-300 rounded-md text-sm text-gray-700">
+                                            <option value="">-- Filter Lokasi --</option>
                                             <option value="Umum">Umum</option>
                                             <option value="Matematika">Matematika</option>
                                             <option value="Biologi">Biologi</option>
@@ -60,34 +68,28 @@
                                             <option value="Agroteknologi">Agroteknologi</option>
                                             <option value="Teknik Elektro">Teknik Elektro</option>
                                         </select>
-                                    </div>
-                                @endif
-                                <div>
-                                    <button type="submit"
-                                        class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
-                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
-                                            viewBox="0 0 24 24" width="512" height="512">
-                                            <path
-                                                d="M9.878,18.122a3,3,0,0,0,4.244,0l3.211-3.211A1,1,0,0,0,15.919,13.5l-2.926,2.927L13,1a1,1,0,0,0-1-1h0a1,1,0,0,0-1,1l-.009,15.408L8.081,13.5a1,1,0,0,0-1.414,1.415Z" />
-                                            <path
-                                                d="M23,16h0a1,1,0,0,0-1,1v4a1,1,0,0,1-1,1H3a1,1,0,0,1-1-1V17a1,1,0,0,0-1-1H1a1,1,0,0,0-1,1v4a3,3,0,0,0,3,3H21a3,3,0,0,0,3-3V17A1,1,0,0,0,23,16Z" />
-                                        </svg>
-                                        <span>Export Excel</span>
-                                    </button>
+                                    @endif
                                 </div>
-                                <div>
-                                    <a href="{{ $type == 'bhp' ? route('print.bhp', ['product_type' => request('product_type'), 'location' => request('location')]) : route('print.inv', ['product_type' => request('product_type'), 'location' => request('location')]) }}"
-                                        target="_blank"
-                                        class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-teal-500 border border-transparent rounded-md font-semibold text-white hover:bg-teal-600 transition duration-300">
-                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
-                                            viewBox="0 0 24 24" width="512" height="512">
-                                            <path
-                                                d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
-                                            <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
-                                        </svg>
-                                        <span>Print Data</span>
-                                    </a>
-                                </div>
+                                <button type="submit"
+                                    class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
+                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
+                                        data-name="Layer 1" viewBox="0 0 24 24">
+                                        <path
+                                            d="M23.971,17.98c-.191,1.175-1.215,2.028-2.436,2.028-.664,0-1.301-.196-1.84-.553-.387-.257-.447-.801-.118-1.129l.002-.002c.236-.235,.602-.283,.886-.11,.316,.191,.689,.298,1.07,.298,.604,0,1.031-.404,1.096-.795,.088-.55-.602-.873-.817-.959-.915-.371-1.751-.78-1.753-.78-.692-.484-1.027-1.231-.921-2.049,.111-.845,.674-1.534,1.471-1.796,.839-.277,1.603-.076,2.152,.203,.405,.205,.518,.733,.24,1.093-.203,.263-.559,.358-.863,.225-.306-.134-.71-.226-1.137-.088-.412,.136-.517,.447-.515,.577,.005,.442,.335,.57,.433,.615,.282,.128,.806,.368,1.366,.595,1.461,.591,1.828,1.745,1.685,2.627Zm-8.368-5.972h0c-.442,0-.8,.358-.8,.8v6.401c0,.442,.358,.8,.8,.8h2.133c.442,0,.8-.358,.8-.8s-.358-.8-.8-.8c-.755,0-1.333,0-1.333,0v-5.601c0-.442-.358-.8-.8-.8Zm-2.612,0c-.307,0-.589,.174-.726,.449l-.864,1.733-.864-1.733c-.137-.275-.418-.449-.726-.449-.602,0-.994,.634-.726,1.173l1.409,2.827-1.409,2.827c-.269,.539,.123,1.173,.726,1.173h0c.307,0,.589-.174,.726-.449l.864-1.733,.864,1.733c.137,.275,.418,.449,.726,.449,.602,0,.994-.634,.726-1.173l-1.409-2.827,1.409-2.827c.269-.539-.123-1.173-.726-1.173Zm7.009,10.992c0,.553-.447,1-1,1H5c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h4.515c1.869,0,3.627,.728,4.95,2.05l3.484,3.486c.888,.887,1.521,2,1.833,3.217,.076,.299,.011,.617-.179,.861s-.481,.387-.79,.387h-5.813c-1.654,0-3-1.346-3-3V2.023c-.16-.015-.322-.023-.485-.023H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h14c.553,0,1,.447,1,1ZM12,7c0,.551,.448,1,1,1h4.339c-.22-.382-.489-.736-.804-1.05l-3.484-3.486c-.318-.318-.671-.587-1.051-.805V7Z" />
+                                    </svg>
+                                    <span>Export</span>
+                                </button>
+                                <a href="{{ $type == 'bhp' ? route('print.bhp', ['product_type' => request('product_type'), 'location' => request('location')]) : route('print.inv', ['product_type' => request('product_type'), 'location' => request('location')]) }}"
+                                    target="_blank"
+                                    class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-teal-500 border border-transparent rounded-md font-semibold text-white hover:bg-teal-600 transition duration-300">
+                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                        viewBox="0 0 24 24" width="512" height="512">
+                                        <path
+                                            d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
+                                        <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
+                                    </svg>
+                                    <span>Print</span>
+                                </a>
                             </form>
                             @if (Auth::user()->usertype !== 'user')
                                 <a href="{{ $type == 'bhp' ? route('add-aset-bhp') : route('add-aset-inv') }}"
@@ -97,7 +99,7 @@
                                         <path
                                             d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                     </svg>
-                                    Tambah Data
+                                    Tambah
                                 </a>
                             @endif
                         </div>

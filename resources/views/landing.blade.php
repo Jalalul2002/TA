@@ -47,7 +47,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
             class="mx-auto flex max-w-6xl items-center justify-between px-6 xl:px-0 transition-all duration-300"
             aria-label="Global">
             <div class="flex lg:flex-1">
-                <a href="/" class="-m-1.5 p-1.5">
+                <a href="{{ route('landing') }}" class="-m-1.5 p-1.5">
                     <div class="flex items-center">
                         <div class="mr-2">
                             <img src="{{ asset('Logo-uinsgd_official.png') }}" alt="Logo UIN" class="w-auto h-10">
@@ -85,7 +85,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 </button>
             </div>
             <div class="hidden lg:flex lg:gap-x-12">
-                <a href="/"
+                <a href="{{ route('landing') }}"
                     class="text-sm font-semibold text-gray-900 hover:text-uinBlue transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-uinBlue after:transition-all after:duration-300 hover:after:w-full">Beranda</a>
                 <div class="relative inline-block">
                     <button type="button" @click="isOpen = !isOpen"
@@ -116,7 +116,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                                         class="flex font-bold text-gray-900 size-11 flex-none items-center justify-center rounded-lg bg-gray-100 group-hover:bg-uinYellow group-hover:text-white">
                                         <p>{{ $program['code'] }}</p>
                                     </div>
-                                    <a href="{{ $program['link'] }}"
+                                    <a href="{{ $program['link'] }}" target="_blank"
                                         class="block font-semibold text-gray-900 group-hover:text-white">
                                         {{ $program['name'] }}
                                         <span class="absolute inset-0"></span>
@@ -129,7 +129,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 <a href="#"
                     class="text-sm font-semibold text-gray-900 hover:text-uinBlue transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-uinBlue after:transition-all after:duration-300 hover:after:w-full">Denah
                     Lab</a>
-                <a href="https://fst.uinsgd.ac.id/"
+                <a href="https://fst.uinsgd.ac.id/" target="_blank"
                     class="text-sm font-semibold text-gray-900 hover:text-uinBlue transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[2px] after:bg-uinBlue after:transition-all after:duration-300 hover:after:w-full">Web
                     Fakultas</a>
             </div>
@@ -203,7 +203,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 <div class="mt-6 flow-root">
                     <div class="-my-6 divide-y divide-white/10">
                         <div class="space-y-2 py-6">
-                            <a href="/"
+                            <a href="{{ route('landing') }}"
                                 class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Beranda</a>
                             <div x-data="{ open: false }" class="-mx-3">
                                 <button type="button" @click="open = !open"
@@ -219,7 +219,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                                 </button>
                                 <div x-show="open" x-collapse class="mt-2 space-y-2" id="disclosure-1">
                                     @foreach ($programs as $program)
-                                        <a href="{{ $program['link'] }}"
+                                        <a href="{{ $program['link'] }}" target="_blank"
                                             class="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold text-gray-900 hover:bg-gray-50">{{ $program['code'] . ' ' . $program['name'] }}</a>
                                     @endforeach
                                 </div>
@@ -227,7 +227,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                             <a href="#"
                                 class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Denah
                                 Lab</a>
-                            <a href="https://fst.uinsgd.ac.id/"
+                            <a href="https://fst.uinsgd.ac.id/" target="_blank"
                                 class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Web
                                 Fakultas</a>
                         </div>
@@ -314,7 +314,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 </div>
             </div>
             <div class="bg-white py-24 sm:py-32">
-                <div class="mx-auto max-w-6xl px-6 lg:px-0">
+                <div class="mx-auto max-w-6xl px-6 xl:px-0">
                     <div class="mx-auto lg:text-center animate-on-scroll">
                         <h2
                             class="mt-2 text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl lg:text-balance font-[clash-display]">
@@ -329,7 +329,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                             <div
                                 class="mx-auto grid grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                                 <img src="Lab3.png" alt="Product screenshot"
-                                    class="w-80 max-w-xl md:w-[48rem] animate-on-scroll" width="2432"
+                                    class="w-full max-w-xl md:w-[48rem] animate-on-scroll" width="2432"
                                     height="1442">
                                 <div class="lg:pt-4 lg:pr-8">
                                     <div class="lg:max-w-lg animate-on-scroll">
@@ -384,7 +384,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 </div>
             </div>
             <div class="bg-gray-50 py-24 sm:py-32">
-                <div class="mx-auto max-w-2xl px-6 lg:max-w-6xl lg:px-0">
+                <div class="mx-auto max-w-2xl px-6 lg:max-w-6xl xl:px-0">
                     <p
                         class="animate-on-scroll mx-auto mt-2 max-w-lg text-center text-4xl font-semibold tracking-tight text-balance text-gray-950 sm:text-5xl font-[clash-display]">
                         Tujuan</p>
@@ -492,63 +492,181 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
         </div>
     </section>
 
-    <footer
-        class="bg-center bg-cover bg-no-repeat bg-[url('https://uinsgd.ac.id/wp-content/uploads/elementor/thumbs/IMG_9146-scaled-qibumy4zfccfw6i2ubygu8lhlobxchr6yb3uoza79c.jpg')] bg-sky-600 bg-blend-multiply">
-        <div class="mx-auto w-full max-w-6xl py-6 lg:py-8">
-            <div class="md:flex md:justify-between">
-                <div class="px-6 md:px-0 mb-6 md:mb-0 md:p-6 grid grid-cols-3 gap-2 md:gap-6 lg:gap-8">
-                    <a href="/" class="mr-5">
-                        <img src="Logo-UIN-Putih.png" class="h-40 md:h-52 me-3" alt="UIN Logo Putih" />
+    <footer class="font-['Poppins'] bg-center bg-cover bg-no-repeat"
+        style="background-image: url('{{ asset('footer.png') }}');">
+        <div class="mx-auto w-full max-w-6xl py-6 lg:py-8 px-6 xl:px-0">
+            <div class="flex flex-col md:flex-row md:flex-wrap lg:flex-nowrap md:justify-between md:gap-x-10 lg:pt-5">
+                <div class="mb-2 md:mb-0 flex gap-x-8 items-center">
+                    <a href="{{ route('landing') }}">
+                        <img src="Logo-UIN-Putih.png" class="w-28 lg:w-44 xl:p-6" alt="UIN Logo Putih" />
                     </a>
-                    <div class="text-white text-2xl lg:text-4xl font-semibold text-justify col-span-2 max-w-72">
+                    <div class="text-white text-2xl md:text-4xl leading-none font-semibold text-justify col-span-2">
                         <h3>Laboratorium</h3>
-                        <h3 class="text-sm lg:text-xl font-light">Fakultas Sains dan Teknologi</h3>
-                        <div class="font-sans text-xs lg:text-base py-4">
+                        <h3 class="text-xs md:text-[17px] leading-none font-normal">Fakultas Sains dan Teknologi</h3>
+                        <div class="font-sans text-xs md:text-sm py-4 max-w-64">
                             <p>Jl. A.H. Nasution No. 105 Cibiru Kota Bandung 40614
                                 Jawa Barat – Indonesia</p>
-                            <p class="pt-4">
-                                fst@uinsgd.ac.id
-                            </p>
+                            <div class="pt-4 pb-2 flex gap-x-2 items-center">
+                                <svg class="size-5 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
+                                    data-name="Layer 1" viewBox="0 0 24 24">
+                                    <path
+                                        d="M21.896,7.371c-.555,.598-2.089,2.177-4.319,3.897-2.338,1.804-4.986,3.258-5.098,3.319-.149,.082-.314,.123-.479,.123s-.33-.041-.48-.123c-.111-.061-2.759-1.515-5.098-3.319-2.23-1.72-3.764-3.299-4.32-3.898l-.589-.63c-.269,1.387-.513,3.211-.513,5.261,0,4.458,1.156,7.852,1.206,7.994,.112,.324,.383,.568,.717,.646,.178,.042,4.42,1.023,9.078,1.023,4.819,0,8.914-.983,9.086-1.025,.33-.08,.596-.322,.708-.643,.049-.141,1.206-3.51,1.206-7.996,0-2.067-.242-3.886-.509-5.265l-.594,.636Z" />
+                                    <path
+                                        d="M3.566,6.007c.409,.44,1.907,2.002,4.078,3.676,1.646,1.27,3.5,2.382,4.356,2.876,.856-.495,2.714-1.608,4.355-2.875,2.172-1.674,3.669-3.236,4.076-3.675l1.493-1.597c-.074-.243-.123-.385-.132-.411-.112-.319-.378-.559-.706-.639-.172-.042-4.257-1.025-9.087-1.025-4.744,0-8.907,.982-9.082,1.024-.333,.08-.601,.323-.712,.646-.009,.027-.057,.167-.129,.407l1.49,1.595Z" />
+                                </svg>
+                                <p>fst@uinsgd.ac.id</p>
+                            </div>
+                            <div class="flex gap-x-6 items-center">
+                                <a href="https://www.instagram.com/fst.uinbandung/" class="text-white">
+                                    <svg class="fill-white transition duration-300 hover:fill-uinYellow size-8"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 24 24"
+                                        style="enable-background:new 0 0 24 24;" xml:space="preserve" width="512"
+                                        height="512">
+                                        <g>
+                                            <path
+                                                d="M12,2.162c3.204,0,3.584,0.012,4.849,0.07c1.308,0.06,2.655,0.358,3.608,1.311c0.962,0.962,1.251,2.296,1.311,3.608   c0.058,1.265,0.07,1.645,0.07,4.849c0,3.204-0.012,3.584-0.07,4.849c-0.059,1.301-0.364,2.661-1.311,3.608   c-0.962,0.962-2.295,1.251-3.608,1.311c-1.265,0.058-1.645,0.07-4.849,0.07s-3.584-0.012-4.849-0.07   c-1.291-0.059-2.669-0.371-3.608-1.311c-0.957-0.957-1.251-2.304-1.311-3.608c-0.058-1.265-0.07-1.645-0.07-4.849   c0-3.204,0.012-3.584,0.07-4.849c0.059-1.296,0.367-2.664,1.311-3.608c0.96-0.96,2.299-1.251,3.608-1.311   C8.416,2.174,8.796,2.162,12,2.162 M12,0C8.741,0,8.332,0.014,7.052,0.072C5.197,0.157,3.355,0.673,2.014,2.014   C0.668,3.36,0.157,5.198,0.072,7.052C0.014,8.332,0,8.741,0,12c0,3.259,0.014,3.668,0.072,4.948c0.085,1.853,0.603,3.7,1.942,5.038   c1.345,1.345,3.186,1.857,5.038,1.942C8.332,23.986,8.741,24,12,24c3.259,0,3.668-0.014,4.948-0.072   c1.854-0.085,3.698-0.602,5.038-1.942c1.347-1.347,1.857-3.184,1.942-5.038C23.986,15.668,24,15.259,24,12   c0-3.259-0.014-3.668-0.072-4.948c-0.085-1.855-0.602-3.698-1.942-5.038c-1.343-1.343-3.189-1.858-5.038-1.942   C15.668,0.014,15.259,0,12,0z" />
+                                            <path
+                                                d="M12,5.838c-3.403,0-6.162,2.759-6.162,6.162c0,3.403,2.759,6.162,6.162,6.162s6.162-2.759,6.162-6.162   C18.162,8.597,15.403,5.838,12,5.838z M12,16c-2.209,0-4-1.791-4-4s1.791-4,4-4s4,1.791,4,4S14.209,16,12,16z" />
+                                            <circle cx="18.406" cy="5.594" r="1.44" />
+                                        </g>
+                                    </svg>
+                                    <span class="sr-only">Instagram account FST</span>
+                                </a>
+                                <a href="https://www.youtube.com/channel/UC7CCT_rj026J7ldEnr04dgQ" class="text-white">
+                                    <svg class="fill-white transition duration-300 hover:fill-uinYellow size-10"
+                                        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 24 24"
+                                        style="enable-background:new 0 0 24 24;" xml:space="preserve" width="512"
+                                        height="512">
+                                        <g id="XMLID_184_">
+                                            <path
+                                                d="M23.498,6.186c-0.276-1.039-1.089-1.858-2.122-2.136C19.505,3.546,12,3.546,12,3.546s-7.505,0-9.377,0.504   C1.591,4.328,0.778,5.146,0.502,6.186C0,8.07,0,12,0,12s0,3.93,0.502,5.814c0.276,1.039,1.089,1.858,2.122,2.136   C4.495,20.454,12,20.454,12,20.454s7.505,0,9.377-0.504c1.032-0.278,1.845-1.096,2.122-2.136C24,15.93,24,12,24,12   S24,8.07,23.498,6.186z M9.546,15.569V8.431L15.818,12L9.546,15.569z" />
+                                        </g>
+                                    </svg>
+                                    <span class="sr-only">Youtube account FST</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="px-6 md:px-0 grid grid-cols-2 gap-1 xl:gap-8 lg:gap-6 lg:grid-cols-3">
-                    <div>
-                        <h2 class="mb-6 text-xs lg:text-sm font-semibold text-white uppercase">Program Studi</h2>
-                        <ul class="text-white text-sm lg:text-base font-medium">
+                <div class="mb-6 md:mb-0 text-white font-semibold text-justify col-span-2 max-w-64">
+                    <div class="flex gap-x-2 items-center">
+                        <img src="{{ asset('Logo-IF-putih.png') }}" class="w-12 xl:w-14" alt="IF Logo">
+                        <div>
+                            <h3 class="leading-none text-2xl xl:text-3xl"><span class="text-amber-400">Teknik</span>
+                                Informatika</h3>
+                            <p class="font-normal leading-none text-[11px]">UIN Sunan Gunung Djati Bandung</p>
+                        </div>
+                    </div>
+                    <div class="font-sans px-1 text-xs md:text-sm xl:text-base xl:py-4 font-normal">
+                        <div class="pt-4 pb-2 flex gap-x-2 items-center">
+                            <svg class="size-5 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
+                                data-name="Layer 1" viewBox="0 0 24 24">
+                                <path
+                                    d="M21.896,7.371c-.555,.598-2.089,2.177-4.319,3.897-2.338,1.804-4.986,3.258-5.098,3.319-.149,.082-.314,.123-.479,.123s-.33-.041-.48-.123c-.111-.061-2.759-1.515-5.098-3.319-2.23-1.72-3.764-3.299-4.32-3.898l-.589-.63c-.269,1.387-.513,3.211-.513,5.261,0,4.458,1.156,7.852,1.206,7.994,.112,.324,.383,.568,.717,.646,.178,.042,4.42,1.023,9.078,1.023,4.819,0,8.914-.983,9.086-1.025,.33-.08,.596-.322,.708-.643,.049-.141,1.206-3.51,1.206-7.996,0-2.067-.242-3.886-.509-5.265l-.594,.636Z" />
+                                <path
+                                    d="M3.566,6.007c.409,.44,1.907,2.002,4.078,3.676,1.646,1.27,3.5,2.382,4.356,2.876,.856-.495,2.714-1.608,4.355-2.875,2.172-1.674,3.669-3.236,4.076-3.675l1.493-1.597c-.074-.243-.123-.385-.132-.411-.112-.319-.378-.559-.706-.639-.172-.042-4.257-1.025-9.087-1.025-4.744,0-8.907,.982-9.082,1.024-.333,.08-.601,.323-.712,.646-.009,.027-.057,.167-.129,.407l1.49,1.595Z" />
+                            </svg>
+                            <p>informatics@uinsgd.ac.id</p>
+                        </div>
+                        <p>Ikuti kami di</p>
+                        <div class="flex gap-x-6 items-center">
+                            <a href="https://www.facebook.com/groups/206892129414422/?_rdc=2&_rdr" target="_blank"
+                                class="text-white">
+                                <svg class="fill-white transition duration-300 hover:fill-uinYellow size-8"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 24 24"
+                                    style="enable-background:new 0 0 24 24;" xml:space="preserve" width="512"
+                                    height="512">
+                                    <g>
+                                        <path
+                                            d="M24,12.073c0,5.989-4.394,10.954-10.13,11.855v-8.363h2.789l0.531-3.46H13.87V9.86c0-0.947,0.464-1.869,1.95-1.869h1.509   V5.045c0,0-1.37-0.234-2.679-0.234c-2.734,0-4.52,1.657-4.52,4.656v2.637H7.091v3.46h3.039v8.363C4.395,23.025,0,18.061,0,12.073   c0-6.627,5.373-12,12-12S24,5.445,24,12.073z" />
+                                    </g>
+                                </svg>
+                                <span class="sr-only">Facebook account IF</span>
+                            </a>
+                            <a href="https://x.com/if_uinsgd" target="_blank" class="text-white">
+                                <svg class="fill-white transition duration-300 hover:fill-uinYellow size-8"
+                                    xmlns="http://www.w3.org/2000/svg" id="Capa_1" data-name="Capa 1"
+                                    viewBox="0 0 24 24">
+                                    <path
+                                        d="m18.9,1.153h3.682l-8.042,9.189,9.46,12.506h-7.405l-5.804-7.583-6.634,7.583H.469l8.6-9.831L0,1.153h7.593l5.241,6.931,6.065-6.931Zm-1.293,19.494h2.039L6.482,3.239h-2.19l13.314,17.408Z" />
+                                </svg>
+                                <span class="sr-only">X account IF</span>
+                            </a>
+                            <a href="https://www.instagram.com/ifuinbandung/" target="_blank" class="text-white">
+                                <svg class="fill-white transition duration-300 hover:fill-uinYellow size-8"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 24 24"
+                                    style="enable-background:new 0 0 24 24;" xml:space="preserve" width="512"
+                                    height="512">
+                                    <g>
+                                        <path
+                                            d="M12,2.162c3.204,0,3.584,0.012,4.849,0.07c1.308,0.06,2.655,0.358,3.608,1.311c0.962,0.962,1.251,2.296,1.311,3.608   c0.058,1.265,0.07,1.645,0.07,4.849c0,3.204-0.012,3.584-0.07,4.849c-0.059,1.301-0.364,2.661-1.311,3.608   c-0.962,0.962-2.295,1.251-3.608,1.311c-1.265,0.058-1.645,0.07-4.849,0.07s-3.584-0.012-4.849-0.07   c-1.291-0.059-2.669-0.371-3.608-1.311c-0.957-0.957-1.251-2.304-1.311-3.608c-0.058-1.265-0.07-1.645-0.07-4.849   c0-3.204,0.012-3.584,0.07-4.849c0.059-1.296,0.367-2.664,1.311-3.608c0.96-0.96,2.299-1.251,3.608-1.311   C8.416,2.174,8.796,2.162,12,2.162 M12,0C8.741,0,8.332,0.014,7.052,0.072C5.197,0.157,3.355,0.673,2.014,2.014   C0.668,3.36,0.157,5.198,0.072,7.052C0.014,8.332,0,8.741,0,12c0,3.259,0.014,3.668,0.072,4.948c0.085,1.853,0.603,3.7,1.942,5.038   c1.345,1.345,3.186,1.857,5.038,1.942C8.332,23.986,8.741,24,12,24c3.259,0,3.668-0.014,4.948-0.072   c1.854-0.085,3.698-0.602,5.038-1.942c1.347-1.347,1.857-3.184,1.942-5.038C23.986,15.668,24,15.259,24,12   c0-3.259-0.014-3.668-0.072-4.948c-0.085-1.855-0.602-3.698-1.942-5.038c-1.343-1.343-3.189-1.858-5.038-1.942   C15.668,0.014,15.259,0,12,0z" />
+                                        <path
+                                            d="M12,5.838c-3.403,0-6.162,2.759-6.162,6.162c0,3.403,2.759,6.162,6.162,6.162s6.162-2.759,6.162-6.162   C18.162,8.597,15.403,5.838,12,5.838z M12,16c-2.209,0-4-1.791-4-4s1.791-4,4-4s4,1.791,4,4S14.209,16,12,16z" />
+                                        <circle cx="18.406" cy="5.594" r="1.44" />
+                                    </g>
+                                </svg>
+                                <span class="sr-only">Instagram account IF</span>
+                            </a>
+                            <a href="https://www.youtube.com/@teknikinformatikauinbandung" target="_blank"
+                                class="text-white">
+                                <svg class="fill-white transition duration-300 hover:fill-uinYellow size-10"
+                                    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 24 24"
+                                    style="enable-background:new 0 0 24 24;" xml:space="preserve" width="512"
+                                    height="512">
+                                    <g id="XMLID_184_">
+                                        <path
+                                            d="M23.498,6.186c-0.276-1.039-1.089-1.858-2.122-2.136C19.505,3.546,12,3.546,12,3.546s-7.505,0-9.377,0.504   C1.591,4.328,0.778,5.146,0.502,6.186C0,8.07,0,12,0,12s0,3.93,0.502,5.814c0.276,1.039,1.089,1.858,2.122,2.136   C4.495,20.454,12,20.454,12,20.454s7.505,0,9.377-0.504c1.032-0.278,1.845-1.096,2.122-2.136C24,15.93,24,12,24,12   S24,8.07,23.498,6.186z M9.546,15.569V8.431L15.818,12L9.546,15.569z" />
+                                    </g>
+                                </svg>
+                                <span class="sr-only">Youtube account IF</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="xl:pr-6">
+                    <div class="relative">
+                        <h2
+                            class="mb-2 inline-block text-sm font-semibold text-white uppercase after:absolute after:left-0 after:bottom-0 after:h-[2px] after:bg-uinYellow after:w-full">
+                            Program Studi</h2>
+                    </div>
+                    <div class="flex gap-x-8 pt-6">
+                        <ul class="text-white text-sm md:text-sm xl:text-base font-medium">
                             <li class="mb-4">
-                                <a href="https://math.uinsgd.ac.id/"
+                                <a href="https://math.uinsgd.ac.id/" target="_blank"
                                     class="hover:text-uinYellow transition duration-300">Matematika</a>
                             </li>
                             <li class="mb-4">
-                                <a href="http://bio.uinsgd.ac.id/"
+                                <a href="http://bio.uinsgd.ac.id/" target="_blank"
                                     class="hover:text-uinYellow transition duration-300">Biologi</a>
                             </li>
                             <li class="mb-4">
-                                <a href="https://fi.uinsgd.ac.id/"
+                                <a href="https://fi.uinsgd.ac.id/" target="_blank"
                                     class="hover:text-uinYellow transition duration-300">Fisika</a>
                             </li>
                             <li class="mb-4">
-                                <a href="https://chem.uinsgd.ac.id/"
+                                <a href="https://chem.uinsgd.ac.id/" target="_blank"
                                     class="hover:text-uinYellow transition duration-300">Kimia</a>
                             </li>
                         </ul>
-                    </div>
-                    <div class="pt-11">
-                        <ul class="text-white text-sm lg:text-base font-medium">
+                        <ul class="text-white text-sm md:text-sm xl:text-base font-medium">
 
                             <li class="mb-4">
-                                <a href="https://if.uinsgd.ac.id/"
+                                <a href="https://if.uinsgd.ac.id/" target="_blank"
                                     class="hover:text-uinYellow transition duration-300">Teknik
                                     Informatika</a>
 
                             </li>
                             <li class="mb-4">
-                                <a href="https://agrotek.uinsgd.ac.id/"
+                                <a href="https://agrotek.uinsgd.ac.id/" target="_blank"
                                     class="hover:text-uinYellow transition duration-300">Agroteknologi</a>
                             </li>
                             <li class="mb-4">
-                                <a href="https://ee.uinsgd.ac.id/"
+                                <a href="https://ee.uinsgd.ac.id/" target="_blank"
                                     class="hover:text-uinYellow transition duration-300">Teknik
                                     Elektro</a>
                             </li>
@@ -556,9 +674,9 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                     </div>
                 </div>
             </div>
-            <hr class="my-6 border-white sm:mx-auto lg:my-8" />
-            <div class="sm:flex sm:items-center sm:justify-between px-6 md:px-0">
-                <span class="text-sm text-white sm:text-center">© 2024 <a href="/"
+            <hr class="my-6 border-white sm:mx-auto" />
+            <div class="text-sm sm:flex font-normal sm:items-center sm:justify-between px-6 md:px-0">
+                <span class="text-white sm:text-center">© 2024 <a href="{{ route('landing') }}"
                         class="hover:text-uinYellow transition duration-300 relative inline-block after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-uinYellow after:transition-all after:duration-300 hover:after:w-full">Laboratorium
                         Fakultas Saintek</a>. UIN Sunan Gunung Djati Bandung.
                 </span>

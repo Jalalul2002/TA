@@ -82,8 +82,31 @@
                     </div>
                     <div class="mt-4">
                         <x-input-label for="product_unit" :value="__('Satuan')" />
-                        <x-text-input id="product_unit" class="block mt-1 w-full" type="text" name="product_unit"
-                            :value="old('product_unit', $assetLab->product_unit)" required autofocus autocomplete="product_unit" />
+                        @php
+                            $units = [
+                                'bks',
+                                'botol',
+                                'cm',
+                                'g',
+                                'pcs',
+                                'unit',
+                                'karung',
+                                'lembar',
+                                'ml',
+                                'pak',
+                                'paket',
+                                'petri',
+                                'rol',
+                                'set',
+                            ];
+                        @endphp
+                        <select id="product_unit" name="product_unit"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
+                            required>
+                            @foreach ($units as $unit)
+                                <option value="{{ $unit }}" {{ $unit == $assetLab->product_unit ? 'selected' : '' }}>{{ $unit }}</option>
+                            @endforeach
+                        </select>
                         <x-input-error :messages="$errors->get('product_unit')" class="mt-2" />
                     </div>
                     <div class="flex items-center justify-end mt-4">

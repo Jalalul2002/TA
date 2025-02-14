@@ -18,7 +18,7 @@ require __DIR__ . '/auth.php';
 Route::get('/', function () {
     // return redirect('/login');
     return view('landing');
-});
+}) ->name('landing');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -68,6 +68,7 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::post('/perencanaan-bhp/add-item/{id}', [PerencanaanController::class, 'storeItem'])->name('rencana.store-item');
     Route::get('/edit-rencana/{id}', [PerencanaanController::class, 'edit'])->name('rencana.edit-rencana');
     Route::put('/update-rencana/{id}', [PerencanaanController::class, 'update'])->name('rencana.update-rencana');
+    Route::put('/update-detail/{id}', [PerencanaanController::class, 'updateDetail'])->name('rencana.update-detail');
     Route::post('/perencanaan/{id}/complete', [PerencanaanController::class, 'complete'])->name('perencanaan.complete');
 
     Route::post('/add-transaction-bhp', [TransactionController::class, 'create'])->name('add-transaction.bhp');

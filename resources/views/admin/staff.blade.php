@@ -4,13 +4,21 @@
             {{ __('Data Staff') }}
         </h2>
     </x-slot>
-
+    @if (session('success') || session('error'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+            class="fixed top-20 right-10 p-3 rounded-md shadow-md transition-all duration-500"
+            :class="{ 'bg-green-500 text-white': '{{ session('success') }}', 'bg-red-500 text-white': '{{ session('error') }}' }"
+            x-transition:enter="transform ease-out duration-500" x-transition:enter-start="opacity-0 -translate-y-5"
+            x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transform ease-in duration-500"
+            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-5">
+            {{ session('success') ?? session('error') }}
+        </div>
+    @endif
     <div class="py-6">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
-                    <div
-                        class="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between pb-4">
+                    <div class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 lg:items-center justify-between pb-4">
                         <label for="table-search" class="sr-only">Search</label>
                         <div class="relative">
                             <div
@@ -27,7 +35,7 @@
                                 class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Search for items" autocomplete="off">
                         </div>
-                        <div>
+                        <div class="flex justify-end">
                             <a href="{{ route('admin.add-staff') }}"
                                 class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy duration-300 transition-all">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +106,8 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            <form action="{{ route('admin.destroy-staff', $user->id) }}" method="POST">
+                                            <form action="{{ route('admin.destroy-staff', $user->id) }}"
+                                                method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit"

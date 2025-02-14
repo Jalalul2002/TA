@@ -1,10 +1,14 @@
-<aside id="logo-sidebar"
-    class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white sm:translate-x-0"
-    aria-label="Sidebar">
+<aside :class="openSidebar ? 'w-64' : 'w-0 -translate-x-10 md:translate-x-0 md:w-20'" id="logo-sidebar"
+    class="fixed top-0 left-0 z-40 h-screen pt-20 transition-all duration-300 bg-white shadow-md" aria-label="Sidebar">
     @php
         $menus = [
             [
-                'route' => Auth::user()->usertype == 'admin' ? route('admin.dashboard') : (Auth::user()->usertype == 'user' ? route('user.dashboard') : route('dashboard')),
+                'route' =>
+                    Auth::user()->usertype == 'admin'
+                        ? route('admin.dashboard')
+                        : (Auth::user()->usertype == 'user'
+                            ? route('user.dashboard')
+                            : route('dashboard')),
                 'isActive' => Request::routeIs(['dashboard', 'admin.dashboard', 'user.dashboard']),
                 'icon' =>
                     '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M7,0H4A4,4,0,0,0,0,4V7a4,4,0,0,0,4,4H7a4,4,0,0,0,4-4V4A4,4,0,0,0,7,0ZM9,7A2,2,0,0,1,7,9H4A2,2,0,0,1,2,7V4A2,2,0,0,1,4,2H7A2,2,0,0,1,9,4Z"/><path d="M20,0H17a4,4,0,0,0-4,4V7a4,4,0,0,0,4,4h3a4,4,0,0,0,4-4V4A4,4,0,0,0,20,0Zm2,7a2,2,0,0,1-2,2H17a2,2,0,0,1-2-2V4a2,2,0,0,1,2-2h3a2,2,0,0,1,2,2Z"/><path d="M7,13H4a4,4,0,0,0-4,4v3a4,4,0,0,0,4,4H7a4,4,0,0,0,4-4V17A4,4,0,0,0,7,13Zm2,7a2,2,0,0,1-2,2H4a2,2,0,0,1-2-2V17a2,2,0,0,1,2-2H7a2,2,0,0,1,2,2Z"/><path d="M20,13H17a4,4,0,0,0-4,4v3a4,4,0,0,0,4,4h3a4,4,0,0,0,4-4V17A4,4,0,0,0,20,13Zm2,7a2,2,0,0,1-2,2H17a2,2,0,0,1-2-2V17a2,2,0,0,1,2-2h3a2,2,0,0,1,2,2Z"/></svg></div>',
@@ -33,17 +37,23 @@
                 'submenu' => [
                     [
                         'route' => route('perencanaan-inv'),
+                        'icon' =>
+                            '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M16.5,0c-4.206,0-7.5,1.977-7.5,4.5v2.587c-.483-.057-.985-.087-1.5-.087C3.294,7,0,8.977,0,11.5v8c0,2.523,3.294,4.5,7.5,4.5,3.407,0,6.216-1.297,7.16-3.131,.598,.087,1.214,.131,1.84,.131,4.206,0,7.5-1.977,7.5-4.5V4.5c0-2.523-3.294-4.5-7.5-4.5Zm5.5,12.5c0,1.18-2.352,2.5-5.5,2.5-.512,0-1.014-.035-1.5-.103v-1.984c.49,.057,.992,.087,1.5,.087,2.194,0,4.14-.538,5.5-1.411v.911ZM2,14.589c1.36,.873,3.306,1.411,5.5,1.411s4.14-.538,5.5-1.411v.911c0,1.18-2.352,2.5-5.5,2.5s-5.5-1.32-5.5-2.5v-.911Zm20-6.089c0,1.18-2.352,2.5-5.5,2.5-.535,0-1.06-.038-1.566-.112-.193-.887-.8-1.684-1.706-2.323,.984,.28,2.092,.435,3.272,.435,2.194,0,4.14-.538,5.5-1.411v.911Zm-5.5-6.5c3.148,0,5.5,1.32,5.5,2.5s-2.352,2.5-5.5,2.5-5.5-1.32-5.5-2.5,2.352-2.5,5.5-2.5ZM7.5,9c3.148,0,5.5,1.32,5.5,2.5s-2.352,2.5-5.5,2.5-5.5-1.32-5.5-2.5,2.352-2.5,5.5-2.5Zm0,13c-3.148,0-5.5-1.32-5.5-2.5v-.911c1.36,.873,3.306,1.411,5.5,1.411s4.14-.538,5.5-1.411v.911c0,1.18-2.352,2.5-5.5,2.5Zm9-3c-.512,0-1.014-.035-1.5-.103v-1.984c.49,.057,.992,.087,1.5,.087,2.194,0,4.14-.538,5.5-1.411v.911c0,1.18-2.352,2.5-5.5,2.5Z"/></svg></div>',
                         'label' => 'Aset Inventaris',
                         'isActive' => Request::routeIs('perencanaan-inv'),
                     ],
                     [
                         'route' => route('perencanaan-bhp'),
+                        'icon' =>
+                            '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M18.713,12H14a2,2,0,0,1-2-2V5.274a3,3,0,0,0-1.166-2.383,2.871,2.871,0,0,0-2.481-.534,10.969,10.969,0,0,0,.553,21.414A11,11,0,0,0,21.64,15.657a2.876,2.876,0,0,0-.533-2.485A3.055,3.055,0,0,0,18.713,12Zm.988,3.168A8.969,8.969,0,1,1,8.842,4.3a.871.871,0,0,1,.764.172,1.016,1.016,0,0,1,.4.806V10a4,4,0,0,0,4,4h4.712a1.041,1.041,0,0,1,.816.4A.884.884,0,0,1,19.7,15.168Z"/><path d="M23.651,7.446A10.073,10.073,0,0,0,16.582.372,2.1,2.1,0,0,0,16.038.3a2,2,0,0,0-2.019,2V7a3,3,0,0,0,3,3h4.719A2.008,2.008,0,0,0,23.651,7.446ZM21.153,8H17.015a1,1,0,0,1-1-1l-.008-4.693a.048.048,0,0,1,.025-.009l.026,0A8.072,8.072,0,0,1,21.734,8Z"/></svg></div>',
                         'label' => 'Barang Habis Pakai',
                         'isActive' => Request::routeIs('perencanaan-bhp'),
                     ],
                     [
                         'route' => route('prediksi'),
-                        'label' => 'Prediksi Barang Habis Pakai',
+                        'icon' =>
+                            '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg"><svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24" width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="m16 16a1 1 0 0 1 -1 1h-2v2a1 1 0 0 1 -2 0v-2h-2a1 1 0 0 1 0-2h2v-2a1 1 0 0 1 2 0v2h2a1 1 0 0 1 1 1zm6-5.515v8.515a5.006 5.006 0 0 1 -5 5h-10a5.006 5.006 0 0 1 -5-5v-14a5.006 5.006 0 0 1 5-5h4.515a6.958 6.958 0 0 1 4.95 2.05l3.484 3.486a6.951 6.951 0 0 1 2.051 4.949zm-6.949-7.021a5.01 5.01 0 0 0 -1.051-.78v4.316a1 1 0 0 0 1 1h4.316a4.983 4.983 0 0 0 -.781-1.05zm4.949 7.021c0-.165-.032-.323-.047-.485h-4.953a3 3 0 0 1 -3-3v-4.953c-.162-.015-.321-.047-.485-.047h-4.515a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3z"/></svg></div>',
+                        'label' => 'Prediksi BHP',
                         'isActive' => Request::routeIs('prediksi'),
                     ],
                 ],
@@ -64,16 +74,18 @@
                     <li>
                         <x-side-link href="{{ $menu['route'] }}" :active="$menu['isActive']">
                             {!! str_replace('bg-uinGreen', $menu['isActive'] ? 'bg-uinBlue' : 'bg-uinGreen', $menu['icon']) !!}
-                            <span class="flex-1 ms-3 whitespace-nowrap">{{ $menu['label'] }}</span>
+                            <span class="flex-1 ms-3 whitespace-nowrap transition-all duration-300"
+                                :class="openSidebar ? 'opacity-100' : 'opacity-0'">{{ $menu['label'] }}</span>
                         </x-side-link>
                     </li>
                 @else
                     <li x-data="{ open: false }">
                         <button @click="open = !open"
-                            class="flex items-center w-full px-3 py-4 text-base transition duration-500 rounded-lg group {{ $menu['isActive'] ? 'bg-uinOrange text-white' : 'bg-white text-gray-900 hover:bg-uinYellow hover:text-white' }}">
+                            class="flex items-center w-full px-3 py-4 text-base rounded-lg group {{ $menu['isActive'] ? 'bg-uinOrange text-white' : 'bg-white text-gray-900 hover:bg-uinYellow hover:text-white' }}">
                             {!! str_replace('bg-uinGreen', $menu['isActive'] ? 'bg-uinBlue' : 'bg-uinGreen', $menu['icon']) !!}
                             <span
-                                class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">{{ $menu['label'] }}</span>
+                                class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap transition-all duration-300"
+                                :class="openSidebar ? 'opacity-100' : 'opacity-0'">{{ $menu['label'] }}</span>
                             <svg class="w-3 h-3 transition-transform duration-500 {{ $menu['isActive'] ? 'text-white' : 'text-gray-900 group-hover:text-white' }}"
                                 :class="open ? 'rotate-180' : ''" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 10 6">
@@ -83,9 +95,11 @@
                         </button>
                         <ul x-show="open" x-transition.opacity x-collapse class="py-2 space-y-2">
                             @foreach ($menu['submenu'] as $submenu)
-                                <li>
+                                <li class="pl-2">
                                     <x-side-link href="{{ $submenu['route'] }}" :active="$submenu['isActive']">
-                                        {{ $submenu['label'] }}
+                                        {!! str_replace('bg-uinGreen', $submenu['isActive'] ? 'bg-uinBlue' : 'bg-uinGreen', $submenu['icon']) !!}
+                                        <span class="flex-1 ms-3 whitespace-nowrap transition-all duration-300"
+                                            :class="openSidebar ? 'opacity-100' : 'opacity-0'">{{ $submenu['label'] }}</span>
                                     </x-side-link>
                                 </li>
                             @endforeach
@@ -97,15 +111,16 @@
             {{-- Admin Link --}}
             @if (Auth::user()->usertype == 'admin')
                 <li>
-                    <x-side-link href="/admin/data-staff" :active="request()->is('admin/data-staff')">
+                    <x-side-link href="{{ route('admin.staff') }}" :active="request()->is('admin/data-staff')">
                         <div class="p-2 rounded-lg bg-uinGreen group-hover:bg-uinBlue">
-                            <svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24" width="512"
-                                xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+                            <svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24"
+                                width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
                                 <path
                                     d="m7.5 13a4.5 4.5 0 1 1 4.5-4.5 4.505 4.505 0 0 1 -4.5 4.5zm0-7a2.5 2.5 0 1 0 2.5 2.5 2.5 2.5 0 0 0 -2.5-2.5zm7.5 17v-.5a7.5 7.5 0 0 0 -15 0v.5a1 1 0 0 0 2 0v-.5a5.5 5.5 0 0 1 11 0v.5a1 1 0 0 0 2 0zm9-5a7 7 0 0 0 -11.667-5.217 1 1 0 1 0 1.334 1.49 5 5 0 0 1 8.333 3.727 1 1 0 0 0 2 0zm-6.5-9a4.5 4.5 0 1 1 4.5-4.5 4.505 4.505 0 0 1 -4.5 4.5zm0-7a2.5 2.5 0 1 0 2.5 2.5 2.5 2.5 0 0 0 -2.5-2.5z" />
                             </svg>
                         </div>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Manajemen Pengguna</span>
+                        <span class="flex-1 ms-3 whitespace-nowrap transition-all duration-300"
+                            :class="openSidebar ? 'opacity-100' : 'opacity-0'">Manajemen Pengguna</span>
                     </x-side-link>
                 </li>
             @endif
@@ -114,19 +129,21 @@
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
 
-                    <a href="{{ route('logout') }}" class="flex items-center px-3 py-4 text-uinRed rounded-lg hover:bg-uinRed hover:font-medium hover:text-white group transition duration-300"
+                    <a href="{{ route('logout') }}"
+                        class="flex items-center px-3 py-4 text-uinRed rounded-lg hover:bg-uinRed hover:font-medium hover:text-white group transition-all duration-100"
                         onclick="event.preventDefault();
                                     this.closest('form').submit();">
                         <div class="p-2 rounded-lg bg-uinRed group-hover:bg-white transition duration-300">
-                            <svg class="size-4 fill-white group-hover:fill-uinRed" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
-                                data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512">
+                            <svg class="size-4 fill-white group-hover:fill-uinRed" xmlns="http://www.w3.org/2000/svg"
+                                id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512">
                                 <path
                                     d="M11.476,15a1,1,0,0,0-1,1v3a3,3,0,0,1-3,3H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2H7.476a3,3,0,0,1,3,3V8a1,1,0,0,0,2,0V5a5.006,5.006,0,0,0-5-5H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H7.476a5.006,5.006,0,0,0,5-5V16A1,1,0,0,0,11.476,15Z" />
                                 <path
                                     d="M22.867,9.879,18.281,5.293a1,1,0,1,0-1.414,1.414l4.262,4.263L6,11a1,1,0,0,0,0,2H6l15.188-.031-4.323,4.324a1,1,0,1,0,1.414,1.414l4.586-4.586A3,3,0,0,0,22.867,9.879Z" />
                             </svg>
                         </div>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Sign Out</span>
+                        <span class="flex-1 ms-3 whitespace-nowrap transition-all duration-300"
+                            :class="openSidebar ? 'opacity-100' : 'opacity-0'">Sign Out</span>
                     </a>
                 </form>
             </li>

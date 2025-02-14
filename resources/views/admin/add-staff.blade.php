@@ -1,12 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Data User') }}
-        </h2>
+        <a href="{{ route('admin.staff') }}">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('◀️ Tambah Data User') }}
+            </h2>
+        </a>
     </x-slot>
 
     <div class="py-6" x-data="{ usertype: '', prodiRequired: false }">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid grid-cols-2 lg:grid-cols-3">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid lg:grid-cols-2 xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('admin.add-staff') }}">
                     @csrf
@@ -30,16 +32,17 @@
                     {{-- Role --}}
                     <div class="mt-4">
                         <x-input-label for="usertype" :value="__('Usertype')" />
-                        <select id="usertype" name="usertype" x-model="usertype"
+                        <select id="usertype" name="usertype" x-model="usertype" required
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
                             @change="prodiRequired = (usertype === 'staff')">
                             <option value="">-- Pilih Tipe Pengguna --</option>
+                            <option value="admin">Admin</option>
                             <option value="staff">Staff</option>
                             <option value="user">User</option>
                         </select>
                         <x-input-error :messages="$errors->get('usertype')" class="mt-2" />
                     </div>
-                    
+
                     <div class="mt-4">
                         <x-input-label for="prodi" :value="__('Program Studi (staff wajib diisi)')" />
                         <select id="prodi" name="prodi"
@@ -56,7 +59,7 @@
                         </select>
                         <x-input-error :messages="$errors->get('prodi')" class="mt-2" />
                     </div>
-                    
+
                     <!-- Password -->
                     <div class="mt-4">
                         <x-input-label for="password" :value="__('Password')" />

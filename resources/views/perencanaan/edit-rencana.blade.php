@@ -7,7 +7,7 @@
         </a>
     </x-slot>
     <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid sm:grid-cols-2 xl:grid-cols-3">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid lg:grid-cols-2 xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('rencana.update-rencana', $item->id) }}">
                     @csrf

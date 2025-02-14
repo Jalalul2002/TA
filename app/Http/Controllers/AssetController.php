@@ -7,10 +7,12 @@ use App\Exports\AssetInvExport;
 use App\Http\Controllers\Controller;
 use App\Models\Assetlab;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
 class AssetController extends Controller
@@ -191,14 +193,13 @@ class AssetController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'product_code' => ['required', 'string', 'unique:assetlabs'],
-            'product_name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'max:255'],
-            'location' => ['required', 'string', 'max:255']
-        ]);
-
         try {
+            $request->validate([
+                'product_code' => ['required', 'string', 'unique:assetlabs'],
+                'product_name' => ['required', 'string', 'max:255'],
+                'type' => ['required', 'string', 'max:255'],
+                'location' => ['required', 'string', 'max:255']
+            ]);
             // Convert product_id to lowercase
             $product_code_upper = strtoupper($request->product_code);
             $product_name_capitalized = ucwords(strtolower($request->product_name));
@@ -223,16 +224,16 @@ class AssetController extends Controller
                 'updated_by' => Auth::id(),
             ]);
 
-            if ($request->type == 'bhp') {
-                return redirect(route('data-bhp', absolute: false));
-            }
-
-            return redirect(route('data-aset', absolute: false));
+            return redirect($request->type == 'bhp' ? route('data-bhp', absolute: false) : route('data-aset', absolute: false))->with('success', 'Produk berhasil ditambahkan.');
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator)->withInput();
         } catch (QueryException $e) {
-            if ($e->errorInfo[1] == 1062) { // Error kode 1062 untuk duplicate entry
-                return redirect()->back()->with('duplicate_error', 'Kode produk sudah ada!');
+            if ($e->errorInfo[1] == 1062) {
+                return redirect()->back()->with('error', 'Kode produk sudah ada!')->withInput();
             }
             return redirect()->back()->with('error', 'Terjadi kesalahan pada database.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan yang tidak terduga.');
         }
     }
 
@@ -242,11 +243,7 @@ class AssetController extends Controller
         $type = $assetlab->type;
         $assetlab->delete();
 
-        if ($type === 'bhp') {
-            return redirect()->route('data-bhp')->with('success', 'Barang deleted successfully');
-        }
-
-        return redirect()->route('data-aset')->with('success', 'Barang deleted successfully');
+        return redirect($type == 'bhp' ? route('data-bhp', absolute: false) : route('data-aset', absolute: false))->with('success', 'Barang deleted successfully');
     }
 
     public function edit($product_code)
@@ -257,37 +254,41 @@ class AssetController extends Controller
 
     public function update(Request $request, $product_code)
     {
-        $assetLab = Assetlab::where('product_code', $product_code)->firstOrFail();
+        try {
+            $assetLab = Assetlab::where('product_code', $product_code)->firstOrFail();
+            $request->validate([
+                'product_name' => ['required', 'string', 'max:255'],
+                'product_detail' => ['nullable', 'string', 'max:255'],
+                'merk' => ['nullable', 'string', 'max:255'],
+                'product_type' => ['required', 'string', 'max:255'],
+                'stock' => ['required', 'integer'],
+                'product_unit' => ['required', 'string', 'max:255'],
+                'location_detail' => ['nullable', 'string', 'max:255'],
+                'location' => ['required', 'string', 'max:255'],
+            ]);
 
-        $request->validate([
-            'product_name' => ['required', 'string', 'max:255'],
-            'product_detail' => ['nullable', 'string', 'max:255'],
-            'merk' => ['nullable', 'string', 'max:255'],
-            'product_type' => ['required', 'string', 'max:255'],
-            'stock' => ['required', 'integer'],
-            'product_unit' => ['required', 'string', 'max:255'],
-            'location_detail' => ['nullable', 'string', 'max:255'],
-            'location' => ['required', 'string', 'max:255'],
-        ]);
+            $assetLab->update([
+                'product_name' => ucwords(strtolower($request->product_name)),
+                'product_detail' => $request->product_detail,
+                'merk' => ucwords(strtolower($request->merk)),
+                'product_type' => ucwords(strtolower($request->product_type)),
+                'stock' => $request->stock,
+                'product_unit' => $request->product_unit,
+                'location_detail' => ucwords(strtolower($request->location_detail)),
+                'location' => ucwords(strtolower($request->location)),
+                'updated_by' => Auth::id(),
+            ]);
 
-        $assetLab->update([
-            'product_name' => ucwords(strtolower($request->product_name)),
-            'product_detail' => $request->product_detail,
-            'merk' => ucwords(strtolower($request->merk)),
-            'product_type' => ucwords(strtolower($request->product_type)),
-            'stock' => $request->stock,
-            'product_unit' => $request->product_unit,
-            'location_detail' => ucwords(strtolower($request->location_detail)),
-            'location' => ucwords(strtolower($request->location)),
-            'updated_by' => Auth::id(),
-        ]);
+            $assetLab->refresh();
 
-        $assetLab->refresh();
-
-        if (strtolower($assetLab->type) === 'bhp') {
-            return redirect()->route('data-bhp')->with('success', 'Data berhasil diperbarui');
-        } else {
-            return redirect()->route('data-aset')->with('success', 'Data berhasil diperbarui');
+            return redirect()->route(strtolower($assetLab->type) === 'bhp' ? 'data-bhp' : 'data-aset')
+                ->with('success', 'Data berhasil diperbarui');
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->validator)->withInput();
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memperbarui data.');
         }
     }
 }

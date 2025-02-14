@@ -1,12 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Data User') }}
-        </h2>
+        <a href="{{ route('admin.staff') }}">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('◀️ Edit Data User') }}
+            </h2>
+        </a>
     </x-slot>
-
-    <div class="py-6">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid grid-cols-2 lg:grid-cols-3">
+    <div class="py-6" x-data="{ usertype: '{{ $user->usertype }}', prodiRequired: '{{ $user->usertype }}' === 'staff' }">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 grid lg:grid-cols-2 xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <form method="POST" action="{{ route('admin.update-staff', $user->id) }}">
                     @csrf
@@ -29,9 +30,39 @@
                     </div>
 
                     <div class="mt-4">
-                        <x-input-label for="prodi" :value="__('Program Studi')" />
-                        <x-text-input id="prodi" class="block mt-1 w-full" type="text" name="prodi"
-                            :value="old('prodi', $user->prodi)" autofocus autocomplete="prodi" />
+                        <x-input-label for="usertype" :value="__('Usertype')" />
+                        <select id="usertype" name="usertype" x-model="usertype"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
+                            @change="prodiRequired = (usertype === 'staff')">
+                            <option value="">-- Pilih Tipe Pengguna --</option>
+                            <option value="admin" {{ $user->usertype == 'admin' ? 'selected' : '' }}>Admin</option>
+                            <option value="staff" {{ $user->usertype == 'staff' ? 'selected' : '' }}>Staff</option>
+                            <option value="user" {{ $user->usertype == 'user' ? 'selected' : '' }}>User</option>
+
+                        </select>
+                        <x-input-error :messages="$errors->get('usertype')" class="mt-2" />
+                    </div>
+
+                    <div class="mt-4">
+                        <x-input-label for="prodi" :value="__('Program Studi (staff wajib diisi)')" />
+                        <select id="prodi" name="prodi"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
+                            :required="prodiRequired">
+                            <option value="">-- Pilih Program Studi --</option>
+                            <option value="Matematika" {{ $user->prodi == 'Matematika' ? 'selected' : '' }}>
+                                701-Matematika</option>
+                            <option value="Biologi" {{ $user->prodi == 'Biologi' ? 'selected' : '' }}>702-Biologi
+                            </option>
+                            <option value="Fisika" {{ $user->prodi == 'Fisika' ? 'selected' : '' }}>703-Fisika</option>
+                            <option value="Kimia" {{ $user->prodi == 'Kimia' ? 'selected' : '' }}>704-Kimia</option>
+                            <option value="Teknik Informatika"
+                                {{ $user->prodi == 'Teknik Informatika' ? 'selected' : '' }}>705-Teknik Informatika
+                            </option>
+                            <option value="Agroteknologi" {{ $user->prodi == 'Agroteknologi' ? 'selected' : '' }}>
+                                706-Agroteknologi</option>
+                            <option value="Teknik Elektro" {{ $user->prodi == 'Teknik Elektro' ? 'selected' : '' }}>
+                                707-Teknik Elektro</option>
+                        </select>
                         <x-input-error :messages="$errors->get('prodi')" class="mt-2" />
                     </div>
 

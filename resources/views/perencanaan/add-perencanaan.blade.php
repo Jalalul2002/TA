@@ -8,11 +8,10 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8 xl:grid xl:grid-cols-2">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8 xl:grid xl:grid-cols-3">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 xl:col-span-2">
                 <form method="POST" action="{{ route('add-perencanaan.bhp') }}">
                     @csrf
-
                     @php
                         $currentYear = date('Y');
                         $currentMonth = date('m');
@@ -33,7 +32,7 @@
                         <x-input-label for="location" :value="__('Lokasi / Program Studi')" />
                         @if ($prodi != null)
                             <x-text-input id="location" class="block mt-1 w-full" type="text" name="location"
-                                :value="old('location', $prodi)" autofocus autocomplete="location" disabled />
+                                :value="old('location', $prodi)" autofocus autocomplete="location" readonly />
                         @else
                             <select id="location" name="location"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
@@ -62,7 +61,9 @@
 
                     <!-- Items -->
                     <div class="mt-4">
-                        <label for="items" class="block text-sm font-medium text-gray-900">Daftar Items:</label>
+                        <label for="items" class="block text-sm font-medium text-gray-900">Daftar Items: <span
+                                class="text-red-600">*! Jika produk tidak ditemukan maka simpan dulu dan lakukan edit
+                                dibagian detail perencanaan</span></label>
                         <div class="mt-2 text-sm" id="items" x-data="formHandler()">
                             <template x-for="(item, index) in items" :key="index">
                                 <div class="flex mb-2 text-sm text-gray-900 gap-x-2">
@@ -78,27 +79,32 @@
                                                 {{ empty($product->formula) ? '' : '(' . $product->formula . ')' }}
                                                 {{ empty($product->merk) ? '' : '(' . $product->merk . ')' }}
                                                 {{ empty($product->product_type) ? '' : '(' . $product->product_type . ')' }}
+                                                @if (Auth::user()->usertype === 'admin')
+                                                    {{ $product->location ? "({$product->location})" : '' }}
+                                                @endif
                                             </option>
                                         @endforeach
                                     </select>
-                                    <input type="number" name="items[][stock]" placeholder="Stok"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 mt-1"
-                                        :id="'productStock' + index" required readonly>
-                                    <input type="number" name="items[][quantity]" placeholder="Jumlah Kebutuhan"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 mt-1"
-                                        min="0" required>
-                                    <input type="text" name="items[][product_unit]" placeholder="Satuan"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 mt-1"
-                                        :id="'productUnit' + index" readonly>
-                                    <button type="button" @click="items.splice(index, 1)"
-                                        class="bg-uinRed border hover:bg-red-700 border-uinRed text-white text-sm font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mt-1"><svg
-                                            class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
-                                            viewBox="0 0 24 24" width="512" height="512">
-                                            <path
-                                                d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
-                                            <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
-                                            <path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
-                                        </svg></button>
+                                    <div class="flex flex-row gap-x-2 justify-between lg:w-6/12">
+                                        <input type="number" name="items[][stock]" placeholder="Stok"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 mt-1"
+                                            :id="'productStock' + index" required readonly>
+                                        <input type="number" name="items[][quantity]" placeholder="Jumlah Kebutuhan"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 mt-1"
+                                            min="0" required>
+                                        <input type="text" name="items[][product_unit]" placeholder="Satuan"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/4 p-2.5 mt-1"
+                                            :id="'productUnit' + index" readonly>
+                                        <button type="button" @click="items.splice(index, 1)"
+                                            class="bg-uinRed border hover:bg-red-700 border-uinRed text-white text-sm font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mt-1"><svg
+                                                class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
+                                                id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                                                <path
+                                                    d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
+                                                <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
+                                                <path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
+                                            </svg></button>
+                                    </div>
                                 </div>
                             </template>
                             <button type="button" @click="items.push({product_code: '', stock: 0, quantity: 0})"

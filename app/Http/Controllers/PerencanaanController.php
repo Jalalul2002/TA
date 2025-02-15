@@ -100,7 +100,7 @@ class PerencanaanController extends Controller
         }
 
         $products = $query->paginate(10);
-        $assets = Assetlab::where('type', $dataPerencanaan->type === 'bhp' ? 'bhp' : 'inventaris')->get();
+        $assets = Assetlab::where('type', $dataPerencanaan->type === 'bhp' ? 'bhp' : 'inventaris')->where('location', $dataPerencanaan->prodi)->get();
 
         return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'assets', 'sortField', 'sortOrder'));
     }
@@ -108,14 +108,22 @@ class PerencanaanController extends Controller
     public function createInv()
     {
         $prodi = Auth::user()->prodi;
-        $assetsinv = Assetlab::where('type', 'inventaris')->get();
+        $query = Assetlab::where('type', 'inventaris')->get();
+        if (Auth::user()->usertype === 'staff') {
+            $assetsinv = $query->where('location', $prodi);
+        }
+        $assetsinv = $query;
         return view('perencanaan.add-perencanaan-inv', compact('assetsinv', 'prodi'));
     }
 
     public function createBhp()
     {
         $prodi = Auth::user()->prodi;
-        $assetbhps = Assetlab::where('type', 'bhp')->get();
+        $query = Assetlab::where('type', 'bhp')->get();
+        if (Auth::user()->usertype === 'staff') {
+            $assetbhps = $query->where('location', $prodi);
+        }
+        $assetbhps = $query;
         return view('perencanaan.add-perencanaan', compact('assetbhps', 'prodi'));
     }
 
@@ -129,9 +137,15 @@ class PerencanaanController extends Controller
                 'type' => 'required|string|max:255',
             ]);
 
+            $location = $request->location;
+
+            if (Auth::user()->usertype === 'staff') {
+                $location = Auth::user()->prodi;
+            }
+
             $data = DataPerencanaan::create([
                 'nama_perencanaan' => $request->nama_perencanaan,
-                'prodi' => $request->location,
+                'prodi' => $location,
                 'type' => $request->type,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id(),

@@ -7,33 +7,7 @@
         </a>
     </x-slot>
 
-    <div class="py-8" x-data="{
-        location: '{{ $prodi ?? '' }}',
-        initialCode: '{{ $prodi
-            ? [
-                    'Umum' => '700',
-                    'Matematika' => '701',
-                    'Biologi' => '702',
-                    'Fisika' => '703',
-                    'Kimia' => '704',
-                    'Teknik Informatika' => '705',
-                    'Agroteknologi' => '706',
-                    'Teknik Elektro' => '707',
-                ][$prodi ?? ''] ?? ''
-            : '' }}'
-    }" x-init="$watch('location', value => {
-        const locationToCodeMap = {
-            'Umum': '700',
-            'Matematika': '701',
-            'Biologi': '702',
-            'Fisika': '703',
-            'Kimia': '704',
-            'Teknik Informatika': '705',
-            'Agroteknologi': '706',
-            'Teknik Elektro': '707',
-        };
-        initialCode = locationToCodeMap[value] || '';
-    })">
+    <div class="py-8">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 xl:grid xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 xl:col-span-2">
                 <form method="POST" action="{{ route('add-perencanaan.inv') }}">
@@ -60,7 +34,7 @@
                             <x-text-input id="location" class="block mt-1 w-full" type="text" name="location"
                                 :value="old('location', $prodi)" autofocus autocomplete="location" readonly />
                         @else
-                            <select id="location" name="location" x-model="location"
+                            <select id="location" name="location"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
                                 required>
                                 <option value="">-- Pilih Program Studi --</option>
@@ -87,9 +61,10 @@
 
                     <!-- Items -->
                     <div class="mt-4">
-                        <p class="block text-sm font-medium text-gray-900">Daftar Items:</p>
+                        <label for="items" class="block text-sm font-medium text-gray-900">Daftar Items: <span
+                                class="text-red-600">*! Jika produk tidak ditemukan maka simpan dulu dan lakukan edit
+                                dibagian detail perencanaan</span></label>
                         <div class="mt-2 text-sm" id="items" x-data="formHandler()">
-                            <h3 class="text-sm font-semibold">Tambah Produk</h3>
                             <template x-for="(item, index) in items" :key="index">
                                 <div class="flex flex-col lg:flex-row mb-2 text-sm text-gray-900 gap-x-2">
                                     <select name="items[][product_code]"
@@ -121,7 +96,7 @@
                                             class="bg-transparent border-none text-gray-900 text-sm rounded-lg w-full block focus:ring-transparent p-2.5 mt-1"
                                             :id="'productUnit' + index" readonly>
                                         <button type="button" @click="items.splice(index, 1)"
-                                            class="bg-uinRed border hover:bg-red-700 border-uinRed text-white text-sm font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-3 py-2 mt-1"><svg
+                                            class="bg-uinRed border hover:bg-red-700 border-uinRed text-white text-sm font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mt-1"><svg
                                                 class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
                                                 id="Outline" viewBox="0 0 24 24" width="512" height="512">
                                                 <path
@@ -140,98 +115,6 @@
                                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                 </svg>
                                 <span>Tambah Barang </span></button>
-                        </div>
-
-                        <div class="mt-4 text-sm w-full" x-data="newProductHandler()">
-                            <h3 class="text-sm font-semibold">Tambah Produk Baru</h3>
-                            <template x-for="(product, index) in newProducts" :key="index">
-                                <div class="mb-2 w-full border border-gray-300 rounded-xl p-4 flex flex-row gap-x-2">
-                                    <div class="flex flex-col gap-y-2 w-full">
-                                        <div
-                                            class="grid grid-cols-1 lg:grid-cols-[128px_128px_auto] xl:grid-cols-[128px_128px_auto_auto_auto] gap-2">
-                                            <div class="flex items-center gap-1 lg:col-span-2">
-                                                <input id="initial_code" name="initial_code" type="text"
-                                                    x-model="initialCode" placeholder="Initial Produk" required
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5 w-[126px]">
-                                                <span class="text-gray-600">-</span>
-                                                <input id="new_product_code" name="new_product_code" type="text"
-                                                    x-model="product.product_code" placeholder="Kode Produk" required
-                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5 w-[126px]">
-                                            </div>
-                                            <input id="new_product_name" name="new_product_name" type="text"
-                                                x-model="product.product_name" placeholder="Nama Produk" required
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
-                                            <input type="text" x-model="product.product_detail"
-                                                placeholder="Keterangan/Formula"
-                                                class="lg:col-span-2 xl:col-span-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
-                                            <input type="text" x-model="product.merk" placeholder="Merk"
-                                                class="col-span-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
-                                        </div>
-                                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-2">
-                                            <select id="product_type" name="product_type"
-                                                x-model="product.product_type"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                required>
-                                                <option value="">-- Pilih Jenis Produk --</option>
-                                                <option value="Cairan">Cairan</option>
-                                                <option value="Padatan">Padatan</option>
-                                                <option value="Lainnya">Lainnya</option>
-                                            </select>
-                                            <input id="new_stock" name="new_stock" type="number"
-                                                x-model="product.stock" placeholder="Stok" required
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
-                                            <input id="new_stock" name="new_product_name" type="number"
-                                                x-model="product.quantity" placeholder="Jumlah Kebutuhan" required
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
-                                            @php
-                                                $units = [
-                                                    'bks',
-                                                    'botol',
-                                                    'cm',
-                                                    'g',
-                                                    'pcs',
-                                                    'unit',
-                                                    'karung',
-                                                    'lembar',
-                                                    'ml',
-                                                    'pak',
-                                                    'paket',
-                                                    'petri',
-                                                    'rol',
-                                                    'set',
-                                                ];
-                                            @endphp
-                                            <select id="product_unit" name="product_unit"
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                                required x-model="product.product_unit">
-                                                <option value="">-- Pilih Satuan --</option>
-                                                @foreach ($units as $unit)
-                                                    <option value="{{ $unit }}">{{ $unit }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <button type="button" @click="newProducts.splice(index, 1)"
-                                        class="bg-red-500 hover:bg-red-700 text-white text-sm rounded-lg px-3 py-2"><svg
-                                            class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
-                                            id="Outline" viewBox="0 0 24 24" width="512" height="512">
-                                            <path
-                                                d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
-                                            <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
-                                            <path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
-                                        </svg></button>
-                                </div>
-                            </template>
-                            <button type="button"
-                                @click="newProducts.push({product_name: '', product_code: '', stock: 0, product_unit: ''})"
-                                class="bg-uinYellow hover:bg-amber-700 text-white px-4 py-2 rounded-md flex flex-row items-center font-semibold"><svg
-                                    class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
-                                    fill="currentColor" viewBox="0 0 448 512">
-                                    <path
-                                        d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                </svg>
-                                <span>Tambah Barang Baru</span></button>
-                            <input type="hidden" name="new_products" x-model="JSON.stringify(newProducts)">
                         </div>
                     </div>
                     <!-- Submit Button -->
@@ -263,11 +146,5 @@
                 productUnit.value = satuan ? satuan : '';
             }
         }
-    }
-
-    function newProductHandler() {
-        return {
-            newProducts: []
-        };
     }
 </script>

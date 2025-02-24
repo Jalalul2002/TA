@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -109,10 +111,10 @@ class PerencanaanController extends Controller
     {
         $prodi = Auth::user()->prodi;
         $query = Assetlab::where('type', 'inventaris')->get();
+        $assetsinv = $query;
         if (Auth::user()->usertype === 'staff') {
             $assetsinv = $query->where('location', $prodi);
         }
-        $assetsinv = $query;
         return view('perencanaan.add-perencanaan-inv', compact('assetsinv', 'prodi'));
     }
 
@@ -120,10 +122,10 @@ class PerencanaanController extends Controller
     {
         $prodi = Auth::user()->prodi;
         $query = Assetlab::where('type', 'bhp')->get();
+        $assetbhps = $query;
         if (Auth::user()->usertype === 'staff') {
             $assetbhps = $query->where('location', $prodi);
         }
-        $assetbhps = $query;
         return view('perencanaan.add-perencanaan', compact('assetbhps', 'prodi'));
     }
 
@@ -137,46 +139,47 @@ class PerencanaanController extends Controller
                 'type' => 'required|string|max:255',
             ]);
 
-            $location = $request->location;
+            return DB::transaction(function () use ($request) {
+                $location = $request->location;
+                $type = $request->type;
 
-            if (Auth::user()->usertype === 'staff') {
-                $location = Auth::user()->prodi;
-            }
+                if (Auth::user()->usertype === 'staff') {
+                    $location = Auth::user()->prodi;
+                }
 
-            $data = DataPerencanaan::create([
-                'nama_perencanaan' => $request->nama_perencanaan,
-                'prodi' => $location,
-                'type' => $request->type,
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-            ]);
+                // Simpan data perencanaan
+                $data = DataPerencanaan::create([
+                    'nama_perencanaan' => $request->nama_perencanaan,
+                    'prodi' => $location,
+                    'type' => $type,
+                    'created_by' => Auth::id(),
+                    'updated_by' => Auth::id(),
+                ]);
 
-            $items = $request->items;
-            if ($items) {
-                $result = [];
+                // **1. Simpan produk yang sudah ada**
+                $items = $request->items ?? [];
+                $processedItems = [];
                 $temp = [];
 
                 foreach ($items as $item) {
-                    // Check if the item contains a "product_code"
                     if (isset($item['product_code'])) {
-                        // If $temp is not empty, push it to $result and reset $temp
+                        // Jika temp tidak kosong, berarti ada produk sebelumnya yang harus disimpan
                         if (!empty($temp)) {
-                            $result[] = $temp;
-                            $temp = [];
+                            $processedItems[] = $temp;
                         }
-                        $temp['product_code'] = $item['product_code'];
+                        // Reset temp dan simpan product_code
+                        $temp = $item;
                     } else {
-                        // Merge the other attributes into $temp
+                        // Tambahkan atribut lainnya ke dalam produk yang sedang diproses
                         $temp = array_merge($temp, $item);
                     }
                 }
 
-                // Push the last temp array to result
                 if (!empty($temp)) {
-                    $result[] = $temp;
+                    $processedItems[] = $temp;
                 }
 
-                foreach ($result as $item) {
+                foreach ($processedItems as $item) {
                     $data->plans()->create([
                         'product_code' => $item['product_code'],
                         'stock' => $item['stock'],
@@ -185,16 +188,51 @@ class PerencanaanController extends Controller
                         'updated_by' => Auth::id(),
                     ]);
                 }
-            }
 
-            return redirect()->route($request->type === 'bhp' ? 'perencanaan-bhp' : 'perencanaan-inv')
-                ->with('success', 'Perencanaan created successfully.');
+                // **2. Simpan produk baru**
+                $newProducts = json_decode($request->new_products, true) ?? [];
+
+                foreach ($newProducts as $product) {
+                    if (!isset($product['product_code'], $product['product_name'], $product['product_type'], $product['stock'], $product['product_unit'])) {
+                        continue;
+                    }
+
+                    $asset = AssetLab::create([
+                        'product_code' => strtoupper("{$request->initial_code}-{$product['product_code']}"),
+                        'product_name' => $product['product_name'],
+                        'type' => $type,
+                        'product_type' => $product['product_type'],
+                        'stock' => $product['stock'],
+                        'product_unit' => $product['product_unit'],
+                        'product_detail' => $product['product_detail'] ?? null,
+                        'merk' => $product['merk'] ?? null,
+                        'location' => $location,
+                        'created_by' => Auth::id(),
+                        'updated_by' => Auth::id(),
+                    ]);
+
+                    // Tambahkan produk baru ke dalam perencanaan
+                    $data->plans()->create([
+                        'product_code' => $asset->product_code,
+                        'stock' => $asset->stock,
+                        'jumlah_kebutuhan' => $product['quantity'] ?? 1, // Default 1 jika tidak ada jumlah kebutuhan
+                        'created_by' => Auth::id(),
+                        'updated_by' => Auth::id(),
+                    ]);
+                }
+
+                return redirect()->route($request->type === 'bhp' ? 'perencanaan-bhp' : 'perencanaan-inv')
+                    ->with('success', 'Perencanaan berhasil dibuat.');
+            });
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->validator)->withInput();
         } catch (QueryException $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan pada database.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan yang tidak terduga.');
+            Log::error('Unexpected Error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->withInput();
         }
     }
 

@@ -76,7 +76,7 @@
                                                 data-stock="{{ $product->stock }}"
                                                 data-satuan="{{ $product->product_unit }}">
                                                 {{ $product->product_name }} ({{ $product->product_code }})
-                                                {{ empty($product->formula) ? '' : '(' . $product->formula . ')' }}
+                                                {{ empty($product->product_detail) ? '' : '(' . $product->product_detail . ')' }}
                                                 {{ empty($product->merk) ? '' : '(' . $product->merk . ')' }}
                                                 {{ empty($product->product_type) ? '' : '(' . $product->product_type . ')' }}
                                                 @if (Auth::user()->usertype === 'admin')

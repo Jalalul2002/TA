@@ -20,7 +20,17 @@
                     'Agroteknologi' => '706',
                     'Teknik Elektro' => '707',
                 ][$prodi ?? ''] ?? ''
-            : '' }}'
+            : '' }}',
+        type: 'inventaris',
+        products: [],
+        async fetchProducts() {
+            if (this.location) {
+                const response = await fetch(`/assets?type=${this.type}&location=${this.location}`);
+                this.products = await response.json();
+            } else {
+                this.products = [];
+            }
+        }
     }" x-init="$watch('location', value => {
         const locationToCodeMap = {
             'Umum': '700',
@@ -33,7 +43,8 @@
             'Teknik Elektro': '707',
         };
         initialCode = locationToCodeMap[value] || '';
-    })">
+    });
+    fetchProducts()">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 xl:grid xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 xl:col-span-2">
                 <form method="POST" action="{{ route('add-perencanaan.inv') }}">
@@ -62,7 +73,7 @@
                         @else
                             <select id="location" name="location" x-model="location"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
-                                required>
+                                required x-model="location" @change="fetchProducts()">
                                 <option value="">-- Pilih Program Studi --</option>
                                 <option value="Umum">700-Umum</option>
                                 <option value="Matematika">701-Matematika</option>
@@ -96,19 +107,12 @@
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block lg:w-7/12 p-2.5 mt-1"
                                         :id="'productSelect' + index" @change="updateStock(index)" required>
                                         <option value="">Select Product</option>
-                                        @foreach ($assetsinv as $product)
-                                            <option value="{{ $product->product_code }}"
-                                                data-stock="{{ $product->stock }}"
-                                                data-satuan="{{ $product->product_unit }}">
-                                                {{ $product->product_name }} ({{ $product->product_code }})
-                                                {{ $product->formula ? "({$product->formula})" : '' }}
-                                                {{ $product->merk ? "({$product->merk})" : '' }}
-                                                {{ $product->product_type ? "({$product->product_type})" : '' }}
-                                                @if (Auth::user()->usertype === 'admin')
-                                                    {{ $product->location ? "({$product->location})" : '' }}
-                                                @endif
+                                        <template x-for="product in products" :key="product.product_code">
+                                            <option :value="product.product_code" :data-stock="product.stock"
+                                                :data-satuan="product.product_unit"
+                                                x-text="`${product.product_name} (${product.product_code}) ${product.product_detail ? '(' + product.product_detail + ')' : ''} ${product.merk ? '(' + product.merk + ')' : ''} ${product.product_type ? '(' + product.product_type + ')' : ''}`">
                                             </option>
-                                        @endforeach
+                                        </template>
                                     </select>
                                     <div class="flex flex-row gap-x-2 justify-between lg:w-6/12">
                                         <input type="number" name="items[][stock]" placeholder="Stok"

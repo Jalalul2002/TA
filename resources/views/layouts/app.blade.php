@@ -31,7 +31,7 @@
     @include('layouts.sidebar')
 
     <div :class="openSidebar ? 'left-0' : '-left-[36rem]'" @click="openSidebar = !openSidebar"
-        class="w-screen h-screen md:w-0 md:h-0 inset-0 fixed bg-gray-700 opacity-30 transition-all duration-300 "></div>
+        class="z-30 w-screen h-screen md:w-0 md:h-0 inset-0 fixed bg-gray-700 opacity-30 transition-all duration-300 "></div>
 
     <div :class="openSidebar ? 'sm:ml-64' : 'sm:ml-20'"
         class="min-h-screen flex flex-col bg-gray-100 transition-all duration-300">

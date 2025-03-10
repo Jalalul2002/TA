@@ -110,22 +110,25 @@ class PerencanaanController extends Controller
     public function createInv()
     {
         $prodi = Auth::user()->prodi;
-        $query = Assetlab::where('type', 'inventaris')->get();
-        $assetsinv = $query;
+        $query = Assetlab::where('type', 'inventaris')->orderBy('product_name');
+
         if (Auth::user()->usertype === 'staff') {
-            $assetsinv = $query->where('location', $prodi);
+            $query->where('location', $prodi);
         }
+        $assetsinv = $query->get();
+
         return view('perencanaan.add-perencanaan-inv', compact('assetsinv', 'prodi'));
     }
 
     public function createBhp()
     {
         $prodi = Auth::user()->prodi;
-        $query = Assetlab::where('type', 'bhp')->get();
-        $assetbhps = $query;
+        $query = Assetlab::where('type', 'bhp')->orderBy('product_name');
+
         if (Auth::user()->usertype === 'staff') {
-            $assetbhps = $query->where('location', $prodi);
+            $query->where('location', $prodi);
         }
+        $assetbhps = $query->get();
         return view('perencanaan.add-perencanaan', compact('assetbhps', 'prodi'));
     }
 

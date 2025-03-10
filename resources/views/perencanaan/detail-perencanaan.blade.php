@@ -68,7 +68,7 @@
                         <div>
                             <h2 class="text-gray-500 text-sm font-medium">Diupdate</h2>
                             <h1 class="text-lg font-semibold text-gray-900">
-                                {{ ($dataPerencanaan->latestUpdater?->updater?->name ?? $dataPerencanaan->updater->name) . ' | ' . ($dataPerencanaan->latestUpdater?->updated_at ?? $dataPerencanaan->updated_at) }}
+                                {{ ($dataPerencanaan->latestUpdater?->updater?->name ?? $dataPerencanaan->updater->name) . ' | ' . ($dataPerencanaan->latestUpdater?->updated_at->format('d M Y H:i') ?? $dataPerencanaan->updated_at->format('d M Y H:i')) }}
                             </h1>
                         </div>
                         @if (Auth::user()->usertype !== 'user')
@@ -93,7 +93,7 @@
                                 <div>
                                     <h2 class="text-gray-500 text-sm font-medium">Diselesaikan</h2>
                                     <h1 class="text-lg font-semibold text-gray-900">
-                                        {{ $dataPerencanaan->updater->name . ' | ' . $dataPerencanaan->updated_at }}
+                                        {{ $dataPerencanaan->updater->name . ' | ' . $dataPerencanaan->updated_at->format('d M Y H:i') }}
                                     </h1>
                                 </div>
                             @endif
@@ -228,7 +228,7 @@
                                             {{ $product->product->product_name }}
                                         </td>
                                         <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
-                                            {{ empty($product->product->formula) ? '-' : $product->product->formula }}
+                                            {{ empty($product->product->product_detail) ? '-' : $product->product->product_detail }}
                                         </td>
                                         <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
                                             {{ empty($product->product->merk) ? '-' : $product->product->merk }}
@@ -386,7 +386,7 @@
                                                             data-satuan="{{ $product->product_unit }}">
                                                             {{ $product->product_name }}
                                                             ({{ $product->product_code }})
-                                                            {{ empty($product->formula) ? '' : '(' . $product->formula . ')' }}
+                                                            {{ empty($product->product_detail) ? '' : '(' . $product->product_detail . ')' }}
                                                             {{ empty($product->merk) ? '' : '(' . $product->merk . ')' }}
                                                             {{ empty($product->product_type) ? '' : '(' . $product->product_type . ')' }}
                                                             ({{ $product->product_unit }})

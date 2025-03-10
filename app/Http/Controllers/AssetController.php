@@ -17,6 +17,16 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AssetController extends Controller
 {
+    public function getAssets(Request $request)
+    {
+        $query = Assetlab::where('type', $request->type)->where('location', $request->location);
+        if ($request->has('stock_filter') && $request->stock_filter == 1) {
+            $query->where('stock', '>', 0);
+        }
+        $assets = $query->orderBy('product_name')->get();
+        return response()->json($assets);
+    }
+
     public function indexInv(Request $request)
     {
         $productType = request('product_type');

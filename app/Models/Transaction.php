@@ -10,10 +10,20 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_code',
-        'jumlah_pemakaian',
-        'used_by',
+        'user_id',
+        'name',
+        'prodi',
+        'telp',
+        'detail',
+        'location',
+        'created_by',
+        'updated_by'
     ];
+
+    public function items()
+    {
+        return $this->hasMany(TransactionItem::class);
+    }
 
     public function creator()
     {
@@ -23,10 +33,5 @@ class Transaction extends Model
     public function updater()
     {
         return $this->belongsTo(User::class, 'updated_by');
-    }
-
-    public function product()
-    {
-        return $this->belongsTo(Assetlab::class, 'product_code');
     }
 }

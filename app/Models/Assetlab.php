@@ -38,6 +38,11 @@ class Assetlab extends Model
         return $this->hasMany(Perencanaan::class, 'product_code');
     }
 
+    public function transactionItems()
+    {
+        return $this->hasMany(TransactionItem::class, 'product_code', 'product_code');
+    }
+
     public function predict()
     {
         return $this->hasMany(DataPrediksi::class, 'product_code');

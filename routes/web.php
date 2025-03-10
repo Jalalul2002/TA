@@ -18,7 +18,7 @@ require __DIR__ . '/auth.php';
 Route::get('/', function () {
     // return redirect('/login');
     return view('landing');
-}) ->name('landing');
+})->name('landing');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,11 +28,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/data-product', [ProductController::class, 'index'])->name('product');
     Route::get('/data-aset', [AssetController::class, 'indexInv'])->name('data-aset');
     Route::get('/data-barang-habis-pakai', [AssetController::class, 'indexBhp'])->name('data-bhp');
-    Route::get('/export-inv', [AssetController::class, 'exportInv'])->name('export.inv');
-    Route::get('/export-bhp', [AssetController::class, 'exportBhp'])->name('export.bhp');
-    Route::get('/print-bhp', [AssetController::class, 'printBhp'])->name('print.bhp');
-    Route::get('/print-inv', [AssetController::class, 'printInv'])->name('print.inv');
-
+    Route::get('/export/inv', [AssetController::class, 'exportInv'])->name('export.inv');
+    Route::get('/export/bhp', [AssetController::class, 'exportBhp'])->name('export.bhp');
+    Route::get('/print/bhp', [AssetController::class, 'printBhp'])->name('print.bhp');
+    Route::get('/print/inv', [AssetController::class, 'printInv'])->name('print.inv');
 
     Route::get('/perencanaan-inv', [PerencanaanController::class, 'indexInv'])->name('perencanaan-inv');
     Route::get('/perencanaan-bhp', [PerencanaanController::class, 'indexBhp'])->name('perencanaan-bhp');
@@ -40,8 +39,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/perencanaan/{id}/download', [PerencanaanController::class, 'download'])->name('perencanaan.download');
     Route::get('/perencanaan/{id}/print', [PerencanaanController::class, 'print'])->name('perencanaan.print');
 
-
-    Route::get('/transaction-bhp', [TransactionController::class, 'index'])->name('penggunaan');
+    Route::get('/transaction/bhp', [TransactionController::class, 'index'])->name('penggunaan');
+    Route::get('/detail-transaction/{id}', [TransactionController::class, 'show'])->name('detail-penggunaan');
+    Route::get('/print/transaction/bhp', [TransactionController::class, 'print'])->name('print.penggunaan');
+    Route::get('/export/transaction/bhp', [TransactionController::class, 'export'])->name('export.transaction.bhp');
+    Route::get('/transaction/bhp/{id}/download', [TransactionController::class, 'exportById'])->name('penggunaan.export.id');
+    Route::get('/transaction/bhp/{id}/print', [TransactionController::class, 'printById'])->name('penggunaan.print.id');
 
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
 });
@@ -71,8 +74,11 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::put('/update-detail/{id}', [PerencanaanController::class, 'updateDetail'])->name('rencana.update-detail');
     Route::post('/perencanaan/{id}/complete', [PerencanaanController::class, 'complete'])->name('perencanaan.complete');
 
-    Route::post('/add-transaction-bhp', [TransactionController::class, 'create'])->name('add-transaction.bhp');
+    Route::get('/add-penggunaan-bhp', [TransactionController::class, 'create'])->name('add-penggunaan');
+    Route::post('/add-penggunaan-bhp', [TransactionController::class, 'store']);
+    Route::delete('/delete-penggunaan/{transaction}', [TransactionController::class, 'destroy'])->name('destroy-penggunaan');
 
+    Route::get('/assets', [AssetController::class, 'getAssets']);
     Route::post('/prediksi', [PredictionController::class, 'sendData']);
 });
 

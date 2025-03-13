@@ -21,7 +21,13 @@ class PerencanaanController extends Controller
 {
     public function indexInv(Request $request)
     {
-        $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'inventaris')->withCount('plans');
+        $query = DataPerencanaan::with([
+            'plans.product',
+            'latestUpdater.updater',
+            'creator' => function ($query) {
+                $query->select('id', 'name');
+            }
+        ])->where('type', 'inventaris')->withCount('plans');
         $locations = ['all' => 'Semua',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Kimia' => 'Kimia', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];
 
         if (Auth::user()->usertype === 'staff') {
@@ -142,14 +148,23 @@ class PerencanaanController extends Controller
                 'type' => 'required|string|max:255',
             ]);
 
-            return DB::transaction(function () use ($request) {
-                $location = $request->location;
-                $type = $request->type;
+            $location = $request->location;
+            $type = $request->type;
+            if (Auth::user()->usertype === 'staff') {
+                $location = Auth::user()->prodi;
+            }
 
-                if (Auth::user()->usertype === 'staff') {
-                    $location = Auth::user()->prodi;
-                }
-
+            // **1. Validasi apakah produk baru sudah ada di AssetLab sebelum transaksi berjalan**
+            $newProducts = json_decode($request->new_products, true) ?? [];
+            $productCodes = array_map(fn($p) => strtoupper("{$request->initial_code}-{$p['product_code']}"), $newProducts);
+            // Cek apakah ada kode produk yang sudah ada di AssetLab
+            $existingProductCodes = AssetLab::whereIn('product_code', $productCodes)->pluck('product_code')->toArray();
+            if (!empty($existingProductCodes)) {
+                // Format pesan error untuk ditampilkan
+                $errorMessages = array_map(fn($code) => "Kode produk {$code} sudah ada di Asset Lab!", $existingProductCodes);
+                return redirect()->route($type === 'bhp' ? 'add-perencanaan.bhp' : 'add-perencanaan.inv')->withErrors(['product_code' => implode('<br>', $errorMessages)])->withInput();
+            }
+            return DB::transaction(function () use ($request, $location, $type, $newProducts, $productCodes) {
                 // Simpan data perencanaan
                 $data = DataPerencanaan::create([
                     'nama_perencanaan' => $request->nama_perencanaan,
@@ -192,16 +207,15 @@ class PerencanaanController extends Controller
                     ]);
                 }
 
-                // **2. Simpan produk baru**
-                $newProducts = json_decode($request->new_products, true) ?? [];
-
-                foreach ($newProducts as $product) {
+                foreach ($newProducts as $index => $product) {
                     if (!isset($product['product_code'], $product['product_name'], $product['product_type'], $product['stock'], $product['product_unit'])) {
                         continue;
                     }
 
+                    $product_code = $productCodes[$index];
+
                     $asset = AssetLab::create([
-                        'product_code' => strtoupper("{$request->initial_code}-{$product['product_code']}"),
+                        'product_code' => $product_code,
                         'product_name' => $product['product_name'],
                         'type' => $type,
                         'product_type' => $product['product_type'],
@@ -214,16 +228,14 @@ class PerencanaanController extends Controller
                         'updated_by' => Auth::id(),
                     ]);
 
-                    // Tambahkan produk baru ke dalam perencanaan
                     $data->plans()->create([
                         'product_code' => $asset->product_code,
                         'stock' => $asset->stock,
-                        'jumlah_kebutuhan' => $product['quantity'] ?? 1, // Default 1 jika tidak ada jumlah kebutuhan
+                        'jumlah_kebutuhan' => $product['quantity'] ?? 1,
                         'created_by' => Auth::id(),
                         'updated_by' => Auth::id(),
                     ]);
                 }
-
                 return redirect()->route($request->type === 'bhp' ? 'perencanaan-bhp' : 'perencanaan-inv')
                     ->with('success', 'Perencanaan berhasil dibuat.');
             });
@@ -247,14 +259,21 @@ class PerencanaanController extends Controller
             $location_code = [
                 'Matematika' => '701',
                 'Biologi' => '702',
-                'Kimia' => '703',
-                'Fisika' => '704',
+                'Fisika' => '703',
+                'Kimia' => '704',
                 'Teknik Informatika' => '705',
                 'Agroteknologi' => '706',
                 'Teknik Elektro' => '707',
             ];
             $initial_code = $location_code[$dataPerencanaan->prodi] ?? '700';
-            $product_code = $request->product_code === 'new' ? "{$initial_code}-{$request->new_product_code}" : $request->product_code;
+            if ($request->product_code === 'new') {
+                if (empty($request->new_product_code)) {
+                    return redirect()->back()->with('error', 'Kode produk baru harus diisi!');
+                }
+                $product_code = "{$initial_code}-{$request->new_product_code}";
+            } else {
+                $product_code = $request->product_code;
+            }
             $product_code_upper = strtoupper($product_code);
             $product_name_capitalized = ucwords(strtolower($request->new_product_name));
             $location_capitalized = ucwords(strtolower($dataPerencanaan->prodi));
@@ -264,9 +283,10 @@ class PerencanaanController extends Controller
 
             $asset = Assetlab::where('product_code', $product_code_upper)->first();
 
-            if ($asset) {
-                redirect()->route('detail-perencanaan', ['id' => $id])->with('error', 'kode produk sudah ada');
-            } else {
+            if ($request->product_code === 'new') {
+                if ($asset) {
+                    return redirect()->back()->with('error', 'Kode produk sudah ada di Asset Lab!');
+                }
                 Assetlab::create([
                     'product_code' => $product_code_upper,
                     'product_name' => $product_name_capitalized,
@@ -281,6 +301,10 @@ class PerencanaanController extends Controller
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
                 ]);
+            } else {
+                if (!$asset) {
+                    return redirect()->back()->with('error', 'Kode produk tidak ditemukan di Asset Lab!');
+                }
             }
 
             Perencanaan::create([

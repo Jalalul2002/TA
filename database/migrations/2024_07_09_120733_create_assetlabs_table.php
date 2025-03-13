@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('product_name');
             $table->string('product_detail')->nullable();
             $table->string('merk')->nullable();
-            $table->string('type');
+            $table->enum('type', ['bhp',  'inventaris']);
             $table->string('product_type');
             $table->integer('stock')->default(0);
             $table->string('product_unit');

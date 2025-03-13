@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\RegisterStaffController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DataStaffController;
+use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PerencanaanController;
 use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\ProductController;
@@ -40,7 +41,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/perencanaan/{id}/print', [PerencanaanController::class, 'print'])->name('perencanaan.print');
 
     Route::get('/transaction/bhp', [TransactionController::class, 'index'])->name('penggunaan');
+    Route::get('/transaction/inventaris', [PeminjamanController::class, 'index'])->name('peminjaman');
     Route::get('/detail-transaction/{id}', [TransactionController::class, 'show'])->name('detail-penggunaan');
+    Route::get('/detail-transaction/inventaris/{id}', [PeminjamanController::class, 'show'])->name('detail-peminjaman');
     Route::get('/print/transaction/bhp', [TransactionController::class, 'print'])->name('print.penggunaan');
     Route::get('/export/transaction/bhp', [TransactionController::class, 'export'])->name('export.transaction.bhp');
     Route::get('/transaction/bhp/{id}/download', [TransactionController::class, 'exportById'])->name('penggunaan.export.id');
@@ -77,6 +80,10 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::get('/add-penggunaan-bhp', [TransactionController::class, 'create'])->name('add-penggunaan');
     Route::post('/add-penggunaan-bhp', [TransactionController::class, 'store']);
     Route::delete('/delete-penggunaan/{transaction}', [TransactionController::class, 'destroy'])->name('destroy-penggunaan');
+    Route::get('/add-peminjaman', [PeminjamanController::class, 'create'])->name('add-peminjaman');
+    Route::post('/add-peminjaman', [PeminjamanController::class, 'store']);
+    Route::put('/transaction/return/{id}', [PeminjamanController::class, 'update'])->name('transaction.return');
+
 
     Route::get('/assets', [AssetController::class, 'getAssets']);
     Route::post('/prediksi', [PredictionController::class, 'sendData']);

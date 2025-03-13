@@ -46,7 +46,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
     public function scopeSearch($query, $search)
     {
         if (!empty($search)) {
@@ -58,14 +57,28 @@ class User extends Authenticatable
 
         return $query;
     }
-
     public function products()
     {
         return $this->hasMany(Product::class, 'created_by');
     }
-
     public function aset()
     {
         return $this->hasMany(Assetlab::class, 'created_by');
+    }
+    public function transctions()
+    {
+        return $this->hasMany(Transaction::class, 'created_by');
+    }
+    public function perencanaans()
+    {
+        return $this->hasMany(Perencanaan::class, 'created_by');
+    }
+    public function dataPerencanaans()
+    {
+        return $this->hasMany(DataPerencanaan::class, 'created_by');
+    }
+    public function peminjamans()
+    {
+        return $this->hasMany(Peminjaman::class, 'created_by');
     }
 }

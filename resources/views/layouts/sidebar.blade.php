@@ -33,7 +33,14 @@
                 'icon' =>
                     '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M19,2H5C2.243,2,0,4.243,0,7v10c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5ZM5,4h14c1.654,0,3,1.346,3,3H2c0-1.654,1.346-3,3-3Zm-3,13V9H11v11H5c-1.654,0-3-1.346-3-3Zm17,3h-6V9h9v8c0,1.654-1.346,3-3,3Z"/></svg></div>',
                 'isDropdown' => true,
-                'isActive' => Request::routeIs(['perencanaan-bhp', 'perencanaan-inv', 'prediksi', 'add-perencanaan.bhp', 'add-perencanaan.inv', 'detail-perencanaan']),
+                'isActive' => Request::routeIs([
+                    'perencanaan-bhp',
+                    'perencanaan-inv',
+                    'prediksi',
+                    'add-perencanaan.bhp',
+                    'add-perencanaan.inv',
+                    'detail-perencanaan',
+                ]),
                 'submenu' => [
                     [
                         'route' => route('perencanaan-inv'),
@@ -65,6 +72,13 @@
                     '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24" width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="m17 14a1 1 0 0 1 -1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1zm-4 3h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2zm9-6.515v8.515a5.006 5.006 0 0 1 -5 5h-10a5.006 5.006 0 0 1 -5-5v-14a5.006 5.006 0 0 1 5-5h4.515a6.958 6.958 0 0 1 4.95 2.05l3.484 3.486a6.951 6.951 0 0 1 2.051 4.949zm-6.949-7.021a5.01 5.01 0 0 0 -1.051-.78v4.316a1 1 0 0 0 1 1h4.316a4.983 4.983 0 0 0 -.781-1.05zm4.949 7.021c0-.165-.032-.323-.047-.485h-4.953a3 3 0 0 1 -3-3v-4.953c-.162-.015-.321-.047-.485-.047h-4.515a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3z"/></svg></div>',
                 'label' => 'Penggunaan',
             ],
+            [
+                'route' => route('peminjaman'),
+                'isActive' => Request::routeIs(['peminjaman', 'add-peminjaman', 'detail-peminjaman']),
+                'icon' =>
+                    '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="m19.642,14.308c.274-.297.536-.625.741-.974.346-.59-.115-1.333-.799-1.333h-3.167c-.684,0-1.144.743-.799,1.333.204.349.466.677.741.974-2.376.879-4.358,3.52-4.358,6.204,0,1.923,1.57,3.488,3.5,3.488h5c1.93,0,3.5-1.565,3.5-3.488,0-2.684-1.982-5.325-4.358-6.204Zm.858,7.692h-5c-.827,0-1.5-.667-1.5-1.488,0-2.192,2.056-4.512,4-4.512s4,2.319,4,4.512c0,.821-.673,1.488-1.5,1.488Zm-1.5-20h-1v-1c0-.552-.447-1-1-1s-1,.448-1,1v1h-8v-1c0-.552-.448-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h4c.552,0,1-.448,1-1s-.448-1-1-1h-4c-1.654,0-3-1.346-3-3v-9h20v1c0,.552.447,1,1,1s1-.448,1-1v-4c0-2.757-2.243-5-5-5ZM2,8v-1c0-1.654,1.346-3,3-3h14c1.654,0,3,1.346,3,3v1H2Z"/></svg></div>',
+                'label' => 'Peminjaman',
+            ],
         ];
     @endphp
     <div class="h-full px-3 pb-4 overflow-y-auto shadow-md">
@@ -79,9 +93,15 @@
                         </x-side-link>
                     </li>
                 @else
-                    <li x-data="{ open: false }">
-                        <button @click="open = !open"
-                            class="flex items-center w-full px-3 py-4 text-base rounded-lg group {{ $menu['isActive'] ? 'bg-uinOrange text-white' : 'bg-white text-gray-900 hover:bg-uinYellow hover:text-white' }}">
+                    <li x-data="{
+                        open: JSON.parse(localStorage.getItem('sidebarOpen_{{ $menu['label'] }}')) || false,
+                        toggle() {
+                            this.open = !this.open;
+                            localStorage.setItem('sidebarOpen_{{ $menu['label'] }}', JSON.stringify(this.open));
+                        }
+                    }">
+                        <button @click="toggle()"
+                            class="flex items-center w-full px-3 py-2 text-base rounded-lg group {{ $menu['isActive'] ? 'bg-uinOrange text-white' : 'bg-white text-gray-900 hover:bg-uinYellow hover:text-white' }}">
                             {!! str_replace('bg-uinGreen', $menu['isActive'] ? 'bg-uinBlue' : 'bg-uinGreen', $menu['icon']) !!}
                             <span
                                 class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap transition-all duration-300"
@@ -130,7 +150,7 @@
                     @csrf
 
                     <a href="{{ route('logout') }}"
-                        class="flex items-center px-3 py-4 text-uinRed rounded-lg hover:bg-uinRed hover:font-medium hover:text-white group transition-all duration-100"
+                        class="flex items-center px-3 py-2 text-uinRed rounded-lg hover:bg-uinRed hover:font-medium hover:text-white group transition-all duration-100"
                         onclick="event.preventDefault();
                                     this.closest('form').submit();">
                         <div class="p-2 rounded-lg bg-uinRed group-hover:bg-white transition duration-300">

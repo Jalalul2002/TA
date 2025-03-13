@@ -6,7 +6,19 @@
             </h2>
         </a>
     </x-slot>
-
+    @if ($errors->has('product_code'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 5000)" x-show="show"
+            class="fixed top-20 right-10 p-3 rounded-md shadow-md bg-red-500 text-white transition-all duration-500"
+            x-transition:enter="transform ease-out duration-500" x-transition:enter-start="opacity-0 -translate-y-5"
+            x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transform ease-in duration-500"
+            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-5">
+            <ul>
+                @foreach ($errors->get('product_code') as $error)
+                    <li>{!! $error !!}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <div class="py-8" x-data="{
         location: '{{ $prodi ?? '' }}',
         initialCode: '{{ $prodi

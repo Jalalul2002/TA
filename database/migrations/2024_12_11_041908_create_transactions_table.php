@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('prodi');
             $table->string('telp');
             $table->string('detail');
+            $table->enum('type', ['bhp',  'inventaris']);
             $table->string('location');
             $table->foreignId('created_by')->constrained(
                 table: 'users',

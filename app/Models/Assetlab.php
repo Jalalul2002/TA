@@ -71,9 +71,15 @@ class Assetlab extends Model
     public function scopeSearch($query, $searchTerm)
     {
         return $query->where('product_name', 'LIKE', "%{$searchTerm}%")->orWhere('product_name', 'LIKE', "%{$searchTerm}%")
-        ->orWhere('product_detail', 'LIKE', "%{$searchTerm}%")
-        ->orWhere('merk', 'LIKE', "%{$searchTerm}%")
-        ->orWhere('product_type', 'LIKE', "%{$searchTerm}%")
-        ->orWhere('location', 'LIKE', "%{$searchTerm}%");
+            ->orWhere('product_detail', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('merk', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('product_type', 'LIKE', "%{$searchTerm}%")
+            ->orWhere('location', 'LIKE', "%{$searchTerm}%");
+    }
+    public function updateStock($returnedQuantity, $damagedQuantity)
+    {
+        $this->stock += $returnedQuantity; // Tambah stok jika barang dikembalikan dengan baik
+        $this->stock -= $damagedQuantity; // Kurangi stok jika ada barang rusak
+        $this->save();
     }
 }

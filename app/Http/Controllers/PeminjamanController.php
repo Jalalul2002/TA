@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\PenggunaanExportAll;
-use App\Exports\PenggunaanExportId;
-use App\Models\Transaction;
-use App\Http\Controllers\Controller;
 use App\Models\Assetlab;
+use App\Models\Peminjaman;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -16,21 +14,30 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
-use function PHPSTORM_META\type;
-
-class TransactionController extends Controller
+class PeminjamanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $user = Transaction::where('type', 'bhp')->select('user_id', 'name');
-        $query = Transaction::where('type', 'bhp')->withCount('items');
-        $locations = ['all' => 'Semua',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Kimia' => 'Kimia', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];
-        if (Auth::user()->usertype === 'staff') {
-            $query->where('location', Auth::user()->prodi);
-            $user->where('location', Auth::user()->prodi);
+        $authUser = Auth::user();
+        $query = Transaction::with(['creator'])->where('type', 'inventaris')->withCount([
+            'loans',
+            'loans as completed_loans_count' => function ($query) {
+                $query->where('status', '!=', 'dipinjam');
+            },
+            'loans as pending_loans_count' => function ($query) {
+                $query->where('status', 'dipinjam');
+            }
+        ]);
+
+        $filterUser = Transaction::where('type', 'inventaris')->select('user_id', 'name')->when($authUser->usertype === 'staff', function ($query) use ($authUser) {
+            return $query->where('location', $authUser->prodi);
+        })->distinct()->get();
+
+        if ($authUser->usertype === 'staff') {
+            $query->where('location', $authUser->prodi);
+        }
+        if ($request->has('search')) {
+            $query->search($request->search);
         }
         if ($request->has('location') && $request->location != 'all') {
             $query->where('location', $request->location);
@@ -47,14 +54,15 @@ class TransactionController extends Controller
         #Sorting
         $sortField = $request->get('sort_field', 'created_at');
         $sortOrder = $request->get('sort_order', 'desc');
-        $allowedFields = ['user_id', 'name', 'prodi', 'telp', 'items_count', 'detail', 'location', 'created_by', 'created_at'];
+        $allowedFields = ['user_id', 'name', 'prodi', 'telp', 'items', 'detail', 'location', 'created_by', 'created_at'];
         if (in_array($sortField, $allowedFields)) {
             $query->orderBy($sortField, $sortOrder);
         }
 
         $transactions = $query->paginate(10);
-        $filterUser = $user->distinct()->get();
-        return view('transactions.penggunaan', compact('transactions', 'locations', 'sortField', 'sortOrder', 'filterUser'));
+        $locations = ['all' => 'Semua',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Kimia' => 'Kimia', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];
+
+        return view('transactions.peminjaman', compact('transactions', 'locations', 'sortField', 'sortOrder', 'filterUser'));
     }
 
     /**
@@ -63,7 +71,7 @@ class TransactionController extends Controller
     public function create()
     {
         $prodi = Auth::user()->prodi;
-        return view('transactions.add-penggunaan', compact('prodi'));
+        return view('transactions.add-peminjaman', compact('prodi'));
     }
 
     /**
@@ -93,12 +101,11 @@ class TransactionController extends Controller
                     'prodi' => $request->prodi,
                     'telp' => $request->telp,
                     'detail' => $request->detail,
-                    'type' => 'bhp',
+                    'type' => 'inventaris',
                     'location' => $location,
                     'created_by' => Auth::id(),
                     'updated_by' => Auth::id(),
                 ]);
-
                 // **1. Simpan produk yang sudah ada**
                 $items = $request->items ?? [];
                 $processedItems = [];
@@ -121,27 +128,26 @@ class TransactionController extends Controller
                 if (!empty($temp)) {
                     $processedItems[] = $temp;
                 }
-
                 foreach ($processedItems as $item) {
                     $asset = Assetlab::where('product_code', $item['product_code'])->first();
                     if ($asset) {
                         // Hitung updated stock
                         $updatedStock = max(0, $asset->stock - $item['quantity']); // Hindari stock negatif
-
                         // Simpan data transaksi
-                        $data->items()->create([
+                        $data->loans()->create([
                             'product_code' => $item['product_code'],
                             'stock' => $asset->stock,
-                            'jumlah_pemakaian' => $item['quantity'],
-                            'updated_stock' => $updatedStock,
+                            'quantity' => $item['quantity'],
+                            'loan_date' => now(),
+                            'status' => 'dipinjam',
+                            'notes' => $item['notes'] ?: '',
                             'created_by' => Auth::id(),
                             'updated_by' => Auth::id(),
                         ]);
                         $asset->update(['stock' => $updatedStock]);
                     }
                 }
-
-                return redirect()->route('detail-penggunaan', ['id' => $data->id])
+                return redirect()->route('detail-peminjaman', ['id' => $data->id])
                     ->with('success', 'Penggunaan berhasil dibuat.');
             });
         } catch (ValidationException $e) {
@@ -151,7 +157,7 @@ class TransactionController extends Controller
         } catch (\Exception $e) {
             Log::error('Unexpected Error: ' . $e->getMessage());
             return redirect()->back()
-                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage())
+                ->with('error', 'Terjadi kesalahan pada baris ' . $e->getLine() . ' di file ' . $e->getFile() . ': ' . $e->getMessage())
                 ->withInput();
         }
     }
@@ -161,8 +167,9 @@ class TransactionController extends Controller
      */
     public function show($id, Request $request)
     {
-        $dataTransaksi = Transaction::findOrFail($id);
-        $query = $dataTransaksi->items()->with('asset');
+        $dataTransaksi = Transaction::with('loans')->findOrFail($id);
+
+        $query = $dataTransaksi->loans()->with('asset');
 
         $sortField = $request->get('sort_field', 'product_name');
         $sortOrder = $request->get('sort_order', 'asc');
@@ -175,8 +182,8 @@ class TransactionController extends Controller
         if (in_array($sortField, $allowedFields)) {
             if (in_array($sortField, ['product_name', 'product_detail', 'merk', 'product_type', 'product_unit'])) {
                 // Sorting berdasarkan tabel product
-                $query->join('assetlabs as a', 'transaction_items.product_code', '=', 'a.product_code')
-                    ->select('transaction_items.*', 'a.product_name', 'a.product_detail', 'a.merk', 'a.product_type', 'a.product_unit')
+                $query->join('assetlabs as a', 'peminjamans.product_code', '=', 'a.product_code')
+                    ->select('peminjamans.*', 'a.product_name', 'a.product_detail', 'a.merk', 'a.product_type', 'a.product_unit')
                     ->orderBy("a.$sortField", $sortOrder);
             } else {
                 // Sorting berdasarkan tabel plans
@@ -185,8 +192,24 @@ class TransactionController extends Controller
         }
 
         $products = $query->paginate(10);
+        $assets = Assetlab::where('type', 'inventaris')->where('location', $dataTransaksi->location)->orderBy('product_name')->get();
 
-        return view('transactions.detail-penggunaan', compact('dataTransaksi', 'products', 'sortField', 'sortOrder'));
+        // **Menentukan Status Transaksi Berdasarkan Status Loans (Produk)**
+        $isCompleted = $dataTransaksi->loans->every(fn($loan) => $loan->status == 'dikembalikan');
+        $isPartiallyReturned = $dataTransaksi->loans->contains(fn($loan) => $loan->status == 'dikembalikan sebagian');
+
+        if ($isCompleted) {
+            $statusColor = 'bg-green-200 text-green-700';
+            $statusText = 'Selesai';
+        } elseif ($isPartiallyReturned) {
+            $statusColor = 'bg-yellow-200 text-yellow-700';
+            $statusText = 'Dikembalikan Sebagian';
+        } else {
+            $statusColor = 'bg-red-200 text-red-700';
+            $statusText = 'Belum Selesai';
+        }
+
+        return view('transactions.detail-peminjaman', compact('dataTransaksi', 'products', 'assets', 'sortField', 'sortOrder', 'statusText', 'statusColor'));
     }
 
     /**
@@ -196,13 +219,47 @@ class TransactionController extends Controller
     {
         //
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Transaction $transaction)
+    public function update(Request $request, $id)
     {
-        //
+        $dataPeminjaman = Peminjaman::findOrFail($id);
+
+        $request->validate([
+            'returned_quantity' => "required|integer|min:0|max:{$dataPeminjaman->quantity}",
+            'damaged_quantity' => "required|integer|min:0|max:{$dataPeminjaman->quantity}",
+            'return_notes' => 'nullable|string',
+        ]);
+
+        $newReturnedQuantity = $request->returned_quantity;
+        $newDamagedQuantity = $request->damaged_quantity;
+
+        $deltaReturned = $newReturnedQuantity - $dataPeminjaman->returned_quantity;
+        $deltaDamaged = $newDamagedQuantity - $dataPeminjaman->damaged_quantity;
+
+        // Update status dataPeminjaman
+        if ($newReturnedQuantity + $newDamagedQuantity == 0) {
+            $status = 'belum dikembalikan';
+        } elseif ($newReturnedQuantity + $newDamagedQuantity < $dataPeminjaman->quantity) {
+            $status = 'dikembalikan sebagian';
+        } elseif ($newReturnedQuantity == $dataPeminjaman->quantity) {
+            $status = 'dikembalikan';
+        } elseif ($newDamagedQuantity == $dataPeminjaman->quantity) {
+            $status = 'rusak';
+        } else {
+            $status = 'dikembalikan sebagian';
+        }
+
+        $dataPeminjaman->update([
+            'returned_quantity' => $newReturnedQuantity,
+            'damaged_quantity' => $newDamagedQuantity,
+            'return_date' => now(),
+            'return_notes' => $request->return_notes,
+            'status' => $status,
+        ]);
+
+        // Update stok di Assetlab
+        $dataPeminjaman->asset->updateStock($deltaReturned, $deltaDamaged);
+
+        return redirect()->back()->with('success', 'Barang berhasil dikembalikan.');
     }
 
     //export
@@ -232,7 +289,7 @@ class TransactionController extends Controller
 
         $filename .= ".xlsx";
 
-        return Excel::download(new PenggunaanExportAll($startDate, $endDate, $location, $user_id), $filename);
+        // return Excel::download(new PenggunaanExportAll($startDate, $endDate, $location, $user_id), $filename);
     }
     public function exportById($id)
     {
@@ -243,14 +300,14 @@ class TransactionController extends Controller
         // Susun nama file yang lebih rapi
         $filename = "Data Penggunaan_{$user_id}_{$name}_{$tanggal}.xlsx";
 
-        return Excel::download(new PenggunaanExportId($id), $filename);
+        // return Excel::download(new PenggunaanExportId($id), $filename);
     }
     // Print Data
     public function print(Request $request)
     {
         $location = $request->input('location');
         $printDate = Carbon::now()->format('d M Y, H:i');
-        $query = Transaction::where('type', 'bhp')->with(['items.asset', 'creator', 'updater']);
+        $query = Transaction::where('type', 'inventaris')->with(['items.asset', 'creator', 'updater']);
         $startDate = null;
         $endDate = null;
         if (Auth::user()->usertype === 'staff') {
@@ -282,9 +339,6 @@ class TransactionController extends Controller
         $data = Transaction::with(['items.asset', 'creator', 'updater'])->findOrFail($id);
         return view('print.penggunaan-detail', compact('data', 'printDate'));
     }
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Transaction $transaction)
     {
         try {

@@ -37,7 +37,7 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
     }
     public function collection()
     {
-        $query = Transaction::with(['items.asset', 'creator', 'updater']);
+        $query = Transaction::with(['items.asset', 'creator', 'updater'])->where('type', 'bhp');
 
         if ($this->startDate && $this->endDate) {
             $query->whereBetween('created_at', [$this->startDate, $this->endDate]);
@@ -90,8 +90,9 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
                 $periode = "Periode: " . ($this->startDate && $this->endDate
                     ? Carbon::parse($this->startDate)->format('d M Y') . " - " . Carbon::parse($this->endDate)->format('d M Y')
                     : "Semua Data");
+                $lokasi = "Lokasi: " . ($this->location ?: "Semua Data");
                 $sheet->mergeCells('A2:L2');
-                $sheet->setCellValue('A2', $periode);
+                $sheet->setCellValue('A2', "$lokasi | $periode");
                 $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
 
                 // Baris Kosong (Baris 3)

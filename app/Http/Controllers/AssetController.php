@@ -30,7 +30,7 @@ class AssetController extends Controller
     public function indexInv(Request $request)
     {
         $productType = request('product_type');
-        $query = AssetLab::ofType('inventaris');
+        $query = AssetLab::with('updater')->ofType('inventaris');
         $sortField = $request->get('sort_field', 'product_name');
         $sortOrder = $request->get('sort_order', 'asc');
         $allowedFields = ['product_code', 'product_name', 'product_detail', 'merk', 'product_type', 'stock', 'product_unit', 'location_detail', 'location'];
@@ -62,11 +62,12 @@ class AssetController extends Controller
 
     public function indexBhp(Request $request)
     {
+        $authUser = Auth::user();
         $productType = request('product_type');
-        $query = AssetLab::ofType('bhp');
+        $query = AssetLab::with('updater')->ofType('bhp');
         #filter user
-        if (Auth::user()->usertype === 'staff') {
-            $query->ofLocation(Auth::user()->prodi);
+        if ($authUser->usertype === 'staff') {
+            $query->ofLocation($authUser->prodi);
         }
         #filter search
         if ($request->has('search')) {
@@ -163,7 +164,7 @@ class AssetController extends Controller
             $location = Auth::user()->prodi;
         }
 
-        $query = AssetLab::ofType('bhp')->with(['creator', 'updater']);
+        $query = AssetLab::ofType('bhp');
 
         if ($productType) {
             $query->where('product_type', $productType);
@@ -187,7 +188,7 @@ class AssetController extends Controller
             $location = Auth::user()->prodi;
         }
 
-        $query = AssetLab::ofType('inventaris')->with(['creator', 'updater']);
+        $query = AssetLab::ofType('inventaris');
 
         if ($productType) {
             $query->where('product_type', $productType);

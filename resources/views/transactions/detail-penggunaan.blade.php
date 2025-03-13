@@ -29,7 +29,7 @@
             {{ session('success') ?? session('error') }}
         </div>
     @endif
-    <div class="py-4" x-data="{ openEdit: false }">
+    <div class="py-4">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="flex items-center space-x-1 xl:space-x-2 justify-end mb-4">
                 <a href="{{ route('penggunaan.export.id', $dataTransaksi->id) }}">

@@ -2,6 +2,7 @@
     @php
         $segment = request()->segment(1); // Ambil segment pertama dari URL
         $type = $segment === 'perencanaan-inv' ? 'inv' : 'bhp';
+        $user = Auth::user()->usertype;
     @endphp
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -61,7 +62,7 @@
                                 </form>
                             </div>
                         </div>
-                        @if (Auth::user()->usertype !== 'user')
+                        @if ($user !== 'user')
                             <div class="flex justify-end">
                                 <a href="{{ $type === 'bhp' ? route('add-perencanaan.bhp') : route('add-perencanaan.inv') }}"
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition-all duration-300">
@@ -157,7 +158,7 @@
                                             {{ $perencanaan->latestUpdater?->updater?->name ?? $perencanaan->updater->name }}
                                         </td>
                                         <td class="py-2 flex flex-row gap-x-1 justify-center">
-                                            @if ($perencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
+                                            @if ($perencanaan->status === 'belum' && $user !== 'user')
                                                 <form id="complete-form"
                                                     action="{{ route('perencanaan.complete', $perencanaan->id) }}"
                                                     method="POST" style="display: none;">
@@ -216,7 +217,7 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            @if (Auth::user()->usertype !== 'user')
+                                            @if ($user !== 'user')
                                                 <form action="{{ route('destroy-rencana', $perencanaan->id) }}"
                                                     method="POST">
                                                     @csrf

@@ -1,9 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Peggunaan BHP') }}
+            {{ __('Data Peminjaman Barang') }}
         </h2>
     </x-slot>
+    @php
+        $user = Auth::user()->usertype;
+    @endphp
     @if (session('success') || session('error'))
         <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
             class="fixed top-20 right-10 p-3 rounded-md shadow-md transition-all duration-500"
@@ -19,9 +22,24 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
                     <div class="flex flex-col-reverse gap-2 justify-between pb-4">
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-500" aria-hidden="true" fill="currentColor"
+                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <input x-data="{ search: '{{ request('search') }}' }" x-on:input="search = $event.target.value" type="text"
+                                id="search" name="search" x-model="search"
+                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 md:w-64 xl:w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                                placeholder="Search for items" autocomplete="off">
+                        </div>
                         <div class="z-10 flex gap-2 flex-wrap justify-end" x-data="filterPenggunaan">
                             {{-- Filter Lokasi --}}
-                            @if (Auth::user()->usertype === 'admin')
+                            @if ($user === 'admin')
                                 <div
                                     class="flex flex-row items-center bg-white rounded-lg w-fit border border-gray-300 ps-2">
                                     <svg class="size-4 fill-gray-400" xmlns="http://www.w3.org/2000/svg" id="Outline"
@@ -101,8 +119,8 @@
                                     Cetak
                                 </div>
                             </a>
-                            @if (Auth::user()->usertype !== 'user')
-                                <a href="{{ route('add-penggunaan') }}"
+                            @if ($user !== 'user')
+                                <a href="{{ route('add-peminjaman') }}"
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition-all duration-300">
                                     <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor" viewBox="0 0 448 512">
@@ -122,7 +140,7 @@
                                     'name' => 'Nama Pengguna',
                                     'prodi' => 'Prodi Pengguna',
                                     'telp' => 'Nomor Telepon',
-                                    'items_count' => 'Jumlah Barang',
+                                    'items' => 'Status',
                                     'detail' => 'Keterangan',
                                     'location' => 'Program Studi',
                                     'created_by' => 'Pembuat',
@@ -148,7 +166,7 @@
                                                     $isActive = request('sort_field', 'created_at') === $field;
                                                 @endphp
                                                 <a title="Sort by {{ $name }}" class="px-1"
-                                                    href="{{ route('penggunaan', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
+                                                    href="{{ route('peminjaman', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
                                                     <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
                                                         xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
                                                         viewBox="0 0 24 24" width="512" height="512">
@@ -169,6 +187,12 @@
                                     $counter = ($transactions->currentPage() - 1) * $transactions->perPage() + 1;
                                 @endphp
                                 @forelse ($transactions as $penggunaan)
+                                    @php
+                                        $isCompleted = $penggunaan->total_returned_quantity == $penggunaan->total_loan_quantity;
+                                        $statusColor = $isCompleted
+                                            ? 'bg-green-300 text-green-700'
+                                            : 'bg-red-300 text-red-700';
+                                    @endphp
                                     <tr class="bg-white border-b hover:bg-gray-50">
                                         <th class="text-center px-2 py-2">
                                             {{ $counter }}
@@ -186,7 +210,11 @@
                                             {{ $penggunaan->telp }}
                                         </td>
                                         <td class="px-1 py-2">
-                                            {{ $penggunaan->items_count }}
+                                            <span
+                                                class="px-3 py-1 rounded-full text-xs font-semibold {{ $statusColor }}">
+                                                {{ $penggunaan->total_returned_quantity ?? 0 }} /
+                                                {{ $penggunaan->total_loan_quantity ?? 0 }}
+                                            </span>
                                         </td>
                                         <td class="px-1 py-2">
                                             {{ $penggunaan->detail }}
@@ -202,7 +230,7 @@
                                         </td>
                                         <td class="py-2 flex flex-row gap-x-1 justify-center">
                                             <a title="Lihat Detail"
-                                                href="{{ route('detail-penggunaan', $penggunaan->id) }}">
+                                                href="{{ route('detail-peminjaman', $penggunaan->id) }}">
                                                 <div
                                                     class="bg-amber-500 p-2 rounded-lg hover:bg-amber-700 transition-all duration-300">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
@@ -236,7 +264,7 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            @if (Auth::user()->usertype !== 'user')
+                                            @if ($user !== 'user')
                                                 <form action="{{ route('destroy-penggunaan', $penggunaan->id) }}"
                                                     method="POST">
                                                     @csrf

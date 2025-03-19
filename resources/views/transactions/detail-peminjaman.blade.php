@@ -53,7 +53,7 @@
     }">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="flex items-center space-x-1 xl:space-x-2 justify-end mb-4">
-                <a href="{{ route('penggunaan.export.id', $dataTransaksi->id) }}">
+                <a href="{{ route('peminjaman.export.id', $dataTransaksi->id) }}">
                     <div
                         class="inline-flex gap-x-2 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 duration-300 transition-all">
                         <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
@@ -64,7 +64,7 @@
                         Export
                     </div>
                 </a>
-                <a href="{{ route('penggunaan.print.id', $dataTransaksi->id) }}" target="_blank">
+                <a href="{{ route('peminjaman.print.id', $dataTransaksi->id) }}" target="_blank">
                     <div
                         class="inline-flex gap-x-2 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-fuchsia-500 hover:bg-fuchsia-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 duration-300 transition-all">
                         <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"

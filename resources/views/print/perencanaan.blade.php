@@ -92,7 +92,7 @@
         </div>
     </div>
     <footer class="text-center text-gray-600 text-sm mt-6 print-footer">
-        <p>&copy; Dicetak dari: <strong>www.labsaintek.icu</strong> tanggal {{ $printDate }}</p>
+        <p>&copy; Dicetak dari: <strong>{{ request()->getHost() }}</strong> tanggal {{ $printDate }}</p>
     </footer>
 
     <style>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Data Penggunaan Barang</title>
+    <title>Cetak Data Peminjaman Barang</title>
     @vite('resources/css/app.css')
     <style>
         @media print {
@@ -36,7 +36,7 @@
     </style>
 </head>
 @php
-    // dd($data->first()->user_id);
+    // dd($data);
 @endphp
 
 <body class="bg-gray-100 text-gray-900">
@@ -49,7 +49,7 @@
 
             <!-- Header -->
             <div class="text-center flex-1">
-                <h1 class="text-xl font-bold text-center uppercase">Laporan Data Penggunaan Barang</h1>
+                <h1 class="text-xl font-bold text-center uppercase">Laporan Data Peminjaman Barang</h1>
                 <h1 class="text-base font-bold uppercase">Laboratorium Fakultas Sains dan Teknologi</h1>
                 <h1 class="text-base font-bold uppercase">Universitas Islam Negeri Sunan Gunung Djati Bandung</h1>
                 <p class="text-[10px] mt-2">Jl. A.H. Nasution No. 105 Cibiru Kota Bandung 40614 Jawa Barat – Indonesia |
@@ -116,15 +116,16 @@
                             <td class="text-gray-700"><strong>{{ $data->created_at->format('d/m/Y') }}</strong></td>
                         </tr>
                         <tr>
-                            <td class="text-gray-700">Laboran</td>
+                            <td class="text-gray-700">Laboran Pembuat</td>
                             <td class="text-gray-700 px-2">:</td>
                             <td class="text-gray-700"><strong>{{ $data->creator->name }}</strong></td>
                         </tr>
                     @endif
                     <tr>
-                        <td class="text-gray-700">Tanggal Cetak</td>
+                        <td class="text-gray-700">Keterangan Peminjaman</td>
                         <td class="text-gray-700 px-2">:</td>
-                        <td class="text-gray-700">{{ $printDate }}</td>
+                        <td class="text-gray-700">
+                            {{ request()->has('user_id') ? $data->first()->detail : $data->detail }}</td>
                     </tr>
                 </table>
             </div>
@@ -146,50 +147,82 @@
                     <thead>
                         <tr class="bg-gray-200 text-gray-700">
                             @if (request()->has('user_id'))
-                                <th class="border border-gray-300 px-3 py-2">Tanggal</th>
+                                <th class="border border-gray-300 px-3 py-2">Tanggal Pinjam</th>
                                 <th class="border border-gray-300 px-3 py-2">Laboran</th>
                             @endif
                             <th class="border border-gray-300 px-3 py-2">Nama Produk</th>
+                            <th class="border border-gray-300 px-3 py-2">Keterangan/Vol</th>
                             <th class="border border-gray-300 px-3 py-2">Merk</th>
-                            <th class="border border-gray-300 px-3 py-2">Jenis</th>
-                            <th class="border border-gray-300 px-3 py-2">Satuan</th>
-                            <th class="border border-gray-300 px-3 py-2">Jumlah</th>
-                            <th class="border border-gray-300 px-3 py-2">Keterangan</th>
+                            <th class="border border-gray-300 px-3 py-2">Banyaknya</th>
+                            <th class="border border-gray-300 px-3 py-2">Dikembalikan</th>
+                            <th class="border border-gray-300 px-3 py-2">Rusak</th>
+                            <th class="border border-gray-300 px-3 py-2">Status</th>
+                            <th class="border border-gray-300 px-3 py-2">Tanggal Kembali</th>
+                            <th class="border border-gray-300 px-3 py-2">Laboran</th>
+                            <th class="border border-gray-300 px-3 py-2">Catatan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (request()->has('user_id'))
                             @foreach ($data as $row)
-                                @foreach ($row->items as $item)
+                                @foreach ($row->loans as $item)
                                     <tr class="hover:bg-gray-100">
                                         <td class="border border-gray-300 px-3 py-2">
-                                            {{ $row->created_at->format('d/m/Y') }}
+                                            {{ $item->created_at->format('d/m/Y') }}
                                         </td>
-                                        <td class="border border-gray-300 px-3 py-2">{{ $row->creator->name }}</td>
+                                        <td class="border border-gray-300 px-3 py-2">{{ $item->creator->name }}</td>
                                         <td class="border border-gray-300 px-3 py-2">{{ $item->asset->product_name }}
                                         </td>
-                                        <td class="border border-gray-300 px-3 py-2">{{ $item->asset->merk }}</td>
-                                        <td class="border border-gray-300 px-3 py-2">{{ $item->asset->product_type }}
+                                        <td class="border border-gray-300 px-3 py-2">
+                                            {{ $item->asset->product_detail ?: '-' }}
                                         </td>
-                                        <td class="border border-gray-300 px-3 py-2">{{ $item->asset->product_unit }}
+                                        <td class="border border-gray-300 px-3 py-2">{{ $item->asset->merk ?: '-' }}
                                         </td>
-                                        <td class="border border-gray-300 px-3 py-2">{{ $item->jumlah_pemakaian }}</td>
-                                        <td class="border border-gray-300 px-3 py-2">{{ $row->detail }}</td>
+                                        <td class="border border-gray-300 px-3 py-2">
+                                            {{ $item->quantity }} {{ $item->asset->product_unit }}
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2">
+                                            {{ $item->returned_quantity }} / {{ $item->quantity }}
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2">
+                                            {{ $item->damaged_quantity }}
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2 capitalize">{{ $item->status }}
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2">{{ $item->return_date ?: '-' }}
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2">
+                                            {{ $item->status != 'dipinjam' ? $item->updater->name : '-' }}</td>
+                                        <td class="border border-gray-300 px-3 py-2">
+                                            {{ $item->notes ?: ($item->return_notes ?: '-') }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach
                         @else
-                            @foreach ($data->items as $item)
+                            @foreach ($data->loans as $item)
                                 <tr class="hover:bg-gray-100">
                                     <td class="border border-gray-300 px-3 py-2">{{ $item->asset->product_name }}
                                     </td>
-                                    <td class="border border-gray-300 px-3 py-2">{{ $item->asset->merk }}</td>
-                                    <td class="border border-gray-300 px-3 py-2">{{ $item->asset->product_type }}
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ $item->asset->product_detail ?: '-' }}
                                     </td>
-                                    <td class="border border-gray-300 px-3 py-2">{{ $item->asset->product_unit }}
+                                    <td class="border border-gray-300 px-3 py-2">{{ $item->asset->merk ?: '-' }}</td>
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ $item->quantity }} {{ $item->asset->product_unit }}
                                     </td>
-                                    <td class="border border-gray-300 px-3 py-2">{{ $item->jumlah_pemakaian }}</td>
-                                    <td class="border border-gray-300 px-3 py-2">{{ $data->detail }}</td>
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ $item->returned_quantity }} / {{ $item->quantity }}
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ $item->damaged_quantity }}
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2 capitalize">{{ $item->status }}
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2">{{ $item->return_date ?: '-' }}</td>
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ $item->status != 'dipinjam' ? $item->updater->name : '-' }}</td>
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ $item->notes ?: ($item->return_notes ?: '-') }}</td>
                                 </tr>
                             @endforeach
                         @endif

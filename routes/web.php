@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\UserController;
+use App\Models\Peminjaman;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
@@ -45,9 +46,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/detail-transaction/{id}', [TransactionController::class, 'show'])->name('detail-penggunaan');
     Route::get('/detail-transaction/inventaris/{id}', [PeminjamanController::class, 'show'])->name('detail-peminjaman');
     Route::get('/print/transaction/bhp', [TransactionController::class, 'print'])->name('print.penggunaan');
+    Route::get('/print/transaction/inventaris', [PeminjamanController::class, 'print'])->name('print.peminjaman');
     Route::get('/export/transaction/bhp', [TransactionController::class, 'export'])->name('export.transaction.bhp');
+    Route::get('/export/transaction/inventaris', [PeminjamanController::class, 'export'])->name('export.transaction.inv');
     Route::get('/transaction/bhp/{id}/download', [TransactionController::class, 'exportById'])->name('penggunaan.export.id');
+    Route::get('/transaction/inv/{id}/download', [PeminjamanController::class, 'exportById'])->name('peminjaman.export.id');
     Route::get('/transaction/bhp/{id}/print', [TransactionController::class, 'printById'])->name('penggunaan.print.id');
+    Route::get('/transaction/inv/{id}/print', [PeminjamanController::class, 'printById'])->name('peminjaman.print.id');
 
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
 });
@@ -83,6 +88,7 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::get('/add-peminjaman', [PeminjamanController::class, 'create'])->name('add-peminjaman');
     Route::post('/add-peminjaman', [PeminjamanController::class, 'store']);
     Route::put('/transaction/return/{id}', [PeminjamanController::class, 'update'])->name('transaction.return');
+    Route::delete('/delete-peminjaman/{transaction}', [PeminjamanController::class, 'destroy'])->name('destroy-peminjaman');
 
 
     Route::get('/assets', [AssetController::class, 'getAssets']);

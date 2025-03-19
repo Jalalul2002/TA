@@ -95,7 +95,7 @@
                                     :min="startDate" max="{{ now()->format('Y-m-d') }}">
                             </div>
                             <a title="Download Data"
-                                href="{{ route('export.transaction.bhp', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'user_id' => request('user_id')]) }}">
+                                href="{{ route('export.transaction.inv', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'user_id' => request('user_id')]) }}">
                                 <div
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-teal-500 hover:bg-teal-700 transition-all duration-300">
                                     <svg class="size-4 fill-white me-2" xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +106,7 @@
                                     Download
                                 </div>
                             </a>
-                            <a href="{{ route('print.penggunaan', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'user_id' => request('user_id')]) }}"
+                            <a href="{{ route('print.peminjaman', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'user_id' => request('user_id')]) }}"
                                 target="_blank">
                                 <div
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-zinc-500 hover:bg-fuchsia-700 transition-all duration-300">
@@ -186,9 +186,9 @@
                                 @php
                                     $counter = ($transactions->currentPage() - 1) * $transactions->perPage() + 1;
                                 @endphp
-                                @forelse ($transactions as $penggunaan)
+                                @forelse ($transactions as $peminjaman)
                                     @php
-                                        $isCompleted = $penggunaan->total_returned_quantity == $penggunaan->total_loan_quantity;
+                                        $isCompleted = $peminjaman->total_returned_quantity == $peminjaman->total_loan_quantity;
                                         $statusColor = $isCompleted
                                             ? 'bg-green-300 text-green-700'
                                             : 'bg-red-300 text-red-700';
@@ -198,39 +198,39 @@
                                             {{ $counter }}
                                         </th>
                                         <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
-                                            {{ $penggunaan->user_id }}
+                                            {{ $peminjaman->user_id }}
                                         </td>
                                         <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
-                                            {{ $penggunaan->name }}
+                                            {{ $peminjaman->name }}
                                         </td>
                                         <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
-                                            {{ $penggunaan->prodi }}
+                                            {{ $peminjaman->prodi }}
                                         </td>
                                         <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
-                                            {{ $penggunaan->telp }}
+                                            {{ $peminjaman->telp }}
                                         </td>
                                         <td class="px-1 py-2">
                                             <span
                                                 class="px-3 py-1 rounded-full text-xs font-semibold {{ $statusColor }}">
-                                                {{ $penggunaan->total_returned_quantity ?? 0 }} /
-                                                {{ $penggunaan->total_loan_quantity ?? 0 }}
+                                                {{ $peminjaman->total_returned_quantity ?? 0 }} /
+                                                {{ $peminjaman->total_loan_quantity ?? 0 }}
                                             </span>
                                         </td>
                                         <td class="px-1 py-2">
-                                            {{ $penggunaan->detail }}
+                                            {{ $peminjaman->detail }}
                                         </td>
                                         <td class="px-1 py-2">
-                                            {{ $penggunaan->location }}
+                                            {{ $peminjaman->location }}
                                         </td>
                                         <td class="px-1 py-2">
-                                            {{ $penggunaan->creator->name }}
+                                            {{ $peminjaman->creator->name }}
                                         </td>
                                         <td class="px-1 py-2">
-                                            {{ $penggunaan->created_at->format('d/m/Y H:i') }}
+                                            {{ $peminjaman->created_at->format('d/m/Y H:i') }}
                                         </td>
                                         <td class="py-2 flex flex-row gap-x-1 justify-center">
                                             <a title="Lihat Detail"
-                                                href="{{ route('detail-peminjaman', $penggunaan->id) }}">
+                                                href="{{ route('detail-peminjaman', $peminjaman->id) }}">
                                                 <div
                                                     class="bg-amber-500 p-2 rounded-lg hover:bg-amber-700 transition-all duration-300">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
@@ -241,7 +241,7 @@
                                                 </div>
                                             </a>
                                             <a title="Download Data"
-                                                href="{{ route('penggunaan.export.id', $penggunaan->id) }}">
+                                                href="{{ route('peminjaman.export.id', $peminjaman->id) }}">
                                                 <div
                                                     class="bg-teal-500 p-2 rounded-lg hover:bg-teal-700 transition-all duration-300">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
@@ -251,7 +251,7 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            <a href="{{ route('penggunaan.print.id', $penggunaan->id) }}"
+                                            <a href="{{ route('peminjaman.print.id', $peminjaman->id) }}"
                                                 target="_blank">
                                                 <div
                                                     class="bg-fuchsia-500 p-2 rounded-lg hover:bg-fuchsia-700 transition-all duration-300">
@@ -265,7 +265,7 @@
                                                 </div>
                                             </a>
                                             @if ($user !== 'user')
-                                                <form action="{{ route('destroy-penggunaan', $penggunaan->id) }}"
+                                                <form action="{{ route('destroy-peminjaman', $peminjaman->id) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')

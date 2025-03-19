@@ -6,6 +6,7 @@ use App\Models\Assetlab;
 use App\Models\Peminjaman;
 use App\Models\Transaction;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -154,7 +155,7 @@ class PeminjamanController extends Controller
             return redirect()->back()->withErrors($e->validator)->withInput();
         } catch (QueryException $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan pada database.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Unexpected Error: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', 'Terjadi kesalahan pada baris ' . $e->getLine() . ' di file ' . $e->getFile() . ': ' . $e->getMessage())
@@ -336,23 +337,27 @@ class PeminjamanController extends Controller
     public function printById(Request $request, $id)
     {
         $printDate = Carbon::now()->format('d M Y, H:i');
-        $data = Transaction::with(['items.asset', 'creator', 'updater'])->findOrFail($id);
-        return view('print.penggunaan-detail', compact('data', 'printDate'));
+        $data = Transaction::with(['loans.asset', 'creator', 'updater'])->findOrFail($id);
+        return view('print.peminjaman-detail', compact('data', 'printDate'));
     }
     public function destroy(Transaction $transaction)
     {
         try {
             DB::transaction(function () use ($transaction) {
                 // Ambil semua item dalam transaksi
-                foreach ($transaction->items as $item) {
+                foreach ($transaction->loans as $item) {
                     // Ambil asset terkait
                     $asset = Assetlab::where('product_code', $item->product_code)->first();
 
                     if ($asset) {
-                        // Kembalikan stok ke nilai sebelum transaksi terjadi
-                        $asset->update([
-                            'stock' => $asset->stock + $item->jumlah_pemakaian
-                        ]);
+                        if ($item->returned_quantity == 0) {
+                            // Kembalikan stok ke nilai sebelum transaksi terjadi
+                            $asset->update([
+                                'stock' => $asset->stock + $item->quantity
+                            ]);
+                        } else if ($item->returned_quantity < $item->quantity) {
+                            throw new Exception('Terdapat transaksi belum selesai.');
+                        }
                     }
 
                     // Hapus item transaksi
@@ -363,8 +368,8 @@ class PeminjamanController extends Controller
                 $transaction->delete();
             });
 
-            return redirect()->route('penggunaan')->with('success', 'Transaksi berhasil dihapus.');
-        } catch (\Exception $e) {
+            return redirect()->route('peminjaman')->with('success', 'Transaksi berhasil dihapus.');
+        } catch (Exception $e) {
             Log::error('Error deleting transaction: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Terjadi kesalahan saat menghapus transaksi.');
         }

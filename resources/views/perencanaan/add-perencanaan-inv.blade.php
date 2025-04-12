@@ -114,41 +114,69 @@
                         <div class="mt-2 text-sm" id="items" x-data="formHandler()">
                             <h3 class="text-sm font-semibold">Tambah Produk</h3>
                             <template x-for="(item, index) in items" :key="index">
-                                <div class="flex flex-col lg:flex-row mb-2 text-sm text-gray-900 gap-x-2">
-                                    <select name="items[][product_code]"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block lg:w-7/12 p-2.5 mt-1"
-                                        :id="'productSelect' + index" @change="updateStock(index)" required>
-                                        <option value="">Select Product</option>
-                                        <template x-for="product in products" :key="product.product_code">
-                                            <option :value="product.product_code" :data-stock="product.stock"
-                                                :data-satuan="product.product_unit"
-                                                x-text="`${product.product_name} (${product.product_code}) ${product.product_detail ? '(' + product.product_detail + ')' : ''} ${product.merk ? '(' + product.merk + ')' : ''} ${product.product_type ? '(' + product.product_type + ')' : ''}`">
-                                            </option>
-                                        </template>
-                                    </select>
-                                    <div class="flex flex-row gap-x-2 justify-between lg:w-6/12">
-                                        <input type="number" name="items[][stock]" placeholder="Stok"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full block p-2.5 mt-1"
-                                            :id="'productStock' + index" required readonly>
-                                        <input type="number" name="items[][quantity]" placeholder="Jumlah"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full block p-2.5 mt-1"
-                                            min="0" required>
-                                        <input type="text" name="items[][product_unit]" placeholder="Satuan"
-                                            class="bg-transparent border-none text-gray-900 text-sm rounded-lg w-full block focus:ring-transparent p-2.5 mt-1"
-                                            :id="'productUnit' + index" readonly>
-                                        <button type="button" @click="items.splice(index, 1)"
-                                            class="bg-uinRed border hover:bg-red-700 border-uinRed text-white text-sm font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-3 py-2 mt-1"><svg
-                                                class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
-                                                id="Outline" viewBox="0 0 24 24" width="512" height="512">
-                                                <path
-                                                    d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
-                                                <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
-                                                <path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
-                                            </svg></button>
+                                <div class="flex mb-2 text-sm text-gray-900 gap-x-2">
+                                    <div class="w-full">
+                                        <select name="items[][product_code]"
+                                            class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 mt-1"
+                                            :id="'productSelect' + index" @change="updateStock(index)" required>
+                                            <option value="">Select Product</option>
+                                            <template x-for="product in products" :key="product.product_code">
+                                                <option :value="product.product_code"
+                                                    :data-stock="product.formatted_stock"
+                                                    :data-satuan="product.product_unit"
+                                                    :data-purchase-price="product.latest_price ? product.latest_price.purchase_price : 0"
+                                                    x-text="`${product.product_name} (${product.product_code}) ${product.product_detail ? '(' + product.product_detail + ')' : ''} ${product.merk ? '(' + product.merk + ')' : ''} ${product.product_type ? '(' + product.product_type + ')' : ''}`">
+                                                </option>
+                                            </template>
+                                        </select>
+                                        <div class="flex flex-row gap-x-2 justify-between w-full">
+                                            <input type="number" name="items[][stock]" placeholder="Stok"
+                                                step="any"
+                                                class="w-1/2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 mt-1"
+                                                :id="'productStock' + index" x-model="items[index].stock" required
+                                                readonly>
+                                            <div class="relative w-full">
+                                                <span
+                                                    class="absolute left-3 top-1/2 transform text-sm -translate-y-1/2 text-gray-600">Rp.</span>
+                                                <input type="number" name="items[][purchase_price]"
+                                                    placeholder="Harga Beli"
+                                                    class="pl-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full block p-2.5 mt-1"
+                                                    :id="'productPrice' + index" required
+                                                    x-model="items[index].purchase_price"
+                                                    @input="calculateTotalPrice(index)">
+                                            </div>
+                                            <input type="number" name="items[][quantity]" placeholder="Jumlah"
+                                                step="any"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full block p-2.5 mt-1"
+                                                min="0" required x-model="items[index].quantity"
+                                                @input="calculateTotalPrice(index)">
+                                            <input type="text" name="items[][product_unit]" placeholder="Satuan"
+                                                class="bg-transparent border-none text-gray-900 text-sm rounded-lg w-1/3 block focus:ring-transparent p-2.5 mt-1"
+                                                :id="'productUnit' + index" readonly
+                                                x-model="items[index].product_unit">
+                                            <div class="relative w-full">
+                                                <span
+                                                    class="absolute left-3 top-1/2 transform text-sm -translate-y-1/2 text-gray-600">Rp.</span>
+                                                <input type="number" name="items[][total_price]"
+                                                    placeholder="Total Harga"
+                                                    class="pl-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full block p-2.5 mt-1"
+                                                    min="0" required x-model="items[index].total_price"
+                                                    @input="updateFromTotalPrice(index)">
+                                            </div>
+                                        </div>
                                     </div>
+                                    <button type="button" @click="items.splice(index, 1)"
+                                        class="bg-uinRed border hover:bg-red-700 border-uinRed text-white text-sm font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block px-3 py-2 mt-1"><svg
+                                            class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
+                                            id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                                            <path
+                                                d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
+                                            <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
+                                            <path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
+                                        </svg></button>
                                 </div>
                             </template>
-                            <button type="button" @click="items.push({product_code: '', stock: 0, quantity: 0})"
+                            <button type="button" @click="items.push({product_code: ''})"
                                 class="bg-uinBlue hover:bg-uinNavy text-white px-4 py-2 rounded-md flex flex-row items-center font-semibold">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
@@ -163,11 +191,11 @@
                             <template x-for="(product, index) in newProducts" :key="index">
                                 <div class="mb-2 w-full border border-gray-300 rounded-xl p-4 flex flex-row gap-x-2">
                                     <div class="flex flex-col gap-y-2 w-full">
-                                        <div
-                                            class="grid grid-cols-1 lg:grid-cols-[128px_128px_auto] xl:grid-cols-[128px_128px_auto_auto_auto] gap-2">
+                                        <div class="grid grid-cols-1 lg:grid-cols-[128px_128px_auto] gap-2">
                                             <div class="flex items-center gap-1 lg:col-span-2">
                                                 <input id="initial_code" name="initial_code" type="text"
                                                     x-model="initialCode" placeholder="Initial Produk" required
+                                                    readonly
                                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5 w-[126px]">
                                                 <span class="text-gray-600">-</span>
                                                 <input id="new_product_code" name="new_product_code" type="text"
@@ -179,11 +207,11 @@
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
                                             <input type="text" x-model="product.product_detail"
                                                 placeholder="Keterangan/Formula"
-                                                class="lg:col-span-2 xl:col-span-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
+                                                class="lg:col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
                                             <input type="text" x-model="product.merk" placeholder="Merk"
                                                 class="col-span-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
                                         </div>
-                                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-2">
+                                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-2">
                                             <select id="product_type" name="product_type"
                                                 x-model="product.product_type"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -193,11 +221,8 @@
                                                 <option value="Padatan">Padatan</option>
                                                 <option value="Lainnya">Lainnya</option>
                                             </select>
-                                            <input id="new_stock" name="new_stock" type="number"
-                                                x-model="product.stock" placeholder="Stok" required
-                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
-                                            <input id="new_stock" name="new_product_name" type="number"
-                                                x-model="product.quantity" placeholder="Jumlah Kebutuhan" required
+                                            <input id="new_stock" name="new_stock" type="number" step="any"
+                                                x-model="product.stock" placeholder="Stok" required min="0"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
                                             @php
                                                 $units = [
@@ -225,6 +250,27 @@
                                                     <option value="{{ $unit }}">{{ $unit }}</option>
                                                 @endforeach
                                             </select>
+                                            <div class="relative w-full">
+                                                <span
+                                                    class="absolute left-3 top-1/2 transform text-sm -translate-y-1/2 text-gray-600">Rp.</span>
+                                                <input id="new_purchase_price" name="new_purchase_price"
+                                                    type="number" x-model="product.purchase_price" min="0"
+                                                    @input="updateTotalPrice(index)" placeholder="Harga Beli"
+                                                    class="w-full pl-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
+                                            </div>
+                                            <input id="new_quantity" name="new_quantity" type="number"
+                                                step="any" x-model="product.quantity"
+                                                placeholder="Jumlah Kebutuhan" required min="0"
+                                                @input="updateTotalPrice(index)"
+                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
+                                            <div class="relative w-full">
+                                                <span
+                                                    class="absolute left-3 top-1/2 transform text-sm -translate-y-1/2 text-gray-600">Rp.</span>
+                                                <input id="new_total_price" name="new_total_price" type="number"
+                                                    x-model="product.total_price" placeholder="Total Harga"
+                                                    min="0" @input="updatePurchasePrice(index)"
+                                                    class="w-full pl-10 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
+                                            </div>
                                         </div>
                                     </div>
                                     <button type="button" @click="newProducts.splice(index, 1)"
@@ -239,7 +285,7 @@
                                 </div>
                             </template>
                             <button type="button"
-                                @click="newProducts.push({product_name: '', product_code: '', stock: 0, product_unit: ''})"
+                                @click="newProducts.push({product_name: '', product_code: '', product_unit: ''})"
                                 class="bg-uinYellow hover:bg-amber-700 text-white px-4 py-2 rounded-md flex flex-row items-center font-semibold"><svg
                                     class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
@@ -270,20 +316,42 @@
             items: [],
             updateStock(index) {
                 const productSelect = document.getElementById('productSelect' + index);
-                const productStock = document.getElementById('productStock' + index);
-                const productUnit = document.getElementById('productUnit' + index);
                 const selectedOption = productSelect.options[productSelect.selectedIndex];
-                const stock = selectedOption.getAttribute('data-stock');
-                const satuan = selectedOption.getAttribute('data-satuan');
-                productStock.value = stock ? stock : '';
-                productUnit.value = satuan ? satuan : '';
+
+                this.items[index].product_code = selectedOption.value;
+                this.items[index].stock = selectedOption.getAttribute('data-stock') || 0;
+                this.items[index].product_unit = selectedOption.getAttribute('data-satuan') || '';
+                this.items[index].purchase_price = selectedOption.getAttribute('data-purchase-price') || 0;
+                this.calculateTotalPrice(index);
+            },
+            calculateTotalPrice(index) {
+                this.items[index].total_price = this.items[index].purchase_price * this.items[index].quantity;
+            },
+            updateFromTotalPrice(index) {
+                if (this.items[index].quantity > 0) {
+                    this.items[index].purchase_price = this.items[index].total_price / this.items[index].quantity;
+                }
             }
-        }
+        };
     }
 
     function newProductHandler() {
         return {
-            newProducts: []
+            newProducts: [],
+
+            updateTotalPrice(index) {
+                let product = this.newProducts[index];
+                if (product.purchase_price && product.quantity) {
+                    product.total_price = product.purchase_price * product.quantity;
+                }
+            },
+
+            updatePurchasePrice(index) {
+                let product = this.newProducts[index];
+                if (product.quantity > 0) {
+                    product.purchase_price = product.total_price / product.quantity;
+                }
+            }
         };
     }
 </script>

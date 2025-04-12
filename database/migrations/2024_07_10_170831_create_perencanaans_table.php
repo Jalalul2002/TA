@@ -23,8 +23,10 @@ return new class extends Migration
             //     table: 'assetlabs',
             //     indexName: 'create_perencanaan_product'
             // );
-            $table->integer('stock')->default(0);
-            $table->integer('jumlah_kebutuhan')->default(0);
+            $table->decimal('stock', 18, 4)->default(0);
+            $table->bigInteger('purchase_price')->default(0);
+            $table->decimal('jumlah_kebutuhan', 18, 4)->default(0);
+            $table->bigInteger('total_price')->default(0);
             $table->foreignId('created_by')->constrained(
                 table: 'users',
                 indexName: 'rencana_create_user'

@@ -31,7 +31,7 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping, WithC
     }
     public function collection()
     {
-        $query = AssetLab::ofType('bhp')->with(['creator', 'updater']);
+        $query = AssetLab::ofType('bhp')->with(['creator', 'updater', 'latestPrice']);
 
         if ($this->productType) {
             $query->where('product_type', $this->productType);
@@ -56,6 +56,8 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping, WithC
             'Jenis',
             'Stok',
             'Satuan',
+            'Harga Beli',
+            'Harga Pakai',
             'Lokasi Penyimpanan',
             'Lokasi',
             'Tanggal Diupdate',
@@ -68,12 +70,12 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping, WithC
                 $sheet = $event->sheet->getDelegate();
 
                 // Auto-size untuk semua kolom dari A hingga L
-                foreach (range('A', 'K') as $column) {
+                foreach (range('A', 'M') as $column) {
                     $sheet->getColumnDimension($column)->setAutoSize(true);
                 }
 
                 // Judul Laporan di Baris 1
-                $sheet->mergeCells('A1:K1');
+                $sheet->mergeCells('A1:M1');
                 $sheet->setCellValue('A1', 'LAPORAN DATA BAHAN HABIS PAKAI');
                 $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
                 $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -81,22 +83,29 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping, WithC
                 // Periode di Baris 2
                 $prodi = "Lokasi/Prodi: " . ($this->location ?: "Semua Data");
                 $jenis = " | Tipe Produk: " . ($this->productType ?: "Semua Jenis");
-                $sheet->mergeCells('A2:K2');
+                $sheet->mergeCells('A2:M2');
                 $sheet->setCellValue('A2', $prodi . $jenis);
                 $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
 
                 // Baris Kosong (Baris 3)
-                $sheet->mergeCells('A3:K3');
+                $sheet->mergeCells('A3:M3');
 
                 // Membuat header bold (Baris 4)
-                $sheet->getStyle('A5:K5')->getFont()->setBold(true);
-                $sheet->getStyle('A5:K5')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A5:M5')->getFont()->setBold(true);
+                $sheet->getStyle('A5:M5')->getAlignment()->setHorizontal('center');
+
+                // Format Mata Uang (Rp) untuk kolom Harga Beli (I) dan Harga Sewa (J)
+                $sheet->getStyle('I6:I' . $sheet->getHighestRow())->getNumberFormat()
+                    ->setFormatCode('[$Rp-421] #,##0');
+
+                $sheet->getStyle('J6:J' . $sheet->getHighestRow())->getNumberFormat()
+                    ->setFormatCode('[$Rp-421] #,##0');
 
                 // Menghitung jumlah baris data (total transaksi)
                 $lastRow = $sheet->getHighestRow(); // Baris terakhir dengan data
 
                 // Tambahkan border ke seluruh tabel (A5:L(last row))
-                $cellRange = "A5:K$lastRow";
+                $cellRange = "A5:M$lastRow";
                 $sheet->getStyle($cellRange)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
@@ -113,13 +122,15 @@ class AssetBhpExport implements FromCollection, WithHeadings, WithMapping, WithC
         return [
             $row->product_code,
             $row->product_name,
-            $row->product_detail,
-            $row->merk,
+            $row->product_detail ?: '-',
+            $row->merk ?: '-',
             $row->type,
             $row->product_type,
             $row->stock > 0 ? $row->stock : '0',
             $row->product_unit,
-            $row->location_detail,
+            $row->latestPrice->purchase_price ?? '0',
+            $row->latestPrice->price ?? '0',
+            $row->location_detail ?: '-',
             $row->location,
             optional($row->updated_at)->format('Y-m-d H:i') ?? 'N/A', // Format tanggal
         ];

@@ -56,19 +56,17 @@
                     </div>
                 </a>
             </div>
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
+            <div class="bg-white overflow-hidden shadow-md sm:rounded-lg">
+                <div class="relative overflow-x-auto sm:rounded-lg p-6">
                     <div class="flex flex-col space-y-4 mb-5">
-                        <div class="flex justify-between border-b pb-4">
-                            <div class="flex items-center gap-x-8">
-                                <div>
+                        <div class="flex justify-between border-b pb-4 gap-2">
+                            <div class="flex-col items-center">
+                                <div class="mb-2">
                                     <h2 class="text-gray-500 text-sm font-medium">Detail Pengguna</h2>
                                     <h1 class="text-lg font-semibold items-baseline text-gray-900">
                                         {{ "{$dataTransaksi->user_id} - {$dataTransaksi->name}" }}
                                     </h1>
                                 </div>
-                            </div>
-                            <div class="flex items-center gap-x-8">
                                 <div>
                                     <h2 class="text-gray-500 text-sm font-medium">Nomor Telepon</h2>
                                     <h1 class="text-lg font-semibold items-baseline text-gray-900">
@@ -76,27 +74,36 @@
                                     </h1>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-x-8">
-                                <div>
+                            <div class="flex-col items-center">
+                                <div class="mb-2">
                                     <h2 class="text-gray-500 text-sm font-medium">Prodi Pengguna</h2>
                                     <h1 class="text-lg font-semibold items-baseline text-gray-900">
                                         {{ "{$dataTransaksi->prodi}" }}
                                     </h1>
                                 </div>
-                            </div>
-                            <div class="flex items-center gap-x-8">
                                 <div>
                                     <h2 class="text-gray-500 text-sm font-medium">Keterangan</h2>
-                                    <h1 class="text-lg font-semibold items-baseline text-gray-900">
+                                    <h1 class="text-lg font-semibold items-baseline text-gray-900 max-w-96">
                                         {{ "{$dataTransaksi->detail}" }}
                                     </h1>
                                 </div>
                             </div>
-                            <div>
-                                <h2 class="text-gray-500 text-sm font-medium">Diupdate</h2>
-                                <h1 class="text-lg font-semibold text-gray-900">
-                                    {{ $dataTransaksi->updater->name . ' | ' . $dataTransaksi->updated_at->format('d M Y H:i') }}
-                                </h1>
+                            <div class="flex-col items-center">
+                                <div class="mb-2">
+                                    <h2 class="text-gray-500 text-sm font-medium">Diupdate</h2>
+                                    <h1 class="text-lg font-semibold text-gray-900">
+                                        {{ $dataTransaksi->updater->name . ' | ' . $dataTransaksi->updated_at->format('d M Y H:i') }}
+                                    </h1>
+                                </div>
+                                <div>
+                                    <h2 class="text-gray-700 text-sm font-medium mb-2">Total Harga</h2>
+                                    <h1 class="text-lg font-semibold items-baseline max-w-96">
+                                        <span class="px-3 py-2 text-white rounded-full bg-uinTosca">
+                                            Rp.
+                                            {{ number_format($dataTransaksi->total_item_price ?? 0, 0, ',', '.') }},-
+                                        </span>
+                                    </h1>
+                                </div>
                             </div>
                             <div>
                                 <span
@@ -114,13 +121,13 @@
                                 $columns = [
                                     'product_code' => 'Kode Barang',
                                     'product_name' => 'Nama Barang',
-                                    'product_detail' => 'Keterangan/Formula',
+                                    'product_detail' => 'Keterangan / Formula',
                                     'merk' => 'Merk',
                                     'product_type' => 'Jenis Produk',
-                                    'stock' => 'stok',
+                                    'unit_price' => 'Harga',
                                     'jumlah_pemakaian' => 'Jumlah Penggunaan',
-                                    'updated_stock' => 'Sisa Stok',
                                     'product_unit' => 'satuan',
+                                    'total_price' => 'Sub Total',
                                 ];
                             @endphp
                             <thead class="text-xs text-white uppercase bg-uinTosca">
@@ -129,8 +136,8 @@
                                         No
                                     </th>
                                     @foreach ($columns as $field => $name)
-                                        <th scope="col" class="py-3">
-                                            <div class="flex items-center">
+                                        <th scope="col" class="py-3 px-2">
+                                            <div class="flex items-center justify-between">
                                                 {{ $name }}
                                                 @php
                                                     // Tentukan arah sorting berdasarkan field yang sedang diurutkan
@@ -164,32 +171,36 @@
                                         <th class="px-1 text-center py-4">
                                             {{ $counter }}
                                         </th>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium">
                                             {{ $product->product_code }}
                                         </td>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium">
                                             {{ $product->asset->product_name }}
                                         </td>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium">
                                             {{ empty($product->asset->product_detail) ? '-' : $product->asset->product_detail }}
                                         </td>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium">
                                             {{ empty($product->asset->merk) ? '-' : $product->asset->merk }}
                                         </td>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium">
                                             {{ $product->asset->product_type }}
                                         </td>
-                                        <td class="px-1 py-4">
-                                            {{ $product->stock }}
+                                        <td class="px-2 font-semibold text-right whitespace-nowrap">
+                                            <span class="px-2 py-1 text-white rounded-full bg-uinOrange">
+                                                Rp. {{ number_format($product->unit_price ?? 0, 0, ',', '.') }},-
+                                            </span>
                                         </td>
-                                        <td class="px-1 py-4 font-bold text-gray-600">
-                                            {{ $product->jumlah_pemakaian }}
+                                        <td class="px-2 py-4 font-bold text-gray-600 text-right">
+                                            {{ $product->formatted_quantity }}
                                         </td>
-                                        <td class="px-1 py-4 font-bold text-gray-600">
-                                            {{ $product->updated_stock }}
-                                        </td>
-                                        <td scope="row" class="px-1 py-4 font-bold text-gray-600 whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-bold text-gray-600">
                                             {{ $product->asset->product_unit }}
+                                        </td>
+                                        <td class="pr-6 pl-2 font-semibold text-right whitespace-nowrap">
+                                            <span class="px-2 py-1  text-white rounded-full bg-teal-500">
+                                                Rp. {{ number_format($product->total_price ?? 0, 0, ',', '.') }},-
+                                            </span>
                                         </td>
                                     </tr>
                                     @php

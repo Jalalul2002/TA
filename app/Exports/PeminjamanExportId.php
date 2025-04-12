@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
-class PenggunaanExportId implements FromCollection, WithHeadings, WithMapping, WithCustomStartCell, WithEvents
+class PeminjamanExportId implements FromCollection, WithHeadings, WithMapping, WithCustomStartCell, WithEvents
 {
     /**
      * @return \Illuminate\Support\Collection

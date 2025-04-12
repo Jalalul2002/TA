@@ -80,7 +80,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
                     <div class="flex flex-col space-y-4 mb-5">
-                        <div class="flex justify-between border-b pb-4">
+                        <div class="flex justify-between border-b pb-4 gap-2">
                             <div class="flex flex-col gap-2">
                                 <div class="flex items-center gap-x-8">
                                     <div>
@@ -123,11 +123,22 @@
                                     </h1>
                                 </div>
                             </div>
-                            <div>
-                                <h2 class="text-gray-500 text-sm font-medium">Diupdate</h2>
-                                <h1 class="text-lg font-semibold text-gray-900">
-                                    {{ ($dataTransaksi->loans->sortByDesc('updated_at')->first()?->updater?->name ?? $dataTransaksi->updater->name) . ' | ' . $dataTransaksi->updated_at->format('d/m/Y H:i') }}
-                                </h1>
+                            <div class="flex flex-col gap-2">
+                                <div>
+                                    <h2 class="text-gray-500 text-sm font-medium">Diupdate</h2>
+                                    <h1 class="text-lg font-semibold text-gray-900">
+                                        {{ ($dataTransaksi->loans->sortByDesc('updated_at')->first()?->updater?->name ?? $dataTransaksi->updater->name) . ' | ' . $dataTransaksi->updated_at->format('d/m/Y H:i') }}
+                                    </h1>
+                                </div>
+                                <div>
+                                    <h2 class="text-gray-700 text-sm font-medium mb-2">Total Harga</h2>
+                                    <h1 class="text-lg font-semibold items-baseline max-w-96">
+                                        <span class="px-3 py-2 text-white rounded-full bg-uinTosca">
+                                            Rp.
+                                            {{ number_format($dataTransaksi->total_loan_price ?? 0, 0, ',', '.') }},-
+                                        </span>
+                                    </h1>
+                                </div>
                             </div>
                             <div>
                                 <span class="px-3 py-1 rounded-full text-sm font-semibold {{ $statusColor }}">
@@ -144,10 +155,11 @@
                             @php
                                 $columns = [
                                     'product_code' => 'Kode Barang',
-                                    'product_name' => 'Nama Barang',
-                                    'product_detail' => 'Keterangan',
-                                    'merk' => 'Merk',
+                                    'product_name' => 'Produk',
+                                    'rental_price' => 'Harga',
                                     'quantity' => 'Banyaknya',
+                                    'rental' => 'Durasi',
+                                    'total_price' => 'Subtotal',
                                     'returned_quantity' => 'Dikembalikan',
                                     'damaged_quantity' => 'Rusak',
                                     'status' => 'Status',
@@ -162,8 +174,8 @@
                                         No
                                     </th>
                                     @foreach ($columns as $field => $name)
-                                        <th scope="col" class="py-3">
-                                            <div class="flex items-center">
+                                        <th scope="col" class="py-3 px-2">
+                                            <div class="flex items-center justify-between">
                                                 {{ $name }}
                                                 @php
                                                     // Tentukan arah sorting berdasarkan field yang sedang diurutkan
@@ -197,23 +209,26 @@
                                 @endphp
                                 @forelse ($products as $product)
                                     <tr class="bg-white border-b hover:bg-gray-50">
-                                        <th class="px-1 text-center py-2">
+                                        <th class="px-3 text-center py-2">
                                             {{ $counter }}
                                         </th>
-                                        <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-3 py-2 font-medium whitespace-nowrap">
                                             {{ $product->product_code }}
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
-                                            {{ $product->asset->product_name }}
+                                        <td scope="row" class="px-3 py-2 font-medium">
+                                            {{ $product->asset->product_name }} {{ $product->asset->product_detail }} {{ $product->asset->merk }}
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
-                                            {{ empty($product->asset->product_detail) ? '-' : $product->asset->product_detail }}
+                                        <td class="px-3 py-2 font-bold text-gray-600 text-right whitespace-nowrap">
+                                            Rp. {{ number_format($product->rental_price, 0, ',', '.') }},-
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
-                                            {{ empty($product->asset->merk) ? '-' : $product->asset->merk }}
+                                        <td class="px-3 py-2 font-bold text-gray-600 text-right">
+                                            {{ intval($product->quantity) }} {{ $product->asset->product_unit }}
                                         </td>
-                                        <td class="px-1 py-2 font-bold text-gray-600">
-                                            {{ $product->quantity }} {{ $product->asset->product_unit }}
+                                        <td class="px-3 py-2 font-bold text-gray-600 text-right">
+                                            {{ $product->asset->latestPrice->price_type == 'unit' ? '-' : intval($product->rental) . ' Jam' }}
+                                        </td>
+                                        <td class="px-3 py-2 font-bold text-gray-600 text-right">
+                                            Rp. {{ number_format($product->total_price, 0, ',', '.') }},-
                                         </td>
                                         @php
                                             $isReturned = $product->status == 'dikembalikan';
@@ -236,30 +251,30 @@
                                                 ? 'bg-green-200 text-green-700'
                                                 : 'bg-red-200 text-red-700';
                                         @endphp
-                                        <td scope="row" class="px-1 py-2 font-bold whitespace-nowrap">
+                                        <td scope="row" class="px-3 py-2 font-bold whitespace-nowrap">
                                             <span
-                                                class="{{ $returnedColor }} px-2 py-1 rounded-full">{{ $product->returned_quantity . '/' . $product->quantity }}</span>
+                                                class="{{ $returnedColor }} px-2 py-1 rounded-full">{{ intval($product->returned_quantity) . '/' . intval($product->quantity) }}</span>
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-bold whitespace-nowrap">
+                                        <td scope="row" class="px-3 py-2 font-bold whitespace-nowrap">
                                             <span
-                                                class="{{ $damagedColor }} px-2 py-1 rounded-full">{{ $product->damaged_quantity }}</span>
+                                                class="{{ $damagedColor }} px-2 py-1 rounded-full">{{ intval($product->damaged_quantity) }}</span>
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-bold whitespace-nowrap">
+                                        <td scope="row" class="px-3 py-2 font-bold whitespace-nowrap">
                                             <span
                                                 class="{{ $returnedColor }} px-2 py-1 rounded-full capitalize">{{ $product->status }}</span>
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-bold whitespace-nowrap">
+                                        <td scope="row" class="px-3 py-2 font-bold whitespace-nowrap">
                                             <span
                                                 class="{{ $returnedColor }} px-2 py-1 rounded-full">{{ $product->return_date ?: '-' }}</span>
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-bold whitespace-nowrap">
+                                        <td scope="row" class="px-3 py-2 font-bold whitespace-nowrap">
                                             <span
                                                 class="{{ $returnedColor }} px-2 py-1 rounded-full">{{ $isReturned || $isPartiallyReturned ? $product->updater->name : '-' }}</span>
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-bold whitespace-nowrap">
+                                        <td scope="row" class="px-3 py-2 font-bold whitespace-nowrap">
                                             {{ $product->notes ?: ($product->return_notes ?: '-') }}
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-bold text-center whitespace-nowrap">
+                                        <td scope="row" class="px-3 py-2 font-bold text-center whitespace-nowrap">
                                             <button title="Kembalikan Barang"
                                                 @click="openModal({{ $product->id }}, '{{ $product->asset->product_code }}', '{{ $product->asset->product_name }}', {{ $product->quantity }}, {{ $product->returned_quantity }}, {{ $product->damaged_quantity }}, '{{ $product->asset->product_detail }}', '{{ $product->asset->merk }}')"
                                                 class="inline-flex items-center p-2 text-sm font-medium rounded-lg shadow-sm text-white bg-green-500 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300">

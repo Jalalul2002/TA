@@ -43,6 +43,9 @@ class PeminjamanController extends Controller
         if ($request->has('location') && $request->location != 'all') {
             $query->where('location', $request->location);
         }
+        if ($request->has('purpose') && $request->purpose != 'semua') {
+            $query->where('purpose', $request->purpose);
+        }
         if ($request->has('user_id') && $request->user_id != 'semua') {
             $query->where('user_id', $request->user_id);
         }
@@ -82,6 +85,7 @@ class PeminjamanController extends Controller
     {
         try {
             $request->validate([
+                'purpose' => 'required',
                 'user_id' => 'required|string|max:255',
                 'name' => 'required|string|max:255',
                 'prodi' => 'required|string|max:255',
@@ -97,6 +101,7 @@ class PeminjamanController extends Controller
 
                 // Simpan data perencanaan
                 $data = Transaction::create([
+                    'purpose' => $request->purpose,
                     'user_id' => $request->user_id,
                     'name' => $request->name,
                     'prodi' => $request->prodi,
@@ -133,12 +138,21 @@ class PeminjamanController extends Controller
                     $asset = Assetlab::where('product_code', $item['product_code'])->first();
                     if ($asset) {
                         // Hitung updated stock
+                        if ($item['quantity'] > $asset->stock) {
+                            return back()->withErrors([
+                                'quantity' => "Jumlah pemakaian untuk produk {$item['product_code']} melebihi stok yang tersedia ({$asset->stock})."
+                            ])->withInput();
+                        }
                         $updatedStock = max(0, $asset->stock - $item['quantity']); // Hindari stock negatif
+                        $price = $request->purpose == 'penelitian' ? $asset->latestPrice->price : 0;
                         // Simpan data transaksi
                         $data->loans()->create([
                             'product_code' => $item['product_code'],
                             'stock' => $asset->stock,
                             'quantity' => $item['quantity'],
+                            'rental' => $item['rental'],
+                            'rental_price' => $price,
+                            'total_price' => ($item['quantity'] * $item['rental'] * $price),
                             'loan_date' => now(),
                             'status' => 'dipinjam',
                             'notes' => $item['notes'] ?: '',
@@ -309,6 +323,7 @@ class PeminjamanController extends Controller
         $location = $request->input('location');
         $printDate = Carbon::now()->format('d M Y, H:i');
         $query = Transaction::where('type', 'inventaris')->with(['items.asset', 'creator', 'updater']);
+        $purpose = 'semua';
         $startDate = null;
         $endDate = null;
         if (Auth::user()->usertype === 'staff') {
@@ -320,6 +335,10 @@ class PeminjamanController extends Controller
         if ($request->has('user_id') && $request->user_id != 'semua') {
             $query->where('user_id', $request->user_id);
         }
+        if ($request->has('purpose') && $request->purpose != 'semua') {
+            $query->where('purpose', $request->purpose);
+            $purpose = $request->purpose;
+        }
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = Carbon::parse($request->start_date)->startOfDay();
             $endDate = Carbon::parse($request->end_date)->endOfDay();
@@ -329,10 +348,10 @@ class PeminjamanController extends Controller
         $data = $query->get();
 
         if ($request->has('user_id') && $request->user_id != 'semua') {
-            return view('print.penggunaan-detail', compact('data', 'startDate', 'endDate', 'location', 'printDate'));
+            return view('print.peminjaman-detail', compact('data', 'startDate', 'endDate', 'location', 'printDate'));
         }
 
-        return view('print.penggunaan', compact('data', 'startDate', 'endDate', 'location', 'printDate'));
+        return view('print.peminjaman', compact('data', 'startDate', 'endDate', 'location', 'printDate', 'purpose'));
     }
     public function printById(Request $request, $id)
     {

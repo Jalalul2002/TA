@@ -55,7 +55,7 @@
                     class="bg-white shadow-md rounded-2xl p-6 flex items-center justify-between border border-gray-200">
                     <div>
                         <h3 class="text-gray-500 text-sm font-medium">Total Aset Inventaris</h3>
-                        <p class="text-3xl font-semibold text-gray-800">{{ $jumlahStokInventaris }}</p>
+                        <p class="text-3xl font-semibold text-gray-800">{{ number_format($jumlahStokInventaris, 0, ',', '.') }}</p>
                     </div>
                     <div class="bg-uinRed p-3 rounded-full">
                         <svg class="w-7 h-7 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24" width="512"

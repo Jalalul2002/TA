@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Data Penggunaan Barang</title>
+    <title>Cetak Data Peminjaman Barang</title>
     @vite('resources/css/app.css')
     <style>
         @media print {
@@ -48,7 +48,7 @@
 
             <!-- Header -->
             <div class="text-center flex-1">
-                <h1 class="text-lg font-bold text-center uppercase">Laporan Data Penggunaan Barang</h1>
+                <h1 class="text-lg font-bold text-center uppercase">Laporan Data Peminjaman Barang</h1>
                 <h1 class="text-sm font-bold uppercase">Laboratorium Fakultas Sains dan Teknologi</h1>
                 <h1 class="text-sm font-bold uppercase">Universitas Islam Negeri Sunan Gunung Djati Bandung</h1>
                 <p class="text-[10px] mt-2">Jl. A.H. Nasution No. 105 Cibiru Kota Bandung 40614 Jawa Barat – Indonesia |
@@ -92,50 +92,71 @@
                         <tr class="bg-gray-200 text-gray-700">
                             <th class="border border-gray-300 px-2 py-1">Tanggal</th>
                             <th class="border border-gray-300 px-2 py-1">Laboran</th>
-                            <th class="border border-gray-300 px-2 py-1">ID Pengguna</th>
-                            <th class="border border-gray-300 px-2 py-1">Nama Pengguna</th>
-                            <th class="border border-gray-300 px-2 py-1">Prodi</th>
-                            <th class="border border-gray-300 px-2 py-1">Telepon</th>
+                            <th class="border border-gray-300 px-2 py-1">Pengguna</th>
                             <th class="border border-gray-300 px-2 py-1">Keperluan</th>
-                            <th class="border border-gray-300 px-2 py-1">Nama Produk</th>
-                            <th class="border border-gray-300 px-2 py-1">Merk</th>
-                            <th class="border border-gray-300 px-2 py-1">Jenis</th>
+                            <th class="border border-gray-300 px-2 py-1">Produk</th>
                             <th class="border border-gray-300 px-2 py-1">Harga</th>
-                            <th class="border border-gray-300 px-2 py-1">Jumlah</th>
-                            <th class="border border-gray-300 px-2 py-1">Satuan</th>
+                            <th class="border border-gray-300 px-2 py-1">Banyaknya</th>
+                            <th class="border border-gray-300 px-2 py-1">Durasi</th>
                             <th class="border border-gray-300 px-2 py-1">Sub Total</th>
+                            <th class="border border-gray-300 px-3 py-2">Dikembalikan</th>
+                            <th class="border border-gray-300 px-3 py-2">Rusak</th>
+                            <th class="border border-gray-300 px-3 py-2">Status</th>
+                            <th class="border border-gray-300 px-3 py-2">Tanggal Kembali</th>
+                            <th class="border border-gray-300 px-3 py-2">Laboran</th>
+                            <th class="border border-gray-300 px-3 py-2">Catatan</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($data as $row)
-                            @foreach ($row->items as $item)
+                            @foreach ($row->loans as $item)
                                 <tr class="hover:bg-gray-100">
                                     <td class="border border-gray-300 px-2 py-1">
                                         {{ $row->created_at->format('d/m/Y') }}</td>
                                     <td class="border border-gray-300 px-2 py-1">{{ $row->creator->name }}</td>
-                                    <td class="border border-gray-300 px-2 py-1">{{ $row->user_id }}</td>
-                                    <td class="border border-gray-300 px-2 py-1">{{ $row->name }}</td>
-                                    <td class="border border-gray-300 px-2 py-1">{{ $row->prodi }}</td>
-                                    <td class="border border-gray-300 px-2 py-1">{{ $row->telp }}</td>
+                                    <td class="border border-gray-300 px-2 py-1">{{ $row->user_id }} -
+                                        {{ $row->name }} - ({{ $row->telp }})</td>
                                     <td class="border border-gray-300 px-2 py-1 capitalize">{{ $row->purpose }}</td>
-                                    <td class="border border-gray-300 px-2 py-1">{{ $item->asset->product_name }}</td>
-                                    <td class="border border-gray-300 px-2 py-1">{{ $item->asset->merk ?: '-' }}</td>
-                                    <td class="border border-gray-300 px-2 py-1">{{ $item->asset->product_type }}</td>
+                                    <td class="border border-gray-300 px-2 py-1">{{ $item->asset->product_name }}
+                                        {{ $item->asset->product_detail ?: '' }} {{ $item->asset->merk ?: '' }}</td>
                                     <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
-                                        Rp. {{ number_format($item->unit_price, 0, ',', '.') }},-</td>
-                                    <td class="border border-gray-300 px-2 py-1 text-right">
-                                        {{ $item->formatted_quantity }}</td>
-                                    <td class="border border-gray-300 px-2 py-1">{{ $item->asset->product_unit }}</td>
+                                        Rp. {{ number_format($item->rental_price, 0, ',', '.') }},-</td>
+                                    <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
+                                        {{ intval($item->quantity) }} {{ $item->asset->product_unit }}</td>
+                                    <td class="border border-gray-300 px-2 py-1 whitespace-nowrap">
+                                        {{ $item->asset->latestPrice->price_type == 'unit' ? '-' : rtrim(rtrim(number_format($item->rental, 4, ',', '.'), '0'), ',') . ' Jam' }}
+                                    </td>
                                     <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
                                         Rp. {{ number_format($item->total_price, 0, ',', '.') }},-</td>
+                                    <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
+                                        {{ intval($item->returned_quantity) }} / {{ intval($item->quantity) }}
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ intval($item->damaged_quantity) }}
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2 capitalize">{{ $item->status }}
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2">{{ $item->return_date ?: '-' }}
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ $item->status != 'dipinjam' ? $item->updater->name : '-' }}</td>
+                                    <td class="border border-gray-300 px-3 py-2">
+                                        {{ $item->notes ?: ($item->return_notes ?: '-') }}</td>
                                 </tr>
                             @endforeach
                         @endforeach
                         <tr class="hover:bg-gray-100">
-                            <td class="border border-gray-300 px-2 py-1 text-center font-bold" colspan="13">Total
+                            <td class="border border-gray-300 px-2 py-1 text-center font-bold" colspan="8">Total
                                 Harga</td>
-                            <td class="border border-gray-300 px-2 py-1 text-right font-bold whitespace-nowrap">
-                                Rp. {{ number_format($totalPrice, 0, ',', '.') }},-</td>
+                            <td class="border border-gray-300 px-2 py-1 text-right font-bold whitespace-nowrap"
+                                colspan="7">
+                                Rp. {{ number_format($data->sum('total_loan_price'), 0, ',', '.') }},-</td>
+                        </tr>
+                        <tr class="hover:bg-gray-100">
+                            <td class="border border-gray-300 px-2 py-1 text-center font-bold" colspan="8">Keterangan
+                            </td>
+                            <td class="border border-gray-300 px-2 py-1 text-right font-bold whitespace-nowrap"
+                                colspan="7"></td>
                         </tr>
                     </tbody>
                 </table>

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string("tahun_perencanaan");
             $table->string("product_code");
             $table->string("location");
-            $table->integer("kebutuhan");
+            $table->decimal('kebutuhan', 18, 4)->default(0);
             $table->timestamps();
         });
     }

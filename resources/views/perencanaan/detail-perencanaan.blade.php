@@ -45,7 +45,7 @@
                             {{ $dataPerencanaan->status == 'belum' ? 'bg-red-100 text-red-500' : 'bg-green-100 text-green-500' }}">{{ $dataPerencanaan->status == 'belum' ? 'Belum Diselesaikan' : 'Sudah Diselesaikan' }}
                         </span>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                         <div class="flex items-center gap-x-8">
                             <div class="">
                                 <h2 class="text-gray-500 text-sm font-medium">Perencanaan</h2>
@@ -69,6 +69,14 @@
                             <h2 class="text-gray-500 text-sm font-medium">Diupdate</h2>
                             <h1 class="text-lg font-semibold text-gray-900">
                                 {{ ($dataPerencanaan->latestUpdater?->updater?->name ?? $dataPerencanaan->updater->name) . ' | ' . ($dataPerencanaan->latestUpdater?->updated_at->format('d M Y H:i') ?? $dataPerencanaan->updated_at->format('d M Y H:i')) }}
+                            </h1>
+                        </div>
+                        <div>
+                            <h2 class="text-gray-500 text-sm font-medium">Total Harga</h2>
+                            <h1 class="text-lg font-semibold">
+                                <span class="px-4 py-1 text-white rounded-full bg-uinTosca">
+                                    Rp. {{ number_format($totalPriceSum ?? 0, 0, ',', '.') }},-
+                                </span>
                             </h1>
                         </div>
                         @if (Auth::user()->usertype !== 'user')
@@ -122,6 +130,17 @@
                                 placeholder="Search for items" autocomplete="off">
                         </div>
                         <div class="flex items-center space-x-1 xl:space-x-2 justify-end">
+                            @if ($dataPerencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
+                                <button @click="openModal = true"
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-uinBlue hover:bg-uinNavy focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 duration-300 transition-all">
+                                    <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 448 512">
+                                        <path
+                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                                    </svg>
+                                    Tambah
+                                </button>
+                            @endif
                             <a href="{{ route('perencanaan.download', $dataPerencanaan->id) }}">
                                 <div
                                     class="inline-flex gap-x-2 items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 duration-300 transition-all">
@@ -145,17 +164,6 @@
                                     Print
                                 </div>
                             </a>
-                            @if ($dataPerencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
-                                <button @click="openModal = true"
-                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-uinBlue hover:bg-uinNavy focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 duration-300 transition-all">
-                                    <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor" viewBox="0 0 448 512">
-                                        <path
-                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                    </svg>
-                                    Tambah
-                                </button>
-                            @endif
                         </div>
                     </div>
                     <div class="pb-1">
@@ -170,19 +178,21 @@
                                     'product_detail' => 'Keterangan/Formula',
                                     'merk' => 'Merk',
                                     'product_type' => 'Jenis Produk',
-                                    'stock' => 'stok',
-                                    'jumlah_kebutuhan' => 'Jumlah Kebutuhan',
+                                    'stock' => 'Stok',
                                     'product_unit' => 'satuan',
+                                    'purchase_price' => 'Harga Beli',
+                                    'jumlah_kebutuhan' => 'Jumlah Kebutuhan',
+                                    'total_price' => 'Sub Total',
                                 ];
                             @endphp
                             <thead class="text-xs text-white uppercase bg-uinTosca">
                                 <tr>
-                                    <th scope="col" class="px-1 text-center py-3">
+                                    <th scope="col" class="px-2 text-center py-3">
                                         No
                                     </th>
                                     @foreach ($columns as $field => $name)
-                                        <th scope="col" class="py-3">
-                                            <div class="flex items-center">
+                                        <th scope="col" class="py-3 px-2">
+                                            <div class="flex items-center justify-between">
                                                 {{ $name }}
                                                 @php
                                                     // Tentukan arah sorting berdasarkan field yang sedang diurutkan
@@ -206,7 +216,7 @@
                                         </th>
                                     @endforeach
                                     @if ($dataPerencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
-                                        <th scope="col" class="px-1 text-center py-3">
+                                        <th scope="col" class="px-2 text-center py-3">
                                             Action
                                         </th>
                                     @endif
@@ -218,33 +228,45 @@
                                 @endphp
                                 @forelse ($products as $product)
                                     <tr class="bg-white border-b hover:bg-gray-50">
-                                        <th class="px-1 text-center py-4">
+                                        <th class="px-2 text-center py-4">
                                             {{ $counter }}
                                         </th>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium whitespace-nowrap">
                                             {{ $product->product_code }}
                                         </td>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium whitespace-nowrap">
                                             {{ $product->product->product_name }}
                                         </td>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium whitespace-nowrap">
                                             {{ empty($product->product->product_detail) ? '-' : $product->product->product_detail }}
                                         </td>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium whitespace-nowrap">
                                             {{ empty($product->product->merk) ? '-' : $product->product->merk }}
                                         </td>
-                                        <td scope="row" class="px-1 py-4 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-4 font-medium whitespace-nowrap">
                                             {{ $product->product->product_type }}
                                         </td>
-                                        <td class="px-1 py-4">
-                                            {{ $product->stock }}
-                                        </td>
-                                        <td class="px-1 py-4 font-bold text-gray-600">
-                                            {{ $product->jumlah_kebutuhan }}
+                                        <td class="px-2 py-4">
+                                            {{ $product->formatted_stock }}
                                         </td>
                                         <td scope="row"
-                                            class="px-1 py-4 font-bold text-gray-600 whitespace-nowrap">
+                                            class="px-2 py-4 font-bold text-gray-600 whitespace-nowrap">
                                             {{ $product->product->product_unit }}
+                                        </td>
+                                        <td class="px-2 py-4 text-right font-medium whitespace-nowrap">
+                                            <span class="px-2 py-1 text-white rounded-full bg-uinOrange">
+                                                Rp.
+                                                {{ number_format($product->purchase_price ?? 0, 0, ',', '.') }},-
+                                            </span>
+                                        </td>
+                                        <td class="px-2 py-4 font-bold text-gray-600">
+                                            {{ $product->formatted_quantity }}
+                                        </td>
+                                        <td class="px-2 py-4 text-right font-medium whitespace-nowrap">
+                                            <span class="px-2 py-1 text-white rounded-full bg-uinBlue">
+                                                Rp.
+                                                {{ number_format($product->total_price ?? 0, 0, ',', '.') }},-
+                                            </span>
                                         </td>
                                         @if ($dataPerencanaan->status === 'belum' && Auth::user()->usertype !== 'user')
                                             <td class="py-2 flex flex-row gap-x-2 justify-center">
@@ -361,8 +383,8 @@
                             aria-hidden="true">&#8203;</span>
                         <div x-show="openModal" x-cloak
                             class="inline-block align-bottom bg-white rounded-3xl px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-                            <div x-data="{ selectedProduct: '', stock: 0, satuan: '', showNewProductForm: false }">
-                                <div class="mt-3">
+                            <div x-data="{ selectedProduct: '', stock: 0, satuan: '', purchase_price: 0, total_price: 0, showNewProductForm: false }">
+                                <div class="mt-3" x-data="priceCalculator()">
                                     <h3 class="text-3xl font-semibold text-gray-900 py-5">
                                         📝 Tambah Produk
                                     </h3>
@@ -375,7 +397,7 @@
                                                     class="block text-sm font-medium text-gray-700">Product</label>
                                                 <select id="product_code" name="product_code"
                                                     x-model="selectedProduct"
-                                                    @change="stock = $el.selectedOptions[0].dataset.stock; satuan = $el.selectedOptions[0].dataset.satuan; showNewProductForm = selectedProduct === 'new';"
+                                                    @change="stock = $el.selectedOptions[0].dataset.stock; purchase_price = $el.selectedOptions[0].dataset.purchase_price; satuan = $el.selectedOptions[0].dataset.satuan; showNewProductForm = selectedProduct === 'new';"
                                                     required
                                                     class="mt-1 block w-full p-2.5 py-2 text-sm border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                                     <option value="">Select Product</option>
@@ -383,6 +405,7 @@
                                                     @foreach ($assets as $product)
                                                         <option value="{{ $product->product_code }}"
                                                             data-stock="{{ $product->stock }}"
+                                                            data-purchase_price="{{ $product->latestPrice?->purchase_price ?? 0 }}"
                                                             data-satuan="{{ $product->product_unit }}">
                                                             {{ $product->product_name }}
                                                             ({{ $product->product_code }})
@@ -466,18 +489,46 @@
                                                 <label for="stock"
                                                     class="block text-sm font-medium text-gray-700">Stok</label>
                                                 <input type="number" name="stock" id="stock" x-model="stock"
-                                                    value="0"
+                                                    value="0" step="any"
                                                     class="mt-1 block w-full p-2.5 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-                                                    :readonly="!showNewProductForm">
+                                                    :readonly="!showNewProductForm" min="0">
                                             </div>
                                             <div class="mt-4 flex flex-row gap-x-2">
+                                                <div class="w-full">
+                                                    <label for="purchase_price"
+                                                        class="block text-sm font-medium text-gray-700">Harga
+                                                        Beli</label>
+                                                    <div class="relative">
+                                                        <span
+                                                            class="absolute left-3 top-1/2 transform text-sm -translate-y-1/2 text-gray-600">Rp.</span>
+                                                        <input type="number" name="purchase_price"
+                                                            id="purchase_price" x-model="purchase_price"
+                                                            value="0" min="0"
+                                                            class="mt-1 block w-full pl-10 p-2.5 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                                    </div>
+                                                </div>
                                                 <div class="w-full">
                                                     <label for="quantity"
                                                         class="block text-sm font-medium text-gray-700">Jumlah
                                                         Kebutuhan</label>
                                                     <input type="number" name="quantity" id="quantity"
+                                                        x-model="quantity" step="any"
                                                         class="mt-1 block w-full p-2.5 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                                                         min="0" required>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 flex flex-row gap-x-2">
+                                                <div class="w-full">
+                                                    <label for="total_price"
+                                                        class="block text-sm font-medium text-gray-700">Total
+                                                        Harga</label>
+                                                    <div class="relative">
+                                                        <span
+                                                            class="absolute left-3 top-1/2 transform text-sm -translate-y-1/2 text-gray-600">Rp.</span>
+                                                        <input type="number" name="total_price" id="total_price"
+                                                            x-model="total_price" value="0" min="0"
+                                                            class="mt-1 block w-full p-2.5 pl-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                                    </div>
                                                 </div>
                                                 <div class="w-full">
                                                     <label for="satuan"
@@ -539,3 +590,29 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    function priceCalculator() {
+        return {
+            purchase_price: 0,
+            quantity: 0,
+            total_price: 0,
+
+            init() {
+                this.$watch('purchase_price', value => {
+                    this.total_price = value * this.quantity;
+                });
+
+                this.$watch('quantity', value => {
+                    this.total_price = this.purchase_price * value;
+                });
+
+                this.$watch('total_price', value => {
+                    if (this.quantity > 0) {
+                        this.purchase_price = value / this.quantity;
+                    }
+                });
+            }
+        };
+    }
+</script>

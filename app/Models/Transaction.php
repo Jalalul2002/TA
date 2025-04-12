@@ -10,6 +10,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $fillable = [
+        'purpose',
         'user_id',
         'name',
         'prodi',
@@ -20,6 +21,7 @@ class Transaction extends Model
         'created_by',
         'updated_by'
     ];
+    protected $appends = ['total_item_price', 'total_loan_price'];
 
     public function items()
     {
@@ -58,5 +60,13 @@ class Transaction extends Model
             ->orWhere('location', 'LIKE', "%{$searchTerm}%")
             ->orWhere('detail', 'LIKE', "%{$searchTerm}%")
             ->orWhere('telp', 'LIKE', "%{$searchTerm}%");
+    }
+    public function getTotalItemPriceAttribute()
+    {
+        return $this->items()->sum('total_price');
+    }
+    public function getTotalLoanPriceAttribute()
+    {
+        return $this->loans()->sum('total_price');
     }
 }

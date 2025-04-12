@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction_items', function (Blueprint $table) {
+        Schema::create('item_prices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
             $table->string('product_code');
-            $table->decimal('stock', 18, 4)->default(0);
-            $table->bigInteger('unit_price');
-            $table->decimal('jumlah_pemakaian', 18, 4)->default(0);
-            $table->decimal('updated_stock', 18, 4)->default(0);
-            $table->bigInteger('total_price');
+            $table->enum('price_type', ['unit', 'rental']);
+            $table->bigInteger('price');
+            $table->bigInteger('purchase_price')->default(0);
+            $table->date('effective_date');
+            $table->string('location');
+            $table->foreignId('created_by')->constrained(
+                table: 'users',
+                indexName: 'prices_create_user'
+            )->onDelete('cascade');
             $table->timestamps();
 
             $table->foreign('product_code')->references('product_code')->on('assetlabs')->onDelete('cascade');
@@ -31,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaction_items');
+        Schema::dropIfExists('item_prices');
     }
 };

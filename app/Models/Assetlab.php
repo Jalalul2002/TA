@@ -11,6 +11,7 @@ class Assetlab extends Model
     use HasFactory;
 
     protected $primaryKey = 'product_code';
+    protected $appends = ['formatted_stock'];
     public $incrementing = false;
 
     protected $fillable = [
@@ -35,7 +36,24 @@ class Assetlab extends Model
 
     public function plans()
     {
-        return $this->hasMany(Perencanaan::class, 'product_code');
+        return $this->hasMany(Perencanaan::class, 'product_code', 'product_code');
+    }
+
+    public function latestPlans()
+    {
+        return $this->hasOne(Perencanaan::class, 'product_code', 'product_code')->latest('updated_at');;
+    }
+
+    public function prices()
+    {
+        return $this->hasMany(ItemPrices::class);
+    }
+
+    public function latestPrice()
+    {
+        return $this->hasOne(ItemPrices::class, 'product_code', 'product_code')
+            ->where('effective_date', '<=', now()) // Hanya harga yang sudah berlaku
+            ->latest('effective_date'); // Ambil harga terbaru berdasarkan tanggal berlaku
     }
 
     public function transactionItems()
@@ -81,5 +99,10 @@ class Assetlab extends Model
         $this->stock += $returnedQuantity; // Tambah stok jika barang dikembalikan dengan baik
         $this->stock -= $damagedQuantity; // Kurangi stok jika ada barang rusak
         $this->save();
+    }
+    public function getFormattedStockAttribute()
+    {
+        $formatted = number_format($this->stock, 4, ',', '.');
+        return rtrim(rtrim($formatted, '0'), ',');
     }
 }

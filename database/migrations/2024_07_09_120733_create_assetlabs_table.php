@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('merk')->nullable();
             $table->enum('type', ['bhp',  'inventaris']);
             $table->string('product_type');
-            $table->integer('stock')->default(0);
+            $table->decimal('stock', 18, 4)->default(0);
             $table->string('product_unit');
             $table->string('location_detail')->nullable();
             $table->string('location');

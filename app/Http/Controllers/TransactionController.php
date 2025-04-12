@@ -35,6 +35,9 @@ class TransactionController extends Controller
         if ($request->has('location') && $request->location != 'all') {
             $query->where('location', $request->location);
         }
+        if ($request->has('purpose') && $request->purpose != 'semua') {
+            $query->where('purpose', $request->purpose);
+        }
         if ($request->has('user_id') && $request->user_id != 'semua') {
             $query->where('user_id', $request->user_id);
         }
@@ -73,6 +76,7 @@ class TransactionController extends Controller
     {
         try {
             $request->validate([
+                'purpose' => 'required',
                 'user_id' => 'required|string|max:255',
                 'name' => 'required|string|max:255',
                 'prodi' => 'required|string|max:255',
@@ -88,6 +92,7 @@ class TransactionController extends Controller
 
                 // Simpan data perencanaan
                 $data = Transaction::create([
+                    'purpose' => $request->purpose,
                     'user_id' => $request->user_id,
                     'name' => $request->name,
                     'prodi' => $request->prodi,
@@ -123,19 +128,24 @@ class TransactionController extends Controller
                 }
 
                 foreach ($processedItems as $item) {
-                    $asset = Assetlab::where('product_code', $item['product_code'])->first();
+                    $asset = Assetlab::with('latestPrice')->where('product_code', $item['product_code'])->first();
                     if ($asset) {
+                        if ($item['quantity'] > $asset->stock) {
+                            return back()->withErrors([
+                                'quantity' => "Jumlah pemakaian untuk produk {$item['product_code']} melebihi stok yang tersedia ({$asset->stock})."
+                            ])->withInput();
+                        }
                         // Hitung updated stock
                         $updatedStock = max(0, $asset->stock - $item['quantity']); // Hindari stock negatif
-
+                        $price = $request->purpose == 'penelitian' ? $asset->latestPrice->price : 0;
                         // Simpan data transaksi
                         $data->items()->create([
                             'product_code' => $item['product_code'],
                             'stock' => $asset->stock,
+                            'unit_price' => $price,
                             'jumlah_pemakaian' => $item['quantity'],
                             'updated_stock' => $updatedStock,
-                            'created_by' => Auth::id(),
-                            'updated_by' => Auth::id(),
+                            'total_price' => ($item['quantity'] * $price),
                         ]);
                         $asset->update(['stock' => $updatedStock]);
                     }
@@ -253,6 +263,7 @@ class TransactionController extends Controller
         $query = Transaction::where('type', 'bhp')->with(['items.asset', 'creator', 'updater']);
         $startDate = null;
         $endDate = null;
+        $purpose = 'semua';
         if (Auth::user()->usertype === 'staff') {
             $location = Auth::user()->prodi;
         }
@@ -262,6 +273,10 @@ class TransactionController extends Controller
         if ($request->has('user_id') && $request->user_id != 'semua') {
             $query->where('user_id', $request->user_id);
         }
+        if ($request->has('purpose') && $request->purpose != 'semua') {
+            $query->where('purpose', $request->purpose);
+            $purpose = $request->purpose;
+        }
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $startDate = Carbon::parse($request->start_date)->startOfDay();
             $endDate = Carbon::parse($request->end_date)->endOfDay();
@@ -269,18 +284,20 @@ class TransactionController extends Controller
         }
 
         $data = $query->get();
+        $totalPrice = $data->sum('total_item_price');
 
         if ($request->has('user_id') && $request->user_id != 'semua') {
-            return view('print.penggunaan-detail', compact('data', 'startDate', 'endDate', 'location', 'printDate'));
+            return view('print.penggunaan-detail', compact('data', 'startDate', 'endDate', 'location', 'printDate', 'totalPrice'));
         }
 
-        return view('print.penggunaan', compact('data', 'startDate', 'endDate', 'location', 'printDate'));
+        return view('print.penggunaan', compact('data', 'startDate', 'endDate', 'location', 'printDate', 'totalPrice', 'purpose'));
     }
     public function printById(Request $request, $id)
     {
         $printDate = Carbon::now()->format('d M Y, H:i');
         $data = Transaction::with(['items.asset', 'creator', 'updater'])->findOrFail($id);
-        return view('print.penggunaan-detail', compact('data', 'printDate'));
+        $totalPrice = $data->total_item_price;
+        return view('print.penggunaan-detail', compact('data', 'printDate', 'totalPrice'));
     }
     /**
      * Remove the specified resource from storage.

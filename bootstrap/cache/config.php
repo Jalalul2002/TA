@@ -13,9 +13,9 @@
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
     'timezone' => 'Asia/Jakarta',
-    'locale' => 'en',
-    'fallback_locale' => 'en',
-    'faker_locale' => 'en_US',
+    'locale' => 'id',
+    'fallback_locale' => 'id',
+    'faker_locale' => 'id_ID',
     'cipher' => 'AES-256-CBC',
     'key' => 'base64:Q/R1vSk1KHTTvWjxCGThruih5TO5qVYniNbx+oZkw/Q=',
     'previous_keys' => 

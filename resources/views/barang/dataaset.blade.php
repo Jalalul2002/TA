@@ -23,7 +23,8 @@
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
-                    <div class="flex flex-col lg:flex-row space-y-1 space-x-1 lg:items-center justify-between pb-4">
+                    <div
+                        class="flex flex-col-reverse xl:flex-row space-y-1 space-x-1 xl:items-center justify-between pb-4">
                         <label for="search" class="sr-only">Search</label>
                         <div class="relative">
                             <div
@@ -70,6 +71,17 @@
                                         </select>
                                     @endif
                                 </div>
+                                @if (Auth::user()->usertype !== 'user')
+                                    <a href="{{ $type == 'bhp' ? route('add-aset-bhp') : route('add-aset-inv') }}"
+                                        class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition duration-300">
+                                        <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor" viewBox="0 0 448 512">
+                                            <path
+                                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                                        </svg>
+                                        Tambah
+                                    </a>
+                                @endif
                                 <button type="submit"
                                     class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
@@ -91,17 +103,6 @@
                                     <span>Print</span>
                                 </a>
                             </form>
-                            @if (Auth::user()->usertype !== 'user')
-                                <a href="{{ $type == 'bhp' ? route('add-aset-bhp') : route('add-aset-inv') }}"
-                                    class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition duration-300">
-                                    <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor" viewBox="0 0 448 512">
-                                        <path
-                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                    </svg>
-                                    Tambah
-                                </a>
-                            @endif
                         </div>
                     </div>
                     <div class="mb-1">
@@ -112,11 +113,13 @@
                             $columns = [
                                 'product_code' => 'Kode Barang',
                                 'product_name' => 'Nama Barang',
-                                'product_detail' => 'Keterangan/Formula',
+                                'product_detail' => 'Keterangan',
                                 'merk' => 'Merk',
                                 'product_type' => 'Jenis',
                                 'stock' => 'stok',
                                 'product_unit' => 'satuan',
+                                'purchase_price' => 'Harga Beli',
+                                'price' => $type === 'bhp' ? 'Harga Pakai' : 'Harga Sewa',
                                 'location_detail' => 'Lokasi Penyimpanan',
                             ];
                             if (Auth::user()->usertype === 'admin' || Auth::user()->usertype === 'user') {
@@ -130,8 +133,8 @@
                                         No
                                     </th>
                                     @foreach ($columns as $field => $name)
-                                        <th scope="col" class="py-3">
-                                            <div class="flex items-center">
+                                        <th scope="col" class="py-3 px-2">
+                                            <div class="flex items-center justify-between">
                                                 {{ $name }}
                                                 @php
                                                     // Tentukan arah sorting berdasarkan field yang sedang diurutkan
@@ -170,39 +173,58 @@
                                 @endphp
                                 @forelse ($assetLabs as $assetLab)
                                     <tr class="bg-white border-b hover:bg-gray-50">
-                                        <th class="px-1 py-4 text-center">
+                                        <th class="px-2 py-4 text-center">
                                             {{ $counter }}
                                         </th>
-                                        <td scope="row" class="px-1 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 font-medium">
                                             {{ $assetLab->product_code }}
                                         </td>
-                                        <td scope="row" class="px-1 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 font-medium">
                                             {{ $assetLab->product_name }}
                                         </td>
-                                        <td class="px-1">
+                                        <td class="px-2">
                                             {{ empty($assetLab->product_detail) ? '-' : $assetLab->product_detail }}
                                         </td>
-                                        <td class="px-1">
+                                        <td class="px-2">
                                             {{ empty($assetLab->merk) ? '-' : $assetLab->merk }}
                                         </td>
-                                        <td class="px-1">
+                                        <td class="px-2">
                                             {{ $assetLab->product_type }}
                                         </td>
-                                        <td class="px-1">
-                                            {{ $assetLab->stock }}
+                                        <td class="px-2">
+                                            {{ $assetLab->formatted_stock }}
                                         </td>
-                                        <td class="px-1">
+                                        <td class="px-2">
                                             {{ $assetLab->product_unit }}
                                         </td>
-                                        <td class="px-1">
+                                        <td class="px-2 text-right font-semibold whitespace-nowrap">
+                                            <span class="px-2 py-1 text-white rounded-full bg-uinOrange">
+                                                Rp.
+                                                {{ number_format($assetLab->latestPrice->purchase_price ?? 0, 0, ',', '.') }},-
+                                            </span>
+                                        </td>
+                                        <td class="px-2 text-right font-semibold whitespace-nowrap">
+                                            <span class="px-2 py-1 text-white rounded-full bg-uinBlue">
+                                                Rp.
+                                                {{ number_format($assetLab->latestPrice->price ?? 0, 0, ',', '.') }},-
+                                                /{{ optional($assetLab->latestPrice)->price_type
+                                                    ? ($assetLab->latestPrice->price_type == 'unit'
+                                                        ? 'item'
+                                                        : 'jam')
+                                                    : ($assetLab->type == 'bhp'
+                                                        ? $assetLab->product_unit
+                                                        : 'jam') }}
+                                            </span>
+                                        </td>
+                                        <td class="px-2">
                                             {{ empty($assetLab->location_detail) ? '-' : $assetLab->location_detail }}
                                         </td>
                                         @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype === 'user')
-                                            <td class="px-1">
+                                            <td class="px-2">
                                                 {{ $assetLab->location }}
                                             </td>
                                         @endif
-                                        <td class="px-1">
+                                        <td class="px-2">
                                             {{ $assetLab->updater->name }}
                                         </td>
                                         @if (Auth::user()->usertype !== 'user')

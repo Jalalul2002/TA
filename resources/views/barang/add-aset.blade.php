@@ -128,7 +128,7 @@
                     </div>
                     <div class="mt-4">
                         <x-input-label for="stock" :value="__('Stok')" />
-                        <x-text-input id="stock" class="block mt-1 w-full" type="text" name="stock"
+                        <x-text-input id="stock" class="block mt-1 w-full" type="number" name="stock" step="any" min='0'
                             :value="old('stock', 0)" autofocus autocomplete="stock" />
                         <x-input-error :messages="$errors->get('stock')" class="mt-2" />
                     </div>

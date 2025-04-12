@@ -19,10 +19,20 @@ class AssetController extends Controller
 {
     public function getAssets(Request $request)
     {
-        $query = Assetlab::where('type', $request->type)->where('location', $request->location);
+        $query = Assetlab::with('latestPrice', 'latestPlans');
+
+        if ($request->has('type')) {
+            $query->where('type', $request->type);
+        }
+
+        if ($request->has('location')) {
+            $query->where('location', $request->location);
+        }
+
         if ($request->has('stock_filter') && $request->stock_filter == 1) {
             $query->where('stock', '>', 0);
         }
+
         $assets = $query->orderBy('product_name')->get();
         return response()->json($assets);
     }
@@ -30,7 +40,7 @@ class AssetController extends Controller
     public function indexInv(Request $request)
     {
         $productType = request('product_type');
-        $query = AssetLab::with('updater')->ofType('inventaris');
+        $query = AssetLab::with(['updater', 'latestPrice'])->ofType('inventaris');
         $sortField = $request->get('sort_field', 'product_name');
         $sortOrder = $request->get('sort_order', 'asc');
         $allowedFields = ['product_code', 'product_name', 'product_detail', 'merk', 'product_type', 'stock', 'product_unit', 'location_detail', 'location'];
@@ -64,7 +74,7 @@ class AssetController extends Controller
     {
         $authUser = Auth::user();
         $productType = request('product_type');
-        $query = AssetLab::with('updater')->ofType('bhp');
+        $query = AssetLab::with(['updater', 'latestPrice'])->ofType('bhp');
         #filter user
         if ($authUser->usertype === 'staff') {
             $query->ofLocation($authUser->prodi);
@@ -164,7 +174,7 @@ class AssetController extends Controller
             $location = Auth::user()->prodi;
         }
 
-        $query = AssetLab::ofType('bhp');
+        $query = AssetLab::with('latestPrice')->ofType('bhp');
 
         if ($productType) {
             $query->where('product_type', $productType);
@@ -188,7 +198,7 @@ class AssetController extends Controller
             $location = Auth::user()->prodi;
         }
 
-        $query = AssetLab::ofType('inventaris');
+        $query = AssetLab::with('latestPrice')->ofType('inventaris');
 
         if ($productType) {
             $query->where('product_type', $productType);
@@ -272,7 +282,7 @@ class AssetController extends Controller
                 'product_detail' => ['nullable', 'string', 'max:255'],
                 'merk' => ['nullable', 'string', 'max:255'],
                 'product_type' => ['required', 'string', 'max:255'],
-                'stock' => ['required', 'integer'],
+                'stock' => ['required'],
                 'product_unit' => ['required', 'string', 'max:255'],
                 'location_detail' => ['nullable', 'string', 'max:255'],
                 'location' => ['required', 'string', 'max:255'],

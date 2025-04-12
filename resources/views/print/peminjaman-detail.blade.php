@@ -9,20 +9,19 @@
     <style>
         @media print {
             @page {
-                margin: 5mm 5mm 5mm 5mm;
+                margin: 10mm 5mm 10mm 5mm;
                 /* Margin atas, kanan, bawah, kiri */
             }
 
             .main-data {
-                transform: scale(0.7);
                 transform-origin: top left;
-                width: 140%;
                 /* Sesuaikan agar tidak ada blank space */
             }
 
             .print-footer {
+                z-index: 50;
                 position: fixed;
-                bottom: 10px;
+                bottom: 0px;
                 width: 100%;
                 text-align: center;
                 font-size: 12px;
@@ -60,7 +59,8 @@
             <div class="w-14"></div>
         </div>
 
-        <div class="main-data">
+        <div class="main-data text-xs">
+            <p class="mb-2 text-sm font-bold">Informasi Penggunaan</p>
             <div class="flex items-start justify-between flex-row mb-4">
                 <table>
                     <tr>
@@ -143,17 +143,21 @@
             </div>
 
             <div class="overflow-x-none">
-                <table class="w-full border-collapse border border-gray-300 text-sm">
+                <p class="mb-2 text-sm font-bold">Daftar Pemakaian Alat</p>
+                <table class="w-full border-collapse border border-gray-300 text-xs">
                     <thead>
                         <tr class="bg-gray-200 text-gray-700">
                             @if (request()->has('user_id'))
                                 <th class="border border-gray-300 px-3 py-2">Tanggal Pinjam</th>
                                 <th class="border border-gray-300 px-3 py-2">Laboran</th>
                             @endif
-                            <th class="border border-gray-300 px-3 py-2">Nama Produk</th>
-                            <th class="border border-gray-300 px-3 py-2">Keterangan/Vol</th>
+                            <th class="border border-gray-300 px-3 py-2">Produk</th>
+                            <th class="border border-gray-300 px-3 py-2">Keterangan</th>
                             <th class="border border-gray-300 px-3 py-2">Merk</th>
+                            <th class="border border-gray-300 px-3 py-2">Harga</th>
                             <th class="border border-gray-300 px-3 py-2">Banyaknya</th>
+                            <th class="border border-gray-300 px-3 py-2">Durasi</th>
+                            <th class="border border-gray-300 px-3 py-2">Sub Total</th>
                             <th class="border border-gray-300 px-3 py-2">Dikembalikan</th>
                             <th class="border border-gray-300 px-3 py-2">Rusak</th>
                             <th class="border border-gray-300 px-3 py-2">Status</th>
@@ -178,14 +182,23 @@
                                         </td>
                                         <td class="border border-gray-300 px-3 py-2">{{ $item->asset->merk ?: '-' }}
                                         </td>
-                                        <td class="border border-gray-300 px-3 py-2">
-                                            {{ $item->quantity }} {{ $item->asset->product_unit }}
+                                        <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">Rp.
+                                            {{ number_format($item->rental_price, 0, ',', '.') }},-
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
+                                            {{ intval($item->quantity) }} {{ $item->asset->product_unit }}
+                                        </td>
+                                        <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
+                                            {{ $item->asset->latestPrice->price_type == 'unit' ? '-' : rtrim(rtrim(number_format($item->rental, 4, ',', '.'), '0'), ',') . ' Jam' }}
+                                        </td>
+                                        <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
+                                            Rp. {{ number_format($item->total_price, 0, ',', '.') }},-
+                                        </td>
+                                        <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
+                                            {{ intval($item->returned_quantity) }} / {{ intval($item->quantity) }}
                                         </td>
                                         <td class="border border-gray-300 px-3 py-2">
-                                            {{ $item->returned_quantity }} / {{ $item->quantity }}
-                                        </td>
-                                        <td class="border border-gray-300 px-3 py-2">
-                                            {{ $item->damaged_quantity }}
+                                            {{ intval($item->damaged_quantity) }}
                                         </td>
                                         <td class="border border-gray-300 px-3 py-2 capitalize">{{ $item->status }}
                                         </td>
@@ -198,6 +211,24 @@
                                     </tr>
                                 @endforeach
                             @endforeach
+                            <tr class="hover:bg-gray-100">
+                                <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap font-bold"
+                                    colspan="8">
+                                    Total Harga
+                                </td>
+                                <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap font-bold"
+                                    colspan="7">
+                                    Rp. {{ number_format($data->sum('total_loan_price'), 0, ',', '.') }},-
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap font-bold"
+                                    colspan="8">
+                                    Keterangan
+                                </td>
+                                <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap font-bold"
+                                    colspan="7"></td>
+                            </tr>
                         @else
                             @foreach ($data->loans as $item)
                                 <tr class="hover:bg-gray-100">
@@ -207,14 +238,23 @@
                                         {{ $item->asset->product_detail ?: '-' }}
                                     </td>
                                     <td class="border border-gray-300 px-3 py-2">{{ $item->asset->merk ?: '-' }}</td>
-                                    <td class="border border-gray-300 px-3 py-2">
-                                        {{ $item->quantity }} {{ $item->asset->product_unit }}
+                                    <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">Rp.
+                                        {{ number_format($item->rental_price, 0, ',', '.') }},-
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
+                                        {{ intval($item->quantity) }} {{ $item->asset->product_unit }}
+                                    </td>
+                                    <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
+                                        {{ $item->asset->latestPrice->price_type == 'unit' ? '-' : rtrim(rtrim(number_format($item->rental, 4, ',', '.'), '0'), ',') . ' Jam' }}
+                                    </td>
+                                    <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
+                                        Rp. {{ number_format($item->total_price, 0, ',', '.') }},-
+                                    </td>
+                                    <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
+                                        {{ intval($item->returned_quantity) }} / {{ intval($item->quantity) }}
                                     </td>
                                     <td class="border border-gray-300 px-3 py-2">
-                                        {{ $item->returned_quantity }} / {{ $item->quantity }}
-                                    </td>
-                                    <td class="border border-gray-300 px-3 py-2">
-                                        {{ $item->damaged_quantity }}
+                                        {{ intval($item->damaged_quantity) }}
                                     </td>
                                     <td class="border border-gray-300 px-3 py-2 capitalize">{{ $item->status }}
                                     </td>
@@ -225,13 +265,39 @@
                                         {{ $item->notes ?: ($item->return_notes ?: '-') }}</td>
                                 </tr>
                             @endforeach
+                            <tr class="hover:bg-gray-100">
+                                <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap font-bold"
+                                    colspan="6">
+                                    Total Harga
+                                </td>
+                                <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap font-bold"
+                                    colspan="7">
+                                    Rp. {{ number_format($data->total_loan_price, 0, ',', '.') }},-
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-gray-100">
+                                <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap font-bold"
+                                    colspan="6">
+                                    Keterangan
+                                </td>
+                                <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap font-bold"
+                                    colspan="7"></td>
+                            </tr>
                         @endif
                     </tbody>
                 </table>
             </div>
+            <div class="w-full mt-10 px-6 flex justify-end">
+                <div class="flex flex-col">
+                    <p class="text-xs">Bandung,
+                        <span>{{ \Carbon\Carbon::parse($printDate)->translatedFormat('d F Y') }}</span>
+                    </p>
+                    <p class="text-xs">Petugas,</p>
+                </div>
+            </div>
         </div>
     </div>
-    <footer class="text-center text-gray-600 text-sm mt-6 print-footer">
+    <footer class="text-center text-gray-600 text-xs mt-6 print-footer">
         <p>&copy; Dicetak dari: <strong>{{ request()->getHost() }}</strong> tanggal {{ $printDate }}</p>
     </footer>
 </body>

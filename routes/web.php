@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\RegisterStaffController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DataStaffController;
+use App\Http\Controllers\ItemPricesController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PerencanaanController;
 use App\Http\Controllers\PredictionController;
@@ -40,6 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/detail-perencanaan/{id}', [PerencanaanController::class, 'show'])->name('detail-perencanaan');
     Route::get('/perencanaan/{id}/download', [PerencanaanController::class, 'download'])->name('perencanaan.download');
     Route::get('/perencanaan/{id}/print', [PerencanaanController::class, 'print'])->name('perencanaan.print');
+    Route::get('/perencanaan/download', [PerencanaanController::class, 'export'])->name('perencanaan.export');
+    Route::get('/perencanaan/print', [PerencanaanController::class, 'printAll'])->name('perencanaan.print.all');
 
     Route::get('/transaction/bhp', [TransactionController::class, 'index'])->name('penggunaan');
     Route::get('/transaction/inventaris', [PeminjamanController::class, 'index'])->name('peminjaman');
@@ -90,6 +93,10 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::put('/transaction/return/{id}', [PeminjamanController::class, 'update'])->name('transaction.return');
     Route::delete('/delete-peminjaman/{transaction}', [PeminjamanController::class, 'destroy'])->name('destroy-peminjaman');
 
+    Route::get('/data-harga', [ItemPricesController::class, 'index'])->name('data-harga');
+    Route::get('/add-harga', [ItemPricesController::class, 'create'])->name('add-harga');
+    Route::post('/add-harga', [ItemPricesController::class, 'store']);
+    Route::delete('/delete-harga/{itemPrices}', [ItemPricesController::class, 'destroy'])->name('data-harga.destroy');
 
     Route::get('/assets', [AssetController::class, 'getAssets']);
     Route::post('/prediksi', [PredictionController::class, 'sendData']);

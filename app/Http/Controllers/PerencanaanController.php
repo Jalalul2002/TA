@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\PerencanaanExport;
+use App\Exports\PerencanaanExportAll;
 use App\Models\Assetlab;
 use App\Models\Perencanaan;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -41,10 +42,15 @@ class PerencanaanController extends Controller
         if ($request->has('location') && $request->location != 'all') {
             $query->where('prodi', $request->location);
         }
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
         #Sorting
-        $sortField = $request->get('sort_field', 'nama_perencanaan');
-        $sortOrder = $request->get('sort_order', 'asc');
-        $allowedFields = ['nama_perencanaan', 'product_name', 'prodi', 'plans_count', 'status'];
+        $sortField = $request->get('sort_field', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $allowedFields = ['nama_perencanaan', 'product_name', 'prodi', 'plans_count', 'status', 'created_at'];
         if (in_array($sortField, $allowedFields)) {
             $query->orderBy($sortField, $sortOrder);
         }
@@ -69,10 +75,15 @@ class PerencanaanController extends Controller
         if ($request->has('location') && $request->location != 'all') {
             $query->where('prodi', $request->location);
         }
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
         #Sorting
-        $sortField = $request->get('sort_field', 'nama_perencanaan');
-        $sortOrder = $request->get('sort_order', 'asc');
-        $allowedFields = ['nama_perencanaan', 'product_name', 'prodi', 'plans_count', 'status'];
+        $sortField = $request->get('sort_field', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $allowedFields = ['nama_perencanaan', 'product_name', 'prodi', 'plans_count', 'status', 'created_at'];
         if (in_array($sortField, $allowedFields)) {
             $query->orderBy($sortField, $sortOrder);
         }
@@ -108,9 +119,10 @@ class PerencanaanController extends Controller
         }
 
         $products = $query->paginate(10);
-        $assets = Assetlab::where('type', $dataPerencanaan->type === 'bhp' ? 'bhp' : 'inventaris')->where('location', $dataPerencanaan->prodi)->get();
+        $totalPriceSum = $products->sum('total_price');
+        $assets = Assetlab::with('latestPrice')->where('type', $dataPerencanaan->type === 'bhp' ? 'bhp' : 'inventaris')->where('location', $dataPerencanaan->prodi)->get();
 
-        return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'assets', 'sortField', 'sortOrder'));
+        return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'totalPriceSum', 'assets', 'sortField', 'sortOrder'));
     }
 
     public function createInv()
@@ -154,9 +166,19 @@ class PerencanaanController extends Controller
                 $location = Auth::user()->prodi;
             }
 
+            $location_code = [
+                'Matematika' => '701',
+                'Biologi' => '702',
+                'Fisika' => '703',
+                'Kimia' => '704',
+                'Teknik Informatika' => '705',
+                'Agroteknologi' => '706',
+                'Teknik Elektro' => '707',
+            ];
+            $initial_code = $location_code[$location] ?? '700';
             // **1. Validasi apakah produk baru sudah ada di AssetLab sebelum transaksi berjalan**
             $newProducts = json_decode($request->new_products, true) ?? [];
-            $productCodes = array_map(fn($p) => strtoupper("{$request->initial_code}-{$p['product_code']}"), $newProducts);
+            $productCodes = array_map(fn($p) => strtoupper("{$initial_code}-{$p['product_code']}"), $newProducts);
             // Cek apakah ada kode produk yang sudah ada di AssetLab
             $existingProductCodes = AssetLab::whereIn('product_code', $productCodes)->pluck('product_code')->toArray();
             if (!empty($existingProductCodes)) {
@@ -201,7 +223,9 @@ class PerencanaanController extends Controller
                     $data->plans()->create([
                         'product_code' => $item['product_code'],
                         'stock' => $item['stock'],
+                        'purchase_price' => $item['purchase_price'],
                         'jumlah_kebutuhan' => $item['quantity'],
+                        'total_price' => $item['total_price'],
                         'created_by' => Auth::id(),
                         'updated_by' => Auth::id(),
                     ]);
@@ -230,8 +254,10 @@ class PerencanaanController extends Controller
 
                     $data->plans()->create([
                         'product_code' => $asset->product_code,
-                        'stock' => $asset->stock,
+                        'stock' => $asset->stock ?? 0,
+                        'purchase_price' => $product['purchase_price'] ?? 0,
                         'jumlah_kebutuhan' => $product['quantity'] ?? 1,
+                        'total_price' => $product['total_price'] ?? 0,
                         'created_by' => Auth::id(),
                         'updated_by' => Auth::id(),
                     ]);
@@ -310,8 +336,10 @@ class PerencanaanController extends Controller
             Perencanaan::create([
                 'rencana_id' => $id,
                 'product_code' => $product_code_upper,
-                'stock' => $request->stock ?? 0,
-                'jumlah_kebutuhan' => $request->quantity,
+                'stock' => (int) $request->stock ?? 0,
+                'purchase_price' => (int) $request->purchase_price,
+                'jumlah_kebutuhan' => (int) $request->quantity,
+                'total_price' => (int) $request->total_price,
                 'created_by' => Auth::id(),
                 'updated_by' => Auth::id()
             ]);
@@ -337,10 +365,12 @@ class PerencanaanController extends Controller
         try {
             $rencana = Perencanaan::where('id', $id)->firstOrFail();
             $request->validate([
-                'jumlah_kebutuhan' => ['required', 'integer'],
+                'jumlah_kebutuhan' => ['required', 'decimal:4'],
             ]);
             $rencana->update([
+                'purchase_price' => $request->purchase_price,
                 'jumlah_kebutuhan' => $request->jumlah_kebutuhan,
+                'total_price' => $request->total_price,
                 'updated_by' => Auth::id(),
             ]);
 
@@ -408,7 +438,30 @@ class PerencanaanController extends Controller
 
         return Excel::download(new PerencanaanExport($id), $filename);
     }
+    public function export(Request $request)
+    {
+        $type = $request->type == 'bhp' ? 'bhp' : 'inventaris';
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        $location = $request->input('location');
+        if (Auth::user()->usertype === 'staff') {
+            $location = Auth::user()->prodi;
+        }
 
+        $filename = "Data_Perencanaan_{$type}";
+
+        if ($location) {
+            $filename .= "_{$location}";
+        }
+
+        if ($startDate || $endDate) {
+            $filename .= "Periode_{$startDate}-{$endDate}";
+        }
+
+        $filename .= ".xlsx";
+
+        return Excel::download(new PerencanaanExportAll($startDate, $endDate, $location, $type), $filename);
+    }
     public function print($id)
     {
         $perencanaan = DataPerencanaan::findOrFail($id);
@@ -420,7 +473,34 @@ class PerencanaanController extends Controller
 
         return view('print.perencanaan', compact('data', 'perencanaan', 'printDate'));
     }
+    public function printAll(Request $request)
+    {
+        $type = $request->type == 'bhp' ? 'bhp' : 'inventaris';
+        $location = $request->input('location');
+        $printDate = Carbon::now()->format('d M Y, H:i');
+        $query = DataPerencanaan::where('type', $type)->with(['plans', 'plans.product']);
+        $startDate = null;
+        $endDate = null;
+        if (Auth::user()->usertype === 'staff') {
+            $location = Auth::user()->prodi;
+        }
+        if (!empty($location) && $location !== 'all') {
+            $query->where('prodi', $location);
+        }
+        if ($request->has('user_id') && $request->user_id != 'semua') {
+            $query->where('user_id', $request->user_id);
+        }
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = Carbon::parse($request->start_date)->startOfDay();
+            $endDate = Carbon::parse($request->end_date)->endOfDay();
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
 
+        $data = $query->get();
+        $grandTotal = $data->sum->total_price;
+
+        return view('print.perencanaan-all', compact('data', 'startDate', 'endDate', 'location', 'printDate', 'type', 'grandTotal'));
+    }
     public function complete($id)
     {
         try {

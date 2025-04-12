@@ -16,10 +16,13 @@ return new class extends Migration
             $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
             $table->string('product_code');
             $table->foreign('product_code')->references('product_code')->on('assetlabs')->onDelete('cascade');
-            $table->integer('stock');
-            $table->integer('quantity');
-            $table->integer('returned_quantity')->nullable()->default(0);
-            $table->integer('damaged_quantity')->nullable()->default(0);
+            $table->decimal('stock', 18, 4)->default(0);
+            $table->decimal('quantity', 18, 4)->default(0);
+            $table->decimal('rental', 18, 4)->default(0);
+            $table->bigInteger('rental_price');
+            $table->bigInteger('total_price');
+            $table->decimal('returned_quantity', 18, 4)->nullable()->default(0);
+            $table->decimal('damaged_quantity', 18, 4)->nullable()->default(0);
             $table->date('loan_date');
             $table->date('return_date')->nullable();
             $table->enum('status', ['dipinjam', 'dikembalikan sebagian', 'dikembalikan', 'rusak'])->default('dipinjam');

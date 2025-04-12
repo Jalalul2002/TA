@@ -42,6 +42,28 @@
                                     </select>
                                 </div>
                             @endif
+                            {{-- Filter Tujuan --}}
+                            <div
+                                class="flex flex-row items-center bg-white rounded-lg w-fit border border-gray-300 ps-2">
+                                <svg class="size-4 fill-gray-400" id="Layer_1" height="512" viewBox="0 0 24 24" width="512"
+                                    xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+                                    <path
+                                        d="m17 14a1 1 0 0 1 -1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1zm-4 3h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2zm9-6.515v8.515a5.006 5.006 0 0 1 -5 5h-10a5.006 5.006 0 0 1 -5-5v-14a5.006 5.006 0 0 1 5-5h4.515a6.958 6.958 0 0 1 4.95 2.05l3.484 3.486a6.951 6.951 0 0 1 2.051 4.949zm-6.949-7.021a5.01 5.01 0 0 0 -1.051-.78v4.316a1 1 0 0 0 1 1h4.316a4.983 4.983 0 0 0 -.781-1.05zm4.949 7.021c0-.165-.032-.323-.047-.485h-4.953a3 3 0 0 1 -3-3v-4.953c-.162-.015-.321-.047-.485-.047h-4.515a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3z" />
+                                </svg>
+                                <select x-model="purpose" @change="updateFilter('purpose', purpose)"
+                                    class="font-medium text-sm text-gray-700 bg-transparent border-none focus:ring-0 cursor-pointer ps-1">
+                                    <option value="semua" {{ request('purpose') == 'semua' ? 'selected' : '' }}>
+                                        Semua Keperluan
+                                    </option>
+                                    <option value="praktikum" {{ request('purpose') == 'praktikum' ? 'selected' : '' }}>
+                                        Praktikum
+                                    </option>
+                                    <option value="penelitian"
+                                        {{ request('purpose') == 'penelitian' ? 'selected' : '' }}>
+                                        Penelitian
+                                    </option>
+                                </select>
+                            </div>
                             {{-- Filter User --}}
                             <div
                                 class="flex flex-row items-center bg-white rounded-lg w-fit border border-gray-300 ps-2">
@@ -76,6 +98,17 @@
                                     class="border border-gray-300 text-gray-900 rounded-lg text-sm p-2"
                                     :min="startDate" max="{{ now()->format('Y-m-d') }}">
                             </div>
+                            @if (Auth::user()->usertype !== 'user')
+                                <a href="{{ route('add-penggunaan') }}"
+                                    class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition-all duration-300">
+                                    <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 448 512">
+                                        <path
+                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                                    </svg>
+                                    Tambah
+                                </a>
+                            @endif
                             <a title="Download Data"
                                 href="{{ route('export.transaction.bhp', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'user_id' => request('user_id')]) }}">
                                 <div
@@ -88,7 +121,7 @@
                                     Download
                                 </div>
                             </a>
-                            <a href="{{ route('print.penggunaan', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'user_id' => request('user_id')]) }}"
+                            <a href="{{ route('print.penggunaan', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'user_id' => request('user_id'), 'purpose' => request('purpose')]) }}"
                                 target="_blank">
                                 <div
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-zinc-500 hover:bg-fuchsia-700 transition-all duration-300">
@@ -101,33 +134,25 @@
                                     Cetak
                                 </div>
                             </a>
-                            @if (Auth::user()->usertype !== 'user')
-                                <a href="{{ route('add-penggunaan') }}"
-                                    class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition-all duration-300">
-                                    <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor" viewBox="0 0 448 512">
-                                        <path
-                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                    </svg>
-                                    Tambah
-                                </a>
-                            @endif
                         </div>
                     </div>
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                             @php
                                 $columns = [
+                                    'created_at' => 'Tanggal',
+                                    'purpopse' => 'Keperluan',
                                     'user_id' => 'ID Pengguna',
                                     'name' => 'Nama Pengguna',
                                     'prodi' => 'Prodi Pengguna',
                                     'telp' => 'Nomor Telepon',
                                     'items_count' => 'Jumlah Barang',
-                                    'detail' => 'Keterangan',
-                                    'location' => 'Program Studi',
+                                    'price_count' => 'Total Harga',
                                     'created_by' => 'Pembuat',
-                                    'created_at' => 'Tanggal Dibuat',
                                 ];
+                                if (Auth::user()->usertype !== 'staff') {
+                                    $columns['location'] = 'Program Studi';
+                                }
                             @endphp
                             <thead class="text-xs text-white uppercase bg-uinTosca">
                                 <tr>
@@ -147,7 +172,7 @@
                                                             : 'asc';
                                                     $isActive = request('sort_field', 'created_at') === $field;
                                                 @endphp
-                                                <a title="Sort by {{ $name }}" class="px-1"
+                                                <a title="Sort by {{ $name }}" class="px-2"
                                                     href="{{ route('penggunaan', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
                                                     <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
                                                         xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
@@ -159,7 +184,7 @@
                                             </div>
                                         </th>
                                     @endforeach
-                                    <th scope="col" class="text-center px-1 py-3 size-fit">
+                                    <th scope="col" class="text-center px-2 py-3 size-fit">
                                         Action
                                     </th>
                                 </tr>
@@ -173,33 +198,41 @@
                                         <th class="text-center px-2 py-2">
                                             {{ $counter }}
                                         </th>
-                                        <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
+                                        <td class="px-2 py-2">
+                                            {{ $penggunaan->created_at->format('d/m/Y') }}
+                                        </td>
+                                        <td scope="row" class="px-2 py-2 font-medium capitalize">
+                                            {{ $penggunaan->purpose }}
+                                        </td>
+                                        <td scope="row" class="px-2 py-2 font-medium">
                                             {{ $penggunaan->user_id }}
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-2 font-medium">
                                             {{ $penggunaan->name }}
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-2 font-medium">
                                             {{ $penggunaan->prodi }}
                                         </td>
-                                        <td scope="row" class="px-1 py-2 font-medium whitespace-nowrap">
+                                        <td scope="row" class="px-2 py-2 font-medium">
                                             {{ $penggunaan->telp }}
                                         </td>
-                                        <td class="px-1 py-2">
+                                        <td class="px-2 py-2">
                                             {{ $penggunaan->items_count }}
                                         </td>
-                                        <td class="px-1 py-2">
-                                            {{ $penggunaan->detail }}
+                                        <td class="px-2 font-semibold text-right whitespace-nowrap">
+                                            <span class="px-2 py-1 text-white rounded-full bg-teal-500">
+                                                Rp.
+                                                {{ number_format($penggunaan->total_item_price ?? 0, 0, ',', '.') }},-
+                                            </span>
                                         </td>
-                                        <td class="px-1 py-2">
-                                            {{ $penggunaan->location }}
-                                        </td>
-                                        <td class="px-1 py-2">
+                                        <td class="px-2 py-2">
                                             {{ $penggunaan->creator->name }}
                                         </td>
-                                        <td class="px-1 py-2">
-                                            {{ $penggunaan->created_at->format('d/m/Y H:i') }}
-                                        </td>
+                                        @if (Auth::user()->usertype !== 'staff')
+                                            <td class="px-2 py-2">
+                                                {{ $penggunaan->location }}
+                                            </td>
+                                        @endif
                                         <td class="py-2 flex flex-row gap-x-1 justify-center">
                                             <a title="Lihat Detail"
                                                 href="{{ route('detail-penggunaan', $penggunaan->id) }}">
@@ -262,7 +295,7 @@
                                     @endphp
                                 @empty
                                     <tr class="bg-white border-b hover:bg-gray-50">
-                                        <th colspan="11" class="px-1 py-2 text-center">
+                                        <th colspan="11" class="px-2 py-2 text-center">
                                             Data Tidak Ditemukan
                                         </th>
                                     </tr>
@@ -282,6 +315,7 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('filterPenggunaan', () => ({
             location: '{{ request('location') }}',
+            purpose: '{{ request('purpose') }}',
             userId: '{{ request('user_id') }}',
             startDate: '{{ request('start_date') }}',
             endDate: '{{ request('end_date') ?: now()->format('Y-m-d') }}',

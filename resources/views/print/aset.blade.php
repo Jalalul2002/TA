@@ -6,6 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cetak Data Aset</title>
     @vite('resources/css/app.css')
+    <style>
+        @media print {
+            @page {
+                margin: 10mm 5mm 10mm 5mm;
+                /* Margin atas, kanan, bawah, kiri */
+            }
+
+            .main-data {
+                transform-origin: top left;
+                width: 100%;
+                height: 80%;
+                /* Sesuaikan agar tidak ada blank space */
+            }
+
+            .print-footer {
+                z-index: 50;
+                position: fixed;
+                bottom: 0px;
+                width: 100%;
+                text-align: center;
+                font-size: 12px;
+                color: gray;
+            }
+
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
 </head>
 @php
     $segment = request()->segment(1); // Ambil segment pertama dari URL
@@ -13,7 +42,7 @@
 @endphp
 
 <body class="bg-gray-100 text-gray-900">
-    <div class="max-w-6xl mx-auto p-6 bg-white rounded-lg">
+    <div class="max-w-6xl mx-auto px-6 py-2 bg-white rounded-lg">
         <div class="flex items-center justify-between border-b-[1px] border-black pb-4 mb-4 px-4">
             <!-- Logo -->
             <div class="w-14 me-1">
@@ -54,32 +83,61 @@
                 </button>
             </div>
 
-            <div class="overflow-x-auto">
+            <div>
                 <table class="w-full border-collapse border border-gray-300 text-sm">
                     <thead>
                         <tr class="bg-gray-200 text-gray-700">
+                            <th class="border border-gray-300 px-3 py-2">Kode Barang</th>
                             <th class="border border-gray-300 px-3 py-2">Nama Barang</th>
                             <th class="border border-gray-300 px-3 py-2">Keterangan</th>
                             <th class="border border-gray-300 px-3 py-2">Merk</th>
                             <th class="border border-gray-300 px-3 py-2">Jenis</th>
                             <th class="border border-gray-300 px-3 py-2">Stok</th>
                             <th class="border border-gray-300 px-3 py-2">Satuan</th>
+                            <th class="border border-gray-300 px-3 py-2" colspan="2">Harga Beli</th>
+                            <th class="border border-gray-300 px-3 py-2" colspan="2">Harga Pakai</th>
                             <th class="border border-gray-300 px-3 py-2">Lokasi Penyimpanan</th>
-                            <th class="border border-gray-300 px-3 py-2">Lokasi</th>
+                            @if (Auth::user()->usertype == 'admin')
+                                <th class="border border-gray-300 px-3 py-2">Lokasi</th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($data as $row)
                             <tr class="hover:bg-gray-100">
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->product_code }}</td>
                                 <td class="border border-gray-300 px-3 py-2">{{ $row->product_name }}</td>
-                                <td class="border border-gray-300 px-3 py-2">{{ $row->product_detail }}</td>
-                                <td class="border border-gray-300 px-3 py-2">{{ $row->merk }}</td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->product_detail ?: '-' }}</td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->merk ?: '-' }}</td>
                                 <td class="border border-gray-300 px-3 py-2">{{ $row->product_type }}</td>
                                 <td class="border border-gray-300 px-3 py-2">{{ $row->stock > 0 ? $row->stock : '0' }}
                                 </td>
                                 <td class="border border-gray-300 px-3 py-2">{{ $row->product_unit }}</td>
-                                <td class="border border-gray-300 px-3 py-2">{{ $row->location_detail }}</td>
-                                <td class="border border-gray-300 px-3 py-2">{{ $row->location }}</td>
+                                <td
+                                    class="border-l border-y border-gray-300 px-3 py-2 whitespace-nowrap font-medium text-left">
+                                    Rp.</td>
+                                <td
+                                    class="border-y border-r border-gray-300 px-3 py-2 whitespace-nowrap font-medium text-right">
+                                    {{ number_format($row->latestPrice->purchase_price ?? 0, 0, ',', '.') }},-
+                                </td>
+                                <td
+                                    class="border-l border-y border-gray-300 px-3 py-2 whitespace-nowrap font-medium text-left">
+                                    Rp.</td>
+                                <td
+                                    class="border-y border-r border-gray-300 px-3 py-2 whitespace-nowrap font-medium text-right">
+                                    {{ optional($row->latestPrice)->price ?? 0 }},-
+                                    /{{ optional($row->latestPrice)->price_type
+                                        ? ($row->latestPrice->price_type == 'unit'
+                                            ? 'item'
+                                            : 'jam')
+                                        : ($row->type == 'bhp'
+                                            ? $row->product_unit
+                                            : 'jam') }}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->location_detail ?: '-' }}</td>
+                                @if (Auth::user()->usertype == 'admin')
+                                    <td class="border border-gray-300 px-3 py-2">{{ $row->location }}</td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>
@@ -90,35 +148,6 @@
     <footer class="text-center text-gray-600 text-sm mt-6 print-footer">
         <p>&copy; Dicetak dari: <strong>{{ request()->getHost() }}</strong> tanggal {{ $printDate }}</p>
     </footer>
-
-    <style>
-        @media print {
-            @page {
-                margin: 5mm 5mm 5mm 5mm;
-                /* Margin atas, kanan, bawah, kiri */
-            }
-
-            .main-data {
-                transform: scale(0.7);
-                transform-origin: top left;
-                width: 140%;
-                /* Sesuaikan agar tidak ada blank space */
-            }
-
-            .print-footer {
-                position: fixed;
-                bottom: 10px;
-                width: 100%;
-                text-align: center;
-                font-size: 12px;
-                color: gray;
-            }
-
-            .print-button {
-                display: none;
-            }
-        }
-    </style>
 </body>
 
 </html>

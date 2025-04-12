@@ -47,7 +47,7 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
         }
         if (Auth::user()->usertype === 'staff') {
             $query->where('location', Auth::user()->prodi);
-        } else if ($this->location) {
+        } else if ($this->location && $this->location != 'all') {
             $query->where('location', $this->location);
         }
         return $query->get();

@@ -10,6 +10,7 @@ class DataPerencanaan extends Model
     use HasFactory;
 
     protected $table = 'data_perencanaans';
+    protected $appends = ['total_price'];
 
     protected $fillable = [
         'nama_perencanaan',
@@ -68,5 +69,9 @@ class DataPerencanaan extends Model
         }
 
         return $query;
+    }
+    public function getTotalPriceAttribute()
+    {
+        return $this->plans()->sum('total_price');
     }
 }

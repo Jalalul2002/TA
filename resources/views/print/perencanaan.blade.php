@@ -6,11 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cetak Data Perencanaan</title>
     @vite('resources/css/app.css')
+    <style>
+        @media print {
+            @page {
+                margin: 10mm 5mm 10mm 5mm;
+                /* Margin atas, kanan, bawah, kiri */
+            }
+
+            .main-data {
+                transform-origin: top left;
+                width: 100%;
+                height: 80%;
+                /* Sesuaikan agar tidak ada blank space */
+            }
+
+            .print-footer {
+                z-index: 50;
+                position: fixed;
+                bottom: 0px;
+                width: 100%;
+                text-align: center;
+                font-size: 12px;
+                color: gray;
+            }
+
+            .print-button {
+                display: none;
+            }
+        }
+    </style>
 </head>
-@php
-    $segment = request()->segment(1); // Ambil segment pertama dari URL
-    $type = $segment === 'print-inv' ? 'inv' : 'bhp';
-@endphp
 
 <body class="bg-gray-100 text-gray-900">
     <div class="max-w-6xl mx-auto p-6 bg-white rounded-lg">
@@ -22,10 +47,10 @@
 
             <!-- Header -->
             <div class="text-center flex-1">
-                <h1 class="text-xl font-bold text-center uppercase">Laporan Data Perencanaan
-                    {{ $type == 'bhp' ? 'Bahan Habis Pakai' : 'Inventaris' }}</h1>
-                <h1 class="text-base font-bold uppercase">Laboratorium Fakultas Sains dan Teknologi</h1>
-                <h1 class="text-base font-bold uppercase">Universitas Islam Negeri Sunan Gunung Djati Bandung</h1>
+                <h1 class="text-lg font-bold text-center uppercase">Laporan Data Perencanaan
+                    {{ $perencanaan->type == 'bhp' ? 'Bahan Habis Pakai' : 'Inventaris' }}</h1>
+                <h1 class="text-sm font-bold uppercase">Laboratorium Fakultas Sains dan Teknologi</h1>
+                <h1 class="text-sm font-bold uppercase">Universitas Islam Negeri Sunan Gunung Djati Bandung</h1>
                 <p class="text-[10px] mt-2">Jl. A.H. Nasution No. 105 Cibiru Kota Bandung 40614 Jawa Barat – Indonesia |
                     Email: fst@uinsgd.ac.id</p>
             </div>
@@ -39,6 +64,7 @@
                     <strong>{{ $perencanaan->nama_perencanaan }}</strong>
                 </p>
                 <p class="text-sm text-gray-700">Prodi: <strong>{{ $perencanaan->prodi }}</strong></p>
+                <p class="text-sm text-gray-700 capitalize">Status: <strong>{{ $perencanaan->status }}</strong></p>
                 <p class="text-sm text-gray-700">Tanggal: <strong>{{ $perencanaan->updated_at }}</strong></p>
 
             </div>
@@ -56,8 +82,8 @@
                 </button>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full border-collapse border border-gray-300 text-sm">
+            <div>
+                <table class="w-full border-collapse border border-gray-300 text-xs">
                     <thead>
                         <tr class="bg-gray-200 text-gray-700">
                             <th class="border border-gray-300 px-3 py-2">Nama Barang</th>
@@ -65,8 +91,10 @@
                             <th class="border border-gray-300 px-3 py-2">Merk</th>
                             <th class="border border-gray-300 px-3 py-2">Jenis</th>
                             <th class="border border-gray-300 px-3 py-2">Stok</th>
-                            <th class="border border-gray-300 px-3 py-2">Jumlah Kebutuhan</th>
                             <th class="border border-gray-300 px-3 py-2">Satuan</th>
+                            <th class="border border-gray-300 px-3 py-2">Harga Beli</th>
+                            <th class="border border-gray-300 px-3 py-2">Jumlah</th>
+                            <th class="border border-gray-300 px-3 py-2">Sub Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,48 +109,37 @@
                                 </td>
                                 <td class="border border-gray-300 px-3 py-2">{{ $row->stock > 0 ? $row->stock : '0' }}
                                 </td>
-                                <td class="border border-gray-300 px-3 py-2">{{ $row->jumlah_kebutuhan }}</td>
                                 <td class="border border-gray-300 px-3 py-2">{{ $row->product->product_unit ?? '-' }}
                                 </td>
+                                <td class="border border-gray-300 px-3 py-2 whitespace-nowrap text-right">Rp.
+                                    {{ number_format($row->purchase_price ?? 0, 0, ',', '.') }},-</td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->jumlah_kebutuhan }}</td>
+                                <td class="border border-gray-300 px-3 py-2 font-bold whitespace-nowrap text-right">Rp.
+                                    {{ number_format($row->total_price ?? 0, 0, ',', '.') }},-</td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <td class="border border-gray-300 px-3 py-2 font-bold text-right" colspan="8">Total Harga
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 font-bold whitespace-nowrap text-right">Rp.
+                                {{ number_format($perencanaan->total_price ?? 0, 0, ',', '.') }},-</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
+            <div class="w-full mt-6 px-6 flex justify-end">
+                <div class="flex flex-col">
+                    <p class="text-xs">Bandung,
+                        <span>{{ \Carbon\Carbon::parse($printDate)->translatedFormat('d F Y') }}</span>
+                    </p>
+                    <p class="text-xs">Petugas,</p>
+                </div>
+            </div>
         </div>
     </div>
-    <footer class="text-center text-gray-600 text-sm mt-6 print-footer">
+    <footer class="text-center text-gray-600 text-xs mt-6 print-footer">
         <p>&copy; Dicetak dari: <strong>{{ request()->getHost() }}</strong> tanggal {{ $printDate }}</p>
     </footer>
-
-    <style>
-        @media print {
-            @page {
-                margin: 5mm 5mm 5mm 5mm;
-                /* Margin atas, kanan, bawah, kiri */
-            }
-
-            .main-data {
-                transform: scale(0.7);
-                transform-origin: top left;
-                width: 140%;
-                /* Sesuaikan agar tidak ada blank space */
-            }
-
-            .print-footer {
-                position: fixed;
-                bottom: 10px;
-                width: 100%;
-                text-align: center;
-                font-size: 12px;
-                color: gray;
-            }
-
-            .print-button {
-                display: none;
-            }
-        }
-    </style>
 </body>
 
 </html>

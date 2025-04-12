@@ -8,11 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Perencanaan extends Model
 {
     use HasFactory;
-
+    protected $casts = [
+        'purchase_price' => 'integer',
+        'total_price' => 'integer',
+    ];
+    protected $appends = ['formatted_stock', 'formatted_quantity'];
     protected $fillable = [
         'rencana_id',
         'product_code',
         'stock',
+        'purchase_price',
+        'total_price',
         'jumlah_kebutuhan',
         'created_by',
         'updated_by'
@@ -64,5 +70,15 @@ class Perencanaan extends Model
                 $dataPerencanaan->save();
             }
         });
+    }
+    public function getFormattedStockAttribute()
+    {
+        $formatted = number_format($this->stock, 4, ',', '.');
+        return rtrim(rtrim($formatted, '0'), ',');
+    }
+    public function getFormattedQuantityAttribute()
+    {
+        $formatted = number_format($this->jumlah_kebutuhan, 4, ',', '.');
+        return rtrim(rtrim($formatted, '0'), ',');
     }
 }

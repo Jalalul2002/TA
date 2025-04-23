@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Assetlab;
 use App\Models\DataPerencanaan;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,7 @@ class AdminController extends Controller
             return $q->where('prodi', $filter);
         })->count();
         $recentAssets = (clone $query)->latest()->limit(10)->get();
+        $recentTransactions = Transaction::latest()->limit(5)->get();
         $Users = User::when($filter !== 'all', function ($q) use ($filter) {
             if ($filter === 'Umum') {
                 return $q->whereNull('prodi');
@@ -48,7 +50,8 @@ class AdminController extends Controller
             'jumlahPerencanaan',
             'recentAssets',
             'Users',
-            'filter'
+            'filter',
+            'recentTransactions'
         ));
     }
 }

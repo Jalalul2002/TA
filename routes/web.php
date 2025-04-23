@@ -11,6 +11,7 @@ use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Staff\RegisterController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\UserController;
@@ -58,6 +59,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/bhp/{id}/print', [TransactionController::class, 'printById'])->name('penggunaan.print.id');
     Route::get('/transaction/inv/{id}/print', [PeminjamanController::class, 'printById'])->name('peminjaman.print.id');
 
+    Route::get('/data-harga', [ItemPricesController::class, 'index'])->name('data-harga');
+
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
     Route::get('/report', [ReportController::class, 'index'])->name('report');
     Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');
@@ -97,7 +100,6 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::put('/transaction/return/{id}', [PeminjamanController::class, 'update'])->name('transaction.return');
     Route::delete('/delete-peminjaman/{transaction}', [PeminjamanController::class, 'destroy'])->name('destroy-peminjaman');
 
-    Route::get('/data-harga', [ItemPricesController::class, 'index'])->name('data-harga');
     Route::get('/add-harga', [ItemPricesController::class, 'create'])->name('add-harga');
     Route::post('/add-harga', [ItemPricesController::class, 'store']);
     Route::delete('/delete-harga/{itemPrices}', [ItemPricesController::class, 'destroy'])->name('data-harga.destroy');
@@ -109,6 +111,12 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
 //Staff Route
 Route::middleware(['auth', 'staffMiddleware'])->group(function () {
     Route::get('dashboard', [StaffController::class, 'index'])->name('dashboard');
+    Route::get('data-staff', [StaffController::class, 'user'])->name('staff');
+    Route::get('add-staff', [RegisterController::class, 'create'])->name('add-staff');
+    Route::post('add-staff', [RegisterController::class, 'store']);
+    Route::get('edit-staff/{id}', [RegisterController::class, 'edit'])->name('edit-staff');
+    Route::put('update-staff/{id}', [RegisterController::class, 'update'])->name('update-staff');
+    Route::delete('data-staff/{id}', [StaffController::class, 'destroy'])->name('destroy-staff');
 });
 
 //staff Route

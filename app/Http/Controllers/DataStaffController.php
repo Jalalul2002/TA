@@ -10,7 +10,7 @@ class DataStaffController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::where('usertype', '!=', 'admin');
+        $query = User::query();
         if ($request->has('search')) {
             $query->search($request->search);
         }

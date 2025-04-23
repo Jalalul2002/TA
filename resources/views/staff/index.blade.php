@@ -36,7 +36,7 @@
                                 placeholder="Search for items" autocomplete="off">
                         </div>
                         <div class="flex justify-end">
-                            <a href="{{ route('admin.add-staff') }}"
+                            <a href="{{ route('add-staff') }}"
                                 class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy duration-300 transition-all">
                                 <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                     fill="currentColor" viewBox="0 0 448 512">
@@ -93,7 +93,7 @@
                                             {{ $user->prodi ?: '-' }}
                                         </td>
                                         <td class="py-2 flex flex-row gap-x-2 justify-center">
-                                            <a href="{{ route('admin.edit-staff', $user->id) }}">
+                                            <a href="{{ route('edit-staff', $user->id) }}">
                                                 <div
                                                     class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400 duration-300 transition-all">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
@@ -106,7 +106,7 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            <form action="{{ route('admin.destroy-staff', $user->id) }}"
+                                            <form action="{{ route('destroy-staff', $user->id) }}"
                                                 method="POST">
                                                 @csrf
                                                 @method('DELETE')

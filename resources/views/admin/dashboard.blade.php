@@ -55,7 +55,8 @@
                     class="bg-white shadow-md rounded-2xl p-6 flex items-center justify-between border border-gray-200">
                     <div>
                         <h3 class="text-gray-500 text-sm font-medium">Total Aset Inventaris</h3>
-                        <p class="text-3xl font-semibold text-gray-800">{{ number_format($jumlahStokInventaris, 0, ',', '.') }}</p>
+                        <p class="text-3xl font-semibold text-gray-800">
+                            {{ number_format($jumlahStokInventaris, 0, ',', '.') }}</p>
                     </div>
                     <div class="bg-uinRed p-3 rounded-full">
                         <svg class="w-7 h-7 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24" width="512"
@@ -139,12 +140,14 @@
                                             {{ $asset->product_name ?? 'Tidak ada data' }}
                                         </td>
                                         <td scope="col" class="px-4 py-2">
-                                            {{ ucfirst($asset->type ?? 'Tidak ada') }}
+                                            {{ $asset->type == 'bhp' ? 'BHP' : 'Inventaris' }}
                                         </td>
                                         <td scope="col" class="px-4 py-2">
                                             {{ ucfirst($asset->location ?? 'Tidak ada') }}
                                         </td>
-                                        <td scope="col" class="px-4 py-2">{{ $asset->stock ?? 0 }}</td>
+                                        <td scope="col" class="px-4 py-2">
+                                            {{ rtrim(rtrim(number_format($asset->stock, 4, ',', '.'), '0'), ',') }}
+                                        </td>
                                         <td scope="col" class="px-4 py-2 text-gray-500">
                                             {{ $asset->updated_at?->diffForHumans() ?? '-' }}
                                         </td>
@@ -164,12 +167,39 @@
             {{-- Card Penggunaan --}}
             <div class="col-span-1 row-span-4">
                 <div class="bg-white p-4 rounded-lg shadow-md">
-                    <h3 class="text-lg font-semibold mb-2">📝 Penggunaan Terbaru</h3>
-                    <ul class="divide-y divide-gray-300 text-sm">
-                        <li class="py-2 flex items-center justify-between">
-                            <span class="font-medium">Tidak Ada</span>
-                        </li>
-                    </ul>
+                    <h3 class="text-lg font-semibold mb-2">📝 Transaksi Terbaru</h3>
+                    <div class="relative overflow-x-auto sm:rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-white uppercase bg-uinTosca">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3">Nama</th>
+                                    <th scope="col" class="px-4 py-3">Jenis Transaksi</th>
+                                    <th scope="col" class="px-4 py-3">Keperluan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($recentTransactions as $item)
+                                    <tr class="border-b border-gray-200">
+                                        <td scope="col" class="px-4 py-2">
+                                            {{ $item->user_id }}-{{ $item->name }}
+                                        </td>
+                                        <td scope="col" class="px-4 py-2">
+                                            {{ $item->type == 'bhp' ? 'Penggunaan Bahan' : 'Peminjaman Barang' }}
+                                        </td>
+                                        <td scope="col" class="px-4 py-2 capitalize">
+                                            {{ $item->purpose }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="p-2 text-center text-gray-500">Tidak ada transaksi
+                                            terbaru
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             {{-- Card users --}}

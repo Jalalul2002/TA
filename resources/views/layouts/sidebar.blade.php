@@ -29,6 +29,13 @@
                 'label' => 'Barang Habis Pakai',
             ],
             [
+                'route' => route('data-harga'),
+                'isActive' => Request::routeIs(['data-harga', 'add-harga']),
+                'icon' =>
+                    '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="m6,9c-3.421,0-6,1.505-6,3.5v8c0,1.995,2.579,3.5,6,3.5s6-1.505,6-3.5v-8c0-1.995-2.579-3.5-6-3.5Zm4,7.5c0,.529-1.519,1.5-4,1.5s-4-.971-4-1.5v-1.348c1.046.533,2.435.848,4,.848s2.954-.315,4-.848v1.348Zm-4-5.5c2.481,0,4,.971,4,1.5s-1.519,1.5-4,1.5-4-.971-4-1.5,1.519-1.5,4-1.5Zm0,11c-2.481,0-4-.971-4-1.5v-1.348c1.046.533,2.435.848,4,.848s2.954-.315,4-.848v1.348c0,.529-1.519,1.5-4,1.5ZM24,5v14c0,2.757-2.243,5-5,5h-5c-.553,0-1-.448-1-1s.447-1,1-1h5c1.654,0,3-1.346,3-3V5c0-1.654-1.346-3-3-3h-10c-1.654,0-3,1.346-3,3v1c0,.552-.447,1-1,1s-1-.448-1-1v-1C4,2.243,6.243,0,9,0h10c2.757,0,5,2.243,5,5Zm-11,5c-.553,0-1-.448-1-1s.447-1,1-1h5v-2h-8v.5c0,.552-.447,1-1,1s-1-.448-1-1v-.5c0-1.103.897-2,2-2h8c1.103,0,2,.897,2,2v2c0,1.103-.897,2-2,2h-5Zm1,8c0-.552.447-1,1-1h4c.553,0,1,.448,1,1s-.447,1-1,1h-4c-.553,0-1-.448-1-1Zm0-4v-1c0-.552.447-1,1-1s1,.448,1,1v1c0,.552-.447,1-1,1s-1-.448-1-1Zm6,0c0,.552-.447,1-1,1s-1-.448-1-1v-1c0-.552.447-1,1-1s1,.448,1,1v1Z"/></svg></div>',
+                'label' => 'Data Harga Barang',
+            ],
+            [
                 'label' => 'Perencanaan',
                 'icon' =>
                     '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24" width="512" height="512"><path d="M19,2H5C2.243,2,0,4.243,0,7v10c0,2.757,2.243,5,5,5h14c2.757,0,5-2.243,5-5V7c0-2.757-2.243-5-5-5ZM5,4h14c1.654,0,3,1.346,3,3H2c0-1.654,1.346-3,3-3Zm-3,13V9H11v11H5c-1.654,0-3-1.346-3-3Zm17,3h-6V9h9v8c0,1.654-1.346,3-3,3Z"/></svg></div>',
@@ -66,25 +73,34 @@
                 ],
             ],
             [
-                'route' => route('data-harga'),
-                'isActive' => Request::routeIs(['data-harga', 'add-harga']),
+                'label' => 'Transaksi',
                 'icon' =>
-                    '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="m6,9c-3.421,0-6,1.505-6,3.5v8c0,1.995,2.579,3.5,6,3.5s6-1.505,6-3.5v-8c0-1.995-2.579-3.5-6-3.5Zm4,7.5c0,.529-1.519,1.5-4,1.5s-4-.971-4-1.5v-1.348c1.046.533,2.435.848,4,.848s2.954-.315,4-.848v1.348Zm-4-5.5c2.481,0,4,.971,4,1.5s-1.519,1.5-4,1.5-4-.971-4-1.5,1.519-1.5,4-1.5Zm0,11c-2.481,0-4-.971-4-1.5v-1.348c1.046.533,2.435.848,4,.848s2.954-.315,4-.848v1.348c0,.529-1.519,1.5-4,1.5ZM24,5v14c0,2.757-2.243,5-5,5h-5c-.553,0-1-.448-1-1s.447-1,1-1h5c1.654,0,3-1.346,3-3V5c0-1.654-1.346-3-3-3h-10c-1.654,0-3,1.346-3,3v1c0,.552-.447,1-1,1s-1-.448-1-1v-1C4,2.243,6.243,0,9,0h10c2.757,0,5,2.243,5,5Zm-11,5c-.553,0-1-.448-1-1s.447-1,1-1h5v-2h-8v.5c0,.552-.447,1-1,1s-1-.448-1-1v-.5c0-1.103.897-2,2-2h8c1.103,0,2,.897,2,2v2c0,1.103-.897,2-2,2h-5Zm1,8c0-.552.447-1,1-1h4c.553,0,1,.448,1,1s-.447,1-1,1h-4c-.553,0-1-.448-1-1Zm0-4v-1c0-.552.447-1,1-1s1,.448,1,1v1c0,.552-.447,1-1,1s-1-.448-1-1Zm6,0c0,.552-.447,1-1,1s-1-.448-1-1v-1c0-.552.447-1,1-1s1,.448,1,1v1Z"/></svg></div>',
-                'label' => 'Data Harga Barang',
-            ],
-            [
-                'route' => route('penggunaan'),
-                'isActive' => Request::routeIs(['penggunaan', 'add-penggunaan', 'detail-penggunaan']),
-                'icon' =>
-                    '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24" width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="m17 14a1 1 0 0 1 -1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1zm-4 3h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2zm9-6.515v8.515a5.006 5.006 0 0 1 -5 5h-10a5.006 5.006 0 0 1 -5-5v-14a5.006 5.006 0 0 1 5-5h4.515a6.958 6.958 0 0 1 4.95 2.05l3.484 3.486a6.951 6.951 0 0 1 2.051 4.949zm-6.949-7.021a5.01 5.01 0 0 0 -1.051-.78v4.316a1 1 0 0 0 1 1h4.316a4.983 4.983 0 0 0 -.781-1.05zm4.949 7.021c0-.165-.032-.323-.047-.485h-4.953a3 3 0 0 1 -3-3v-4.953c-.162-.015-.321-.047-.485-.047h-4.515a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3z"/></svg></div>',
-                'label' => 'Penggunaan',
-            ],
-            [
-                'route' => route('peminjaman'),
-                'isActive' => Request::routeIs(['peminjaman', 'add-peminjaman', 'detail-peminjaman']),
-                'icon' =>
-                    '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="m19.642,14.308c.274-.297.536-.625.741-.974.346-.59-.115-1.333-.799-1.333h-3.167c-.684,0-1.144.743-.799,1.333.204.349.466.677.741.974-2.376.879-4.358,3.52-4.358,6.204,0,1.923,1.57,3.488,3.5,3.488h5c1.93,0,3.5-1.565,3.5-3.488,0-2.684-1.982-5.325-4.358-6.204Zm.858,7.692h-5c-.827,0-1.5-.667-1.5-1.488,0-2.192,2.056-4.512,4-4.512s4,2.319,4,4.512c0,.821-.673,1.488-1.5,1.488Zm-1.5-20h-1v-1c0-.552-.447-1-1-1s-1,.448-1,1v1h-8v-1c0-.552-.448-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h4c.552,0,1-.448,1-1s-.448-1-1-1h-4c-1.654,0-3-1.346-3-3v-9h20v1c0,.552.447,1,1,1s1-.448,1-1v-4c0-2.757-2.243-5-5-5ZM2,8v-1c0-1.654,1.346-3,3-3h14c1.654,0,3,1.346,3,3v1H2Z"/></svg></div>',
-                'label' => 'Peminjaman',
+                    '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M16,0H8A5.006,5.006,0,0,0,3,5V23a1,1,0,0,0,1.564.825L6.67,22.386l2.106,1.439a1,1,0,0,0,1.13,0l2.1-1.439,2.1,1.439a1,1,0,0,0,1.131,0l2.1-1.438,2.1,1.437A1,1,0,0,0,21,23V5A5.006,5.006,0,0,0,16,0Zm3,21.1-1.1-.752a1,1,0,0,0-1.132,0l-2.1,1.439-2.1-1.439a1,1,0,0,0-1.131,0l-2.1,1.439-2.1-1.439a1,1,0,0,0-1.129,0L5,21.1V5A3,3,0,0,1,8,2h8a3,3,0,0,1,3,3Z"/><rect x="7" y="8" width="10" height="2" rx="1"/><rect x="7" y="12" width="8" height="2" rx="1"/></svg></div>',
+                'isDropdown' => true,
+                'isActive' => Request::routeIs([
+                    'penggunaan',
+                    'add-penggunaan',
+                    'detail-penggunaan',
+                    'peminjaman',
+                    'add-peminjaman',
+                    'detail-peminjaman',
+                ]),
+                'submenu' => [
+                    [
+                        'route' => route('penggunaan'),
+                        'isActive' => Request::routeIs(['penggunaan', 'add-penggunaan', 'detail-penggunaan']),
+                        'icon' =>
+                            '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24" width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="m17 14a1 1 0 0 1 -1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1zm-4 3h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2zm9-6.515v8.515a5.006 5.006 0 0 1 -5 5h-10a5.006 5.006 0 0 1 -5-5v-14a5.006 5.006 0 0 1 5-5h4.515a6.958 6.958 0 0 1 4.95 2.05l3.484 3.486a6.951 6.951 0 0 1 2.051 4.949zm-6.949-7.021a5.01 5.01 0 0 0 -1.051-.78v4.316a1 1 0 0 0 1 1h4.316a4.983 4.983 0 0 0 -.781-1.05zm4.949 7.021c0-.165-.032-.323-.047-.485h-4.953a3 3 0 0 1 -3-3v-4.953c-.162-.015-.321-.047-.485-.047h-4.515a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3z"/></svg></div>',
+                        'label' => 'Penggunaan',
+                    ],
+                    [
+                        'route' => route('peminjaman'),
+                        'isActive' => Request::routeIs(['peminjaman', 'add-peminjaman', 'detail-peminjaman']),
+                        'icon' =>
+                            '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="m19.642,14.308c.274-.297.536-.625.741-.974.346-.59-.115-1.333-.799-1.333h-3.167c-.684,0-1.144.743-.799,1.333.204.349.466.677.741.974-2.376.879-4.358,3.52-4.358,6.204,0,1.923,1.57,3.488,3.5,3.488h5c1.93,0,3.5-1.565,3.5-3.488,0-2.684-1.982-5.325-4.358-6.204Zm.858,7.692h-5c-.827,0-1.5-.667-1.5-1.488,0-2.192,2.056-4.512,4-4.512s4,2.319,4,4.512c0,.821-.673,1.488-1.5,1.488Zm-1.5-20h-1v-1c0-.552-.447-1-1-1s-1,.448-1,1v1h-8v-1c0-.552-.448-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h4c.552,0,1-.448,1-1s-.448-1-1-1h-4c-1.654,0-3-1.346-3-3v-9h20v1c0,.552.447,1,1,1s1-.448,1-1v-4c0-2.757-2.243-5-5-5ZM2,8v-1c0-1.654,1.346-3,3-3h14c1.654,0,3,1.346,3,3v1H2Z"/></svg></div>',
+                        'label' => 'Peminjaman',
+                    ],
+                ],
             ],
             [
                 'route' => route('report'),
@@ -150,6 +166,27 @@
                             'p-2 rounded-lg group-hover:bg-uinBlue',
                             'bg-uinGreen' => !Request::routeIs('admin.staff'),
                             'bg-uinBlue' => Request::routeIs('admin.staff'),
+                        ])>
+                            <svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24"
+                                width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+                                <path
+                                    d="m7.5 13a4.5 4.5 0 1 1 4.5-4.5 4.505 4.505 0 0 1 -4.5 4.5zm0-7a2.5 2.5 0 1 0 2.5 2.5 2.5 2.5 0 0 0 -2.5-2.5zm7.5 17v-.5a7.5 7.5 0 0 0 -15 0v.5a1 1 0 0 0 2 0v-.5a5.5 5.5 0 0 1 11 0v.5a1 1 0 0 0 2 0zm9-5a7 7 0 0 0 -11.667-5.217 1 1 0 1 0 1.334 1.49 5 5 0 0 1 8.333 3.727 1 1 0 0 0 2 0zm-6.5-9a4.5 4.5 0 1 1 4.5-4.5 4.505 4.505 0 0 1 -4.5 4.5zm0-7a2.5 2.5 0 1 0 2.5 2.5 2.5 2.5 0 0 0 -2.5-2.5z" />
+                            </svg>
+                        </div>
+                        <span class="flex-1 ms-3 whitespace-nowrap transition-all duration-300"
+                            :class="openSidebar ? 'opacity-100' : 'opacity-0'">Manajemen Pengguna</span>
+                    </x-side-link>
+                </li>
+            @endif
+
+            {{-- Admin Link --}}
+            @if (Auth::user()->usertype == 'staff')
+                <li>
+                    <x-side-link href="{{ route('staff') }}" :active="Request::routeIs('staff')">
+                        <div @class([
+                            'p-2 rounded-lg group-hover:bg-uinBlue',
+                            'bg-uinGreen' => !Request::routeIs('staff'),
+                            'bg-uinBlue' => Request::routeIs('staff'),
                         ])>
                             <svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24"
                                 width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">

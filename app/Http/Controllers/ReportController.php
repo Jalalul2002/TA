@@ -298,4 +298,8 @@ class ReportController extends Controller
 
         return Excel::download(new ReportExport($startDate, $endDate, $location, $type, $productType), $filename);
     }
+
+    public function damagedReport(){
+        
+    }
 }

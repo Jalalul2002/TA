@@ -6,6 +6,16 @@
             </h2>
         </a>
     </x-slot>
+    @if (session('success') || session('error'))
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show"
+            class="fixed top-20 right-10 p-3 rounded-md shadow-md transition-all duration-500"
+            :class="{ 'bg-green-500 text-white': '{{ session('success') }}', 'bg-red-500 text-white': '{{ session('error') }}' }"
+            x-transition:enter="transform ease-out duration-500" x-transition:enter-start="opacity-0 -translate-y-5"
+            x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transform ease-in duration-500"
+            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-5">
+            {{ session('success') ?? session('error') }}
+        </div>
+    @endif
     <div class="py-8">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 xl:grid xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 xl:col-span-2" x-data="{
@@ -246,10 +256,11 @@
                 const stock = selectedOption.getAttribute('data-stock');
                 const satuan = selectedOption.getAttribute('data-satuan');
                 const type = selectedOption.getAttribute('data-type');
+                const price = selectedOption.getAttribute('data-price') || 0;
 
                 this.items[index].type = type;
                 this.items[index].stock = stock ? parseInt(stock) : 0;
-                this.items[index].price = selectedOption.getAttribute('data-price') || 0;
+                this.items[index].price = price ?? 0;
                 this.items[index].product_unit = satuan;
 
                 if (type === 'unit') {

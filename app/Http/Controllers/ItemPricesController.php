@@ -30,10 +30,10 @@ class ItemPricesController extends Controller
         $sortField = $request->get('sort_field', 'effective_date');
         $sortOrder = $request->get('sort_order', 'desc');
         $allowedFields = ['product_code', 'product_name', 'product_detail', 'merk', 'product_type', 'price_type', 'product_unit', 'location', 'purchase_price', 'price', 'effective_date'];
-
+        $location = $request->location;
 
         if (Auth::user()->usertype === 'staff') {
-            $query->ofLocation(Auth::user()->prodi);
+            $location = Auth::user()->prodi;
         }
         #filter search
         if ($request->has('search')) {
@@ -48,8 +48,8 @@ class ItemPricesController extends Controller
             $query->where('product_type', $request->product_type);
         }
         #filterlokasi
-        if ($request->has('location') && $request->location != '') {
-            $query->where('item_prices.location', $request->location);
+        if ($location) {
+            $query->where('item_prices.location', $location);
         }
 
         if (in_array($sortField, $allowedFields)) {

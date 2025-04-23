@@ -90,20 +90,6 @@ class TransactionController extends Controller
                     ? Auth::user()->prodi
                     : $request->location;
 
-                // Simpan data perencanaan
-                $data = Transaction::create([
-                    'purpose' => $request->purpose,
-                    'user_id' => $request->user_id,
-                    'name' => ucwords(strtolower($request->name)),
-                    'prodi' => $request->prodi,
-                    'telp' => $request->telp,
-                    'detail' => $request->detail,
-                    'type' => 'bhp',
-                    'location' => $location,
-                    'created_by' => Auth::id(),
-                    'updated_by' => Auth::id(),
-                ]);
-
                 // **1. Simpan produk yang sudah ada**
                 $items = $request->items ?? [];
                 $processedItems = [];
@@ -127,14 +113,39 @@ class TransactionController extends Controller
                     $processedItems[] = $temp;
                 }
 
+                $data = null;
+
                 foreach ($processedItems as $item) {
                     $asset = Assetlab::with('latestPrice')->where('product_code', $item['product_code'])->first();
                     if ($asset) {
+                        if (!$asset->latestPrice || !$asset->latestPrice->price) {
+                            return back()->withErrors([
+                                'price' => "Harga untuk produk {$item['product_code']} belum diatur di data harga. Silakan atur harga terlebih dahulu."
+                            ])->withInput();
+                        }
+
                         if ($item['quantity'] > $asset->stock) {
                             return back()->withErrors([
                                 'quantity' => "Jumlah pemakaian untuk produk {$item['product_code']} melebihi stok yang tersedia ({$asset->stock})."
                             ])->withInput();
                         }
+
+                        // Simpan data perencanaan
+                        if ($data === null) {
+                            $data = Transaction::create([
+                                'purpose' => $request->purpose,
+                                'user_id' => $request->user_id,
+                                'name' => ucwords(strtolower($request->name)),
+                                'prodi' => $request->prodi,
+                                'telp' => $request->telp,
+                                'detail' => $request->detail,
+                                'type' => 'bhp',
+                                'location' => $location,
+                                'created_by' => Auth::id(),
+                                'updated_by' => Auth::id(),
+                            ]);
+                        }
+
                         // Hitung updated stock
                         $updatedStock = max(0, $asset->stock - $item['quantity']); // Hindari stock negatif
                         $price = $request->purpose == 'penelitian' ? $asset->latestPrice->price : 0;

@@ -10,6 +10,7 @@ use App\Http\Controllers\PerencanaanController;
 use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\UserController;
@@ -58,6 +59,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/inv/{id}/print', [PeminjamanController::class, 'printById'])->name('peminjaman.print.id');
 
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
+    Route::get('/report', [ReportController::class, 'index'])->name('report');
+    Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');
+    Route::get('/report/print', [ReportController::class, 'print'])->name('report.print');
 });
 
 Route::middleware(['auth', 'orMiddleware'])->group(function () {

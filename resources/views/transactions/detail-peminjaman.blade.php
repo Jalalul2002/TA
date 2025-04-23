@@ -216,7 +216,8 @@
                                             {{ $product->product_code }}
                                         </td>
                                         <td scope="row" class="px-3 py-2 font-medium">
-                                            {{ $product->asset->product_name }} {{ $product->asset->product_detail }} {{ $product->asset->merk }}
+                                            {{ $product->asset->product_name }} {{ $product->asset->product_detail }}
+                                            {{ $product->asset->merk }}
                                         </td>
                                         <td class="px-3 py-2 font-bold text-gray-600 text-right whitespace-nowrap">
                                             Rp. {{ number_format($product->rental_price, 0, ',', '.') }},-
@@ -225,7 +226,7 @@
                                             {{ intval($product->quantity) }} {{ $product->asset->product_unit }}
                                         </td>
                                         <td class="px-3 py-2 font-bold text-gray-600 text-right">
-                                            {{ $product->asset->latestPrice->price_type == 'unit' ? '-' : intval($product->rental) . ' Jam' }}
+                                            {{ $product->asset->latestPrice->price_type == 'unit' ? '-' : rtrim(rtrim(number_format($product->rental, 4, ',', '.'), '0'), ',') . ' Jam' }}
                                         </td>
                                         <td class="px-3 py-2 font-bold text-gray-600 text-right">
                                             Rp. {{ number_format($product->total_price, 0, ',', '.') }},-

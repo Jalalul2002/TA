@@ -17,9 +17,7 @@ class PerencanaanExport implements FromCollection, WithHeadings, WithMapping, Wi
     /**
      * @return \Illuminate\Support\Collection
      */
-    private $perencanaanId;
-    private $dataPerencanaan;
-
+    private $perencanaanId, $dataPerencanaan;
     public function __construct($perencanaanId)
     {
         $this->perencanaanId = $perencanaanId;

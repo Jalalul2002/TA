@@ -158,9 +158,9 @@
                             <th class="border border-gray-300 px-3 py-2">Banyaknya</th>
                             <th class="border border-gray-300 px-3 py-2">Durasi</th>
                             <th class="border border-gray-300 px-3 py-2">Sub Total</th>
-                            <th class="border border-gray-300 px-3 py-2">Dikembalikan</th>
+                            {{-- <th class="border border-gray-300 px-3 py-2">Dikembalikan</th>
                             <th class="border border-gray-300 px-3 py-2">Rusak</th>
-                            <th class="border border-gray-300 px-3 py-2">Status</th>
+                            <th class="border border-gray-300 px-3 py-2">Status</th> --}}
                             <th class="border border-gray-300 px-3 py-2">Tanggal Kembali</th>
                             <th class="border border-gray-300 px-3 py-2">Laboran</th>
                             <th class="border border-gray-300 px-3 py-2">Catatan</th>
@@ -194,20 +194,20 @@
                                         <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
                                             Rp. {{ number_format($item->total_price, 0, ',', '.') }},-
                                         </td>
-                                        <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
+                                        {{-- <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
                                             {{ intval($item->returned_quantity) }} / {{ intval($item->quantity) }}
                                         </td>
                                         <td class="border border-gray-300 px-3 py-2">
                                             {{ intval($item->damaged_quantity) }}
                                         </td>
                                         <td class="border border-gray-300 px-3 py-2 capitalize">{{ $item->status }}
-                                        </td>
+                                        </td> --}}
                                         <td class="border border-gray-300 px-3 py-2">{{ $item->return_date ?: '-' }}
                                         </td>
                                         <td class="border border-gray-300 px-3 py-2">
                                             {{ $item->status != 'dipinjam' ? $item->updater->name : '-' }}</td>
                                         <td class="border border-gray-300 px-3 py-2">
-                                            {{ $item->notes ?: ($item->return_notes ?: '-') }}</td>
+                                            {{ $item->return_notes ?: ($item->notes ?: '-') }}</td>
                                     </tr>
                                 @endforeach
                             @endforeach
@@ -250,14 +250,14 @@
                                     <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
                                         Rp. {{ number_format($item->total_price, 0, ',', '.') }},-
                                     </td>
-                                    <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
+                                    {{-- <td class="border border-gray-300 px-3 py-2 whitespace-nowrap">
                                         {{ intval($item->returned_quantity) }} / {{ intval($item->quantity) }}
                                     </td>
                                     <td class="border border-gray-300 px-3 py-2">
                                         {{ intval($item->damaged_quantity) }}
                                     </td>
                                     <td class="border border-gray-300 px-3 py-2 capitalize">{{ $item->status }}
-                                    </td>
+                                    </td> --}}
                                     <td class="border border-gray-300 px-3 py-2">{{ $item->return_date ?: '-' }}</td>
                                     <td class="border border-gray-300 px-3 py-2">
                                         {{ $item->status != 'dipinjam' ? $item->updater->name : '-' }}</td>

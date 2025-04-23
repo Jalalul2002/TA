@@ -128,7 +128,7 @@
                                 </a>
                             @endif
                             <a title="Download Data"
-                                href="{{ route('export.transaction.inv', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'user_id' => request('user_id')]) }}">
+                                href="{{ route('export.transaction.inv', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'purpose' => request('purpose'), 'user_id' => request('user_id')]) }}">
                                 <div
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-teal-500 hover:bg-teal-700 transition-all duration-300">
                                     <svg class="size-4 fill-white me-2" xmlns="http://www.w3.org/2000/svg"

@@ -309,7 +309,7 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                     </div>
                     <div class="flex mb-2 sm:mb-0 gap-x-4 items-center">
                         <img src="icon/lab.png" alt="icon booking" class="w-10 md:w-14 lg:w-16">
-                        <h2 class="leading-none">Peminjaman Bahan Lab</h2>
+                        <h2 class="leading-none">Penggunaan Bahan Lab</h2>
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
-class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, WithCustomStartCell, WithEvents
+class PeminjamanExportAll implements FromCollection, WithHeadings, WithMapping, WithCustomStartCell, WithEvents
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -35,7 +35,7 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
     }
     public function collection()
     {
-        $query = Transaction::with(['items.asset', 'creator', 'updater'])->where('type', 'bhp');
+        $query = Transaction::with(['loans.asset', 'creator', 'updater'])->where('type', 'inventaris');
 
         if ($this->startDate && $this->endDate) {
             $query->whereBetween('created_at', [$this->startDate, $this->endDate]);
@@ -54,7 +54,7 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
 
         $data = $query->get();
 
-        $this->totalHarga = $data->flatMap->items->sum('total_price');
+        $this->totalHarga = $data->flatMap->loans->sum('total_price');
 
         return $data;
     }
@@ -68,12 +68,15 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
             'Prodi',
             'Telepon',
             'Produk',
+            'Keterangan',
             'Merk',
-            'Jenis',
             'Harga',
             'Jumlah',
-            'Satuan',
+            'Durasi/Jam',
             'Sub Total',
+            'Tanggal Kembali',
+            'Laboran',
+            'Catatan',
         ];
     }
     public function registerEvents(): array
@@ -83,12 +86,12 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
                 $sheet = $event->sheet->getDelegate();
 
                 // Auto-size untuk semua kolom dari A hingga L
-                foreach (range('A', 'M') as $column) {
+                foreach (range('A', 'P') as $column) {
                     $sheet->getColumnDimension($column)->setAutoSize(true);
                 }
 
                 // Judul Laporan di Baris 1
-                $sheet->mergeCells('A1:M1');
+                $sheet->mergeCells('A1:P1');
                 $sheet->setCellValue('A1', 'LAPORAN DATA PENGGUNAAN BARANG');
                 $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
                 $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -99,16 +102,16 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
                     : "Semua Data");
                 $lokasi = "Lokasi: " . ($this->location ?: "Semua Data");
                 $purpose = "Keperluan: " . ($this->purpose ?: "Semua Data");
-                $sheet->mergeCells('A2:M2');
+                $sheet->mergeCells('A2:P2');
                 $sheet->setCellValue('A2', "$lokasi | $purpose | $periode");
                 $sheet->getStyle('A2')->getAlignment()->setHorizontal('center');
 
                 // Baris Kosong (Baris 3)
-                $sheet->mergeCells('A3:M3');
+                $sheet->mergeCells('A3:P3');
 
                 // Membuat header bold (Baris 4)
-                $sheet->getStyle('A5:M5')->getFont()->setBold(true);
-                $sheet->getStyle('A5:M5')->getAlignment()->setHorizontal('center');
+                $sheet->getStyle('A5:P5')->getFont()->setBold(true);
+                $sheet->getStyle('A5:P5')->getAlignment()->setHorizontal('center');
 
                 // style
                 $sheet->getStyle('J6:J' . $sheet->getHighestRow())->getNumberFormat()
@@ -125,9 +128,9 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
                 $sheet->getStyle("A$totalRow")->getAlignment()->setHorizontal('right');
                 $sheet->getStyle("A$totalRow:L$totalRow")->getFont()->setBold(true);
                 $sheet->getStyle("M$totalRow")->getNumberFormat()
-                ->setFormatCode('[$Rp-421] #,##0');
+                    ->setFormatCode('[$Rp-421] #,##0');
 
-                $cellRange = "A5:M$totalRow";
+                $cellRange = "A5:P$totalRow";
                 $sheet->getStyle($cellRange)->applyFromArray([
                     'borders' => [
                         'allBorders' => [
@@ -142,7 +145,7 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
     public function map($transaction): array
     {
         $rows = [];
-        foreach ($transaction->items as $item) {
+        foreach ($transaction->loans as $item) {
             $rows[] = [
                 $transaction->created_at ? $transaction->created_at->format('d/m/Y') : '-',
                 $transaction->creator->name ?: '-',
@@ -151,12 +154,15 @@ class PenggunaanExportAll implements FromCollection, WithHeadings, WithMapping, 
                 $transaction->prodi ?: '-',
                 $transaction->telp ?: '-',
                 $item->asset->product_name ?: '-',
+                $item->asset->product_detail ?: '-',
                 $item->asset->merk ?: '-',
-                $item->asset->product_type ?: '-',
-                $item->unit_price > 0 ? $item->unit_price : '0',
-                $item->jumlah_pemakaian > 0 ? $item->jumlah_pemakaian : '0',
-                $item->asset->product_unit ?: '-',
+                $item->rental_price > 0 ? $item->rental_price : '0',
+                $item->quantity ? (int)$item->quantity . ' ' . $item->asset->product_unit : '0',
+                $item->asset->latestPrice->price_type == 'unit' ? '-' : rtrim(rtrim(number_format($item->rental, 4, ',', ''), '0'), ',') . " Jam",
                 $item->total_price > 0 ? $item->total_price : '0',
+                $item->return_date ?: '-',
+                $item->status != 'dipinjam' ? $item->updater->name : '-',
+                $item->return_notes ?: ($item->notes ?: '-')
             ];
         }
         return $rows;

@@ -86,6 +86,13 @@
                     '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1" data-name="Layer 1" viewBox="0 0 24 24"><path d="m19.642,14.308c.274-.297.536-.625.741-.974.346-.59-.115-1.333-.799-1.333h-3.167c-.684,0-1.144.743-.799,1.333.204.349.466.677.741.974-2.376.879-4.358,3.52-4.358,6.204,0,1.923,1.57,3.488,3.5,3.488h5c1.93,0,3.5-1.565,3.5-3.488,0-2.684-1.982-5.325-4.358-6.204Zm.858,7.692h-5c-.827,0-1.5-.667-1.5-1.488,0-2.192,2.056-4.512,4-4.512s4,2.319,4,4.512c0,.821-.673,1.488-1.5,1.488Zm-1.5-20h-1v-1c0-.552-.447-1-1-1s-1,.448-1,1v1h-8v-1c0-.552-.448-1-1-1s-1,.448-1,1v1h-1C2.243,2,0,4.243,0,7v12c0,2.757,2.243,5,5,5h4c.552,0,1-.448,1-1s-.448-1-1-1h-4c-1.654,0-3-1.346-3-3v-9h20v1c0,.552.447,1,1,1s1-.448,1-1v-4c0-2.757-2.243-5-5-5ZM2,8v-1c0-1.654,1.346-3,3-3h14c1.654,0,3,1.346,3,3v1H2Z"/></svg></div>',
                 'label' => 'Peminjaman',
             ],
+            [
+                'route' => route('report'),
+                'isActive' => Request::routeIs('report'),
+                'icon' =>
+                    '<div class="p-2 bg-uinGreen group-hover:bg-uinBlue rounded-lg transition duration-500"><svg class="size-4 fill-white" id="Layer_1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1"><path d="m6 15c.553 0 1 .448 1 1v3c0 .552-.447 1-1 1s-1-.448-1-1v-3c0-.552.447-1 1-1zm4-4c-.553 0-1 .448-1 1v7c0 .552.447 1 1 1s1-.448 1-1v-7c0-.552-.447-1-1-1zm14 10.833c0 1.377-1.641 2.167-4.5 2.167s-4.5-.79-4.5-2.167v-7.333c0-.883 1.85-1.5 4.5-1.5s4.5.617 4.5 1.5zm-4.5-5.833c-.956 0-1.802-.083-2.5-.227v1.769c.249.165.996.458 2.5.458 1.48 0 2.237-.31 2.5-.489v-1.737c-.698.144-1.544.227-2.5.227zm2.5 5.607v-1.938c-.662.201-1.48.331-2.5.331-1.041 0-1.85-.127-2.5-.321v1.928c.296.16 1.114.393 2.5.393s2.204-.233 2.5-.393zm-9-11.607c-1.654 0-3-1.346-3-3v-4.953c-.162-.016-.321-.047-.485-.047h-4.515c-1.654 0-3 1.346-3 3v14c0 1.654 1.346 3 3 3h7c.553 0 1 .448 1 1s-.447 1-1 1h-7c-2.757 0-5-2.243-5-5v-14c0-2.757 2.243-5 5-5h4.515c1.869 0 3.627.728 4.95 2.05l3.484 3.486c1.173 1.172 1.894 2.729 2.028 4.383.045.55-.365 1.033-.916 1.078-.586.056-1.064-.418-1.092-.997h-4.97zm0-2h4.316c-.218-.378-.468-.738-.781-1.05l-3.484-3.485c-.315-.315-.675-.564-1.051-.781v4.316c0 .551.448 1 1 1z"/></svg></div>',
+                'label' => 'Stock Opname',
+            ],
         ];
     @endphp
     <div class="h-full px-3 pb-4 overflow-y-auto shadow-md">
@@ -138,8 +145,12 @@
             {{-- Admin Link --}}
             @if (Auth::user()->usertype == 'admin')
                 <li>
-                    <x-side-link href="{{ route('admin.staff') }}" :active="request()->is('admin/data-staff')">
-                        <div class="p-2 rounded-lg bg-uinGreen group-hover:bg-uinBlue">
+                    <x-side-link href="{{ route('admin.staff') }}" :active="Request::routeIs('admin.staff')">
+                        <div @class([
+                            'p-2 rounded-lg group-hover:bg-uinBlue',
+                            'bg-uinGreen' => !Request::routeIs('admin.staff'),
+                            'bg-uinBlue' => Request::routeIs('admin.staff'),
+                        ])>
                             <svg class="size-4 fill-white" id="Layer_1" height="512" viewBox="0 0 24 24"
                                 width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
                                 <path

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PeminjamanExportAll;
+use App\Exports\PeminjamanExportId;
 use App\Models\Assetlab;
 use App\Models\Peminjaman;
 use App\Models\Transaction;
@@ -103,7 +105,7 @@ class PeminjamanController extends Controller
                 $data = Transaction::create([
                     'purpose' => $request->purpose,
                     'user_id' => $request->user_id,
-                    'name' => $request->name,
+                    'name' => ucwords(strtolower($request->name)),
                     'prodi' => $request->prodi,
                     'telp' => $request->telp,
                     'detail' => $request->detail,
@@ -284,11 +286,12 @@ class PeminjamanController extends Controller
         $endDate = $request->input('end_date');
         $location = $request->input('location');
         $user_id = $request->input('user_id');
+        $purpose = $request->input('purpose');
         if (Auth::user()->usertype === 'staff') {
             $location = Auth::user()->prodi;
         }
 
-        $filename = "Data_Penggunaan Barang";
+        $filename = "Data_Peminjaman Barang";
 
         if ($startDate || $endDate) {
             $filename .= "Periode_{$startDate}-{$endDate}";
@@ -298,13 +301,17 @@ class PeminjamanController extends Controller
             $filename .= "_{$user_id}";
         }
 
+        if ($purpose) {
+            $filename .= "_{$purpose}";
+        }
+
         if ($location) {
             $filename .= "_{$location}";
         }
 
         $filename .= ".xlsx";
 
-        // return Excel::download(new PenggunaanExportAll($startDate, $endDate, $location, $user_id), $filename);
+        return Excel::download(new PeminjamanExportAll($startDate, $endDate, $location, $user_id, $purpose), $filename);
     }
     public function exportById($id)
     {
@@ -313,9 +320,9 @@ class PeminjamanController extends Controller
         $name = $transaksi->name;
         $tanggal = $transaksi->created_at->format('d-m-Y');
         // Susun nama file yang lebih rapi
-        $filename = "Data Penggunaan_{$user_id}_{$name}_{$tanggal}.xlsx";
+        $filename = "Data Peminjaman_{$user_id}_{$name}_{$tanggal}.xlsx";
 
-        // return Excel::download(new PenggunaanExportId($id), $filename);
+        return Excel::download(new PeminjamanExportId($id), $filename);
     }
     // Print Data
     public function print(Request $request)

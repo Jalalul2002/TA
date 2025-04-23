@@ -94,7 +94,7 @@ class TransactionController extends Controller
                 $data = Transaction::create([
                     'purpose' => $request->purpose,
                     'user_id' => $request->user_id,
-                    'name' => $request->name,
+                    'name' => ucwords(strtolower($request->name)),
                     'prodi' => $request->prodi,
                     'telp' => $request->telp,
                     'detail' => $request->detail,
@@ -221,6 +221,7 @@ class TransactionController extends Controller
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
         $location = $request->input('location');
+        $purpose = $request->input('purpose');
         $user_id = $request->input('user_id');
         if (Auth::user()->usertype === 'staff') {
             $location = Auth::user()->prodi;
@@ -236,13 +237,17 @@ class TransactionController extends Controller
             $filename .= "_{$user_id}";
         }
 
+        if ($purpose) {
+            $filename .= "_{$purpose}";
+        }
+
         if ($location) {
             $filename .= "_{$location}";
         }
 
         $filename .= ".xlsx";
 
-        return Excel::download(new PenggunaanExportAll($startDate, $endDate, $location, $user_id), $filename);
+        return Excel::download(new PenggunaanExportAll($startDate, $endDate, $location, $user_id, $purpose), $filename);
     }
     public function exportById($id)
     {

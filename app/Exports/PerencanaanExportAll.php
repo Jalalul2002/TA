@@ -19,12 +19,7 @@ class PerencanaanExportAll implements FromCollection, WithHeadings, WithMapping,
     /**
      * @return \Illuminate\Support\Collection
      */
-    private $startDate;
-    private $endDate;
-    private $location;
-    private $type;
-    private $totalHarga;
-
+    protected $startDate, $endDate, $location, $type, $totalHarga;
     public function __construct($startDate, $endDate, $location, $type)
     {
         $this->startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : null;
@@ -97,7 +92,7 @@ class PerencanaanExportAll implements FromCollection, WithHeadings, WithMapping,
                 $sheet->getStyle('A5:M5')->getAlignment()->setHorizontal('center');
 
                 // Menghitung jumlah baris data (total transaksi)
-                $lastRow = $sheet->getHighestRow(); // Baris terakhir dengan data
+                $lastRow = $sheet->getHighestRow() + 1; // Baris terakhir dengan data
                 $sheet->getStyle('K6:K' . $sheet->getHighestRow())->getNumberFormat()
                     ->setFormatCode('[$Rp-421] #,##0');
                 $sheet->getStyle('M6:M' . $sheet->getHighestRow())->getNumberFormat()

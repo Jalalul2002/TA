@@ -17,8 +17,7 @@ class AssetInvExport implements FromCollection, WithHeadings, WithMapping, WithC
     /**
      * @return \Illuminate\Support\Collection
      */
-    protected $productType;
-    protected $location;
+    protected $productType, $location;
 
     public function __construct($productType, $location)
     {

@@ -45,11 +45,12 @@
                             ][$prodi ?? ''] ?? ''
                         : '' }}',
                     products: [],
+                    type: '',
                     selectedProduct: null,
                     purchasePrice: 0,
                     async fetchProducts() {
                         if (this.location) {
-                            const response = await fetch(`/assets?location=${this.location}`);
+                            const response = await fetch(`/assets?location=${this.location}&type=${this.type}`);
                             this.products = await response.json();
                         } else {
                             this.products = [];
@@ -80,14 +81,25 @@
                         <x-input-error :messages="$errors->get('location')" class="mt-2" />
                     </div>
                     <div class="mt-4">
+                        <x-input-label for="type" :value="__('Jenis Produk')" />
+                        <select id="type" name="type"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
+                            x-model="type" @change="fetchProducts()" required>
+                            <option value="">-- Pilih Jenis Produk --</option>
+                            <option value="inventaris">Aset Inventaris</option>
+                            <option value="bhp">Bahan Habis Pakai</option>
+                        </select>
+                        <x-input-error :messages="$errors->get('type')" class="mt-2" />
+                    </div>
+                    <div class="mt-4">
                         <x-input-label for="product" :value="__('Pilih Produk')" />
                         <select name="product_code"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 mt-1"
                             required x-model="selectedProduct" x-ref="productSelect"
                             @change="
                                 let selected = products.find(p => p.product_code === selectedProduct);
-                                if (selected && selected.latest_plans) {
-                                    purchasePrice = selected.latest_plans.purchase_price || 0;
+                                if (selected && selected.latest_realisasi) {
+                                    purchasePrice = selected.latest_realisasi.purchase_price || 0;
                                 } else {
                                     purchasePrice = 0;
                                 }
@@ -107,7 +119,8 @@
                             required>
                             <option value="">-- Pilih Jenis Harga --</option>
                             <option value="unit">Per Unit</option>
-                            <option value="rental">Sewa Perjam</option>
+                            <option value="sample">Per Sampel</option>
+                            <option value="rental">Sewa Per Jam</option>
                         </select>
                         <x-input-error :messages="$errors->get('price_type')" class="mt-2" />
                     </div>
@@ -134,8 +147,8 @@
                     </div>
                     <div class="mt-4">
                         <x-input-label for="effective_date" :value="__('Tanggal Berlaku')" />
-                        <x-text-input id="effective_date" class="block mt-1 w-full" type="date" name="effective_date"
-                            :value="old('effective_date', 0)" autofocus autocomplete="effective_date" />
+                        <x-text-input id="effective_date" class="block mt-1 w-full" type="date"
+                            name="effective_date" :value="old('effective_date', 0)" autofocus autocomplete="effective_date" />
                         <x-input-error :messages="$errors->get('effective_date')" class="mt-2" />
                     </div>
                     <div class="flex items-center justify-end mt-4">

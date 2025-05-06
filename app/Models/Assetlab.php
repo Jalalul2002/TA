@@ -44,6 +44,16 @@ class Assetlab extends Model
         return $this->hasOne(Perencanaan::class, 'product_code', 'product_code')->latest('updated_at');;
     }
 
+    public function realisasis()
+    {
+        return $this->hasMany(Realisasi::class, 'product_code', 'product_code');
+    }
+
+    public function latestRealisasi()
+    {
+        return $this->hasOne(Realisasi::class, 'product_code', 'product_code')->latest('updated_at');;
+    }
+
     public function prices()
     {
         return $this->hasMany(ItemPrices::class);

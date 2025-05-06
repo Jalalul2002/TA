@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <a href="{{ route('perencanaan-inv') }}">
+        <a href="{{ route('realisasi.bhp') }}">
             <h2 class="font-semibold text-xl text-gray-900 leading-tight">
-                {{ __('◀️ Tambah Data Perencanaan Inventaris') }}
+                {{ __('◀️ Tambah Data Pengadaan BHP') }}
             </h2>
         </a>
     </x-slot>
@@ -33,7 +33,7 @@
                     'Teknik Elektro' => '707',
                 ][$prodi ?? ''] ?? ''
             : '' }}',
-        type: 'inventaris',
+        type: 'bhp',
         products: [],
         async fetchProducts() {
             if (this.location) {
@@ -59,21 +59,15 @@
     fetchProducts()">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8 xl:grid xl:grid-cols-3">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 xl:col-span-2">
-                <form method="POST" action="{{ route('add-perencanaan.inv') }}">
+                <form method="POST" action="{{ route('realisasi.bhp.add') }}">
                     @csrf
-                    @php
-                        $currentYear = date('Y');
-                        $currentMonth = date('m');
-                        $semester = $currentMonth <= 6 ? '1' : '2';
-                        $namaPerencanaan = "{$currentYear}-{$semester}";
-                    @endphp
-                    <!-- Nama Perencanaan -->
+                    <!-- Pengadaan -->
                     <div>
-                        <x-input-label for="nama_perencanaan" :value="__('Tahun Perencanaan')" />
-                        <x-text-input id="nama_perencanaan" class="block mt-1 w-full" type="text"
-                            name="nama_perencanaan" :value="old('nama_perencanaan', $namaPerencanaan)" required autofocus
-                            autocomplete="nama_perencanaan" />
-                        <x-input-error :messages="$errors->get('nama_perencanaan')" class="mt-2" />
+                        <x-input-label for="pengadaan" :value="__('Pengadaan')" />
+                        <x-text-input id="pengadaan" class="block mt-1 w-full" type="text"
+                            name="pengadaan" :value="old('pengadaan')" required autofocus
+                            autocomplete="pengadaan" placeholder="Nama / Tahun Pengadaan" />
+                        <x-input-error :messages="$errors->get('pengadaan')" class="mt-2" />
                     </div>
 
                     <!-- Lokasi / Program Studi -->
@@ -104,7 +98,7 @@
                     <div class="mt-4 hidden">
                         <x-input-label for="type" :value="__('Tipe')" />
                         <x-text-input id="type" class="block mt-1 w-full" type="text" name="type"
-                            :value="old('type', 'inventaris')" autofocus autocomplete="type" />
+                            :value="old('type', 'bhp')" autofocus autocomplete="type" />
                         <x-input-error :messages="$errors->get('type')" class="mt-2" />
                     </div>
 
@@ -260,7 +254,7 @@
                                             </div>
                                             <input id="new_quantity" name="new_quantity" type="number"
                                                 step="any" x-model="product.quantity"
-                                                placeholder="Jumlah Kebutuhan" required min="0"
+                                                placeholder="Jumlah" required min="0"
                                                 @input="updateTotalPrice(index)"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 p-2.5">
                                             <div class="relative w-full">
@@ -298,7 +292,7 @@
                     </div>
                     <!-- Submit Button -->
                     <div class="flex items-center justify-end mt-4">
-                        <a href="{{ route('perencanaan-inv') }}"
+                        <a href="{{ route('realisasi.bhp') }}"
                             class="px-4 py-2 bg-uinRed border border-transparent rounded-md font-semibold text-sm text-white uppercase tracking-widest hover:bg-red-700 focus:bg-red-700 active:bg-red-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">Kembali</a>
                         <x-primary-button class="ms-2">
                             {{ __('Simpan') }}

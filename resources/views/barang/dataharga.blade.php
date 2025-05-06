@@ -115,8 +115,8 @@
                                             No
                                         </th>
                                         @foreach ($columns as $field => $name)
-                                            <th scope="col" class="py-3">
-                                                <div class="flex items-center">
+                                            <th scope="col" class="py-3 px-1">
+                                                <div class="flex items-center justify-between">
                                                     {{ $name }}
                                                     @php
                                                         // Tentukan arah sorting berdasarkan field yang sedang diurutkan
@@ -178,8 +178,8 @@
                                             </td>
                                             <td class="px-2 whitespace-nowrap">
                                                 <span
-                                                    class="px-2 py-1 text-white rounded-full {{ $assetLab->price_type == 'unit' ? 'bg-uinBlue' : 'bg-uinTosca' }}">
-                                                    {{ $assetLab->price_type == 'unit' ? 'per Unit' : 'Sewa per Jam' }}
+                                                    class="px-2 py-1 text-white rounded-full {{ $assetLab->price_type == 'unit' ? 'bg-uinBlue' : ($assetLab->price_type == 'sample' ? 'bg-amber-500' : 'bg-uinTosca') }}">
+                                                    {{ $assetLab->price_type == 'unit' ? 'per Unit' : ($assetLab->price_type == 'sample' ? 'per Sample' : 'Sewa per Jam') }}
                                                 </span>
                                             </td>
                                             <td class="px-2 font-semibold text-right whitespace-nowrap">

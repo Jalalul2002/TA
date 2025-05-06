@@ -122,7 +122,7 @@
                                             <option value="">Select Product</option>
                                             <template x-for="product in products" :key="product.product_code">
                                                 <option :value="product.product_code"
-                                                    :data-stock="product.formatted_stock"
+                                                    :data-stock="product.stock"
                                                     :data-satuan="product.product_unit"
                                                     :data-purchase-price="product.latest_price ? product.latest_price.purchase_price : 0"
                                                     x-text="`${product.product_name} (${product.product_code}) ${product.product_detail ? '(' + product.product_detail + ')' : ''} ${product.merk ? '(' + product.merk + ')' : ''} ${product.product_type ? '(' + product.product_type + ')' : ''}`">

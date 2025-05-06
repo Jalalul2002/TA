@@ -123,10 +123,11 @@ class PeminjamanExportAll implements FromCollection, WithHeadings, WithMapping, 
                 $lastRow = $sheet->getHighestRow(); // Baris terakhir dengan data
                 $totalRow = $lastRow + 1;
                 $sheet->mergeCells("A$totalRow:L$totalRow");
+                $sheet->mergeCells("M$totalRow:P$totalRow");
                 $sheet->setCellValue("A$totalRow", "Total Harga");
                 $sheet->setCellValue("M$totalRow", $this->totalHarga);
                 $sheet->getStyle("A$totalRow")->getAlignment()->setHorizontal('right');
-                $sheet->getStyle("A$totalRow:L$totalRow")->getFont()->setBold(true);
+                $sheet->getStyle("A$totalRow:P$totalRow")->getFont()->setBold(true);
                 $sheet->getStyle("M$totalRow")->getNumberFormat()
                     ->setFormatCode('[$Rp-421] #,##0');
 

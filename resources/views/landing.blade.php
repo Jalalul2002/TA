@@ -246,12 +246,16 @@ document.querySelectorAll('.animate-on-scroll').forEach(el => {
                 </div>
             </div>
             <div class="mx-auto max-w-6xl flex gap-x-24 items-center sm:flex-row flex-col">
-                <div class="text-left py-24 sm:py-32 lg:py-56 mb-10 animate__animated animate__zoomIn">
+                <div class="text-left py-24 sm:py-32 lg:py-56 mb-8 animate__animated animate__zoomIn">
                     <h1
                         class="text-balance text-5xl lg:text-7xl font-semibold tracking-tight text-gray-900 font-[clash-display]">
                         Laboratorium </h1>
                     <p class="mt-8 text-pretty text-lg font-base text-gray-900">Fakultas Sains dan
                         Teknologi UIN Sunan Gunung Djati Bandung</p>
+                    <div class="text-center">
+                        <p class="mt-4 text-pretty text-lg font-bold text-uinTosca">"MENUJU SMART LABORATORIUM TAHUN
+                            2027"</p>
+                    </div>
                     <div class="mt-10 flex items-center gap-x-6">
                         @if (Route::has('login'))
                             @auth

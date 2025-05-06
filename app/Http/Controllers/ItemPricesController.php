@@ -77,7 +77,7 @@ class ItemPricesController extends Controller
         try {
             $request->validate([
                 'product_code' => 'required|exists:assetlabs,product_code',
-                'price_type' => 'required|in:unit,rental',
+                'price_type' => 'required|in:unit,rental,sample',
                 'price' => 'required|numeric|min:0',
                 'purchase_price' => 'nullable|numeric|min:0',
                 'effective_date' => 'required|date',

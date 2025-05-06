@@ -210,7 +210,9 @@
                                                 /{{ optional($assetLab->latestPrice)->price_type
                                                     ? ($assetLab->latestPrice->price_type == 'unit'
                                                         ? 'item'
-                                                        : 'jam')
+                                                        : ($assetLab->latestPrice->price_type == 'sample'
+                                                            ? 'sampel'
+                                                            : 'jam'))
                                                     : ($assetLab->type == 'bhp'
                                                         ? $assetLab->product_unit
                                                         : 'jam') }}

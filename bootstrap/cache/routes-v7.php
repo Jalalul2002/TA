@@ -92,7 +92,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Bkqx7ef8QljBej6M',
+            '_route' => 'generated::cLtSrP6OX6zORjy0',
           ),
           1 => NULL,
           2 => 
@@ -129,7 +129,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::DNLRGWRKCEc90Erp',
+            '_route' => 'generated::Kx74nOcY1mbD0GoL',
           ),
           1 => NULL,
           2 => 
@@ -259,7 +259,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::cd2rBIyTP4oSyzy0',
+            '_route' => 'generated::9G3MW0P559wNyaB1',
           ),
           1 => NULL,
           2 => 
@@ -602,6 +602,86 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/realisasi/bhp' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.bhp',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/realisasi/inventaris' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.inv',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/realisasi/print' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.print',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/realisasi/export' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.export',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/transaction/bhp' => 
       array (
         0 => 
@@ -722,6 +802,66 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
+      '/transaction/report' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'report.transaction',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/transaction/report/print' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'report.transaction.print',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/transaction/report/download' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'report.transaction.download',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
       '/data-harga' => 
       array (
         0 => 
@@ -765,7 +905,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::XpJK9c9IMAvCHBmJ',
+            '_route' => 'generated::PDukq1vhXUJsGBCf',
           ),
           1 => NULL,
           2 => 
@@ -861,7 +1001,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::63qFtoOTFcamUNaq',
+            '_route' => 'generated::PK326pp9NzrwWhkU',
           ),
           1 => NULL,
           2 => 
@@ -897,7 +1037,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::18GGBAl2hIVrlKs2',
+            '_route' => 'generated::CNdihrQrQwgrYZGU',
           ),
           1 => NULL,
           2 => 
@@ -933,7 +1073,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::agvoQeG7f1bXvUvn',
+            '_route' => 'generated::4xdTIXiFmV0dvLAQ',
           ),
           1 => NULL,
           2 => 
@@ -969,7 +1109,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::kUiuRRQptzdIyzgX',
+            '_route' => 'generated::B9pUIRj14rUn9cUy',
           ),
           1 => NULL,
           2 => 
@@ -1005,7 +1145,79 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::4wPqN7Lxuu2oNwAz',
+            '_route' => 'generated::fPhh23xllM6DcW6c',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/realisasi/add-inv' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.inv.add',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'generated::BHDc0iuIX9xlp2BE',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      '/realisasi/add-bhp' => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.bhp.add',
+          ),
+          1 => NULL,
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+        1 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'generated::KOv6y373tz0fxkMb',
           ),
           1 => NULL,
           2 => 
@@ -1041,7 +1253,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::aceOdtLjaiF65Bxw',
+            '_route' => 'generated::qGqtkk80ZkRFLwAA',
           ),
           1 => NULL,
           2 => 
@@ -1077,7 +1289,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::I26qnZlvhq6Btc6C',
+            '_route' => 'generated::6HTDlSnMJEXmSQWW',
           ),
           1 => NULL,
           2 => 
@@ -1113,7 +1325,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::C7CaolGeFyo3PmJ4',
+            '_route' => 'generated::1WK0IXH07m0SQXHX',
           ),
           1 => NULL,
           2 => 
@@ -1132,7 +1344,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::KJ4BjjsdVLTz4cjq',
+            '_route' => 'generated::mLQaZ6CUgCMA4yhJ',
           ),
           1 => NULL,
           2 => 
@@ -1209,7 +1421,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::FCTa2CCrLM7DLYJv',
+            '_route' => 'generated::2JMNxq1FgKHxYcPX',
           ),
           1 => NULL,
           2 => 
@@ -1305,7 +1517,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Dm6BRpRvnH8pG7zi',
+            '_route' => 'generated::367o9sotMojnxjAh',
           ),
           1 => NULL,
           2 => 
@@ -1321,7 +1533,7 @@ app('router')->setCompiledRoutes(
     ),
     2 => 
     array (
-      0 => '{^(?|/_debugbar/c(?|lockwork/([^/]++)(*:39)|ache/([^/]++)(?:/([^/]++))?(*:73))|/reset\\-password/([^/]++)(*:106)|/verify\\-email/([^/]++)/([^/]++)(*:146)|/d(?|e(?|tail\\-(?|perencanaan/([^/]++)(*:192)|transaction/(?|([^/]++)(*:223)|inventaris/([^/]++)(*:250)))|lete\\-(?|aset/([^/]++)(*:282)|pe(?|rencanaan/([^/]++)(*:313)|nggunaan/([^/]++)(*:338)|minjaman/([^/]++)(*:363))|harga/([^/]++)(*:386)))|ata\\-(?|product/([^/]++)(*:420)|staff/([^/]++)(*:442)))|/perencanaan(?|/([^/]++)/(?|download(*:488)|print(*:501)|complete(*:517))|\\-bhp/(?|destroy\\-item/([^/]++)(*:557)|add\\-item/([^/]++)(*:583)))|/transaction/(?|bhp/([^/]++)/(?|download(*:633)|print(*:646))|inv/([^/]++)/(?|download(*:679)|print(*:692))|return/([^/]++)(*:716))|/edit\\-(?|aset/([^/]++)(*:748)|rencana/([^/]++)(*:772)|staff/([^/]++)(*:794))|/update\\-(?|aset/([^/]++)(*:828)|rencana/([^/]++)(*:852)|detail/([^/]++)(*:875)|staff/([^/]++)(*:897))|/admin/(?|edit\\-staff/([^/]++)(*:936)|update\\-staff/([^/]++)(*:966)|data\\-staff/([^/]++)(*:994)))/?$}sDu',
+      0 => '{^(?|/_debugbar/c(?|lockwork/([^/]++)(*:39)|ache/([^/]++)(?:/([^/]++))?(*:73))|/re(?|set\\-password/([^/]++)(*:109)|alisasi/(?|view/([^/]++)(*:141)|print/([^/]++)(*:163)|e(?|xport/([^/]++)(*:189)|dit/([^/]++)(*:209))|de(?|lete/([^/]++)(*:236)|stroy\\-item/([^/]++)(*:264))|add\\-item/([^/]++)(*:291)|update(?|/([^/]++)(*:317)|\\-detail/([^/]++)(*:342))|([^/]++)/complete(*:368)))|/verify\\-email/([^/]++)/([^/]++)(*:410)|/d(?|e(?|tail\\-(?|perencanaan/([^/]++)(*:456)|transaction/(?|([^/]++)(*:487)|inventaris/([^/]++)(*:514)))|lete\\-(?|aset/([^/]++)(*:546)|pe(?|rencanaan/([^/]++)(*:577)|nggunaan/([^/]++)(*:602)|minjaman/([^/]++)(*:627))|harga/([^/]++)(*:650)))|ata\\-(?|product/([^/]++)(*:684)|staff/([^/]++)(*:706)))|/perencanaan(?|/([^/]++)/(?|download(*:752)|print(*:765)|complete(*:781))|\\-bhp/(?|destroy\\-item/([^/]++)(*:821)|add\\-item/([^/]++)(*:847)))|/transaction/(?|bhp/([^/]++)/(?|download(*:897)|print(*:910))|inv/([^/]++)/(?|download(*:943)|print(*:956))|return/([^/]++)(*:980))|/edit\\-(?|aset/([^/]++)(*:1012)|rencana/([^/]++)(*:1037)|staff/([^/]++)(*:1060))|/update\\-(?|aset/([^/]++)(*:1095)|rencana/([^/]++)(*:1120)|detail/([^/]++)(*:1144)|staff/([^/]++)(*:1167))|/admin/(?|edit\\-staff/([^/]++)(*:1207)|update\\-staff/([^/]++)(*:1238)|data\\-staff/([^/]++)(*:1267)))/?$}sDu',
     ),
     3 => 
     array (
@@ -1372,7 +1584,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      106 => 
+      109 => 
       array (
         0 => 
         array (
@@ -1395,7 +1607,231 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      146 => 
+      141 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.show',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      163 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.print.id',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      189 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.export.id',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      209 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.edit',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'GET' => 0,
+            'HEAD' => 1,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      236 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.destroy',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      264 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.destroy.item',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'DELETE' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      291 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.store.item',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      317 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.update',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      342 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.update-detail',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'PUT' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => true,
+          6 => NULL,
+        ),
+      ),
+      368 => 
+      array (
+        0 => 
+        array (
+          0 => 
+          array (
+            '_route' => 'realisasi.complete',
+          ),
+          1 => 
+          array (
+            0 => 'id',
+          ),
+          2 => 
+          array (
+            'POST' => 0,
+          ),
+          3 => NULL,
+          4 => false,
+          5 => false,
+          6 => NULL,
+        ),
+      ),
+      410 => 
       array (
         0 => 
         array (
@@ -1419,7 +1855,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      192 => 
+      456 => 
       array (
         0 => 
         array (
@@ -1442,7 +1878,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      223 => 
+      487 => 
       array (
         0 => 
         array (
@@ -1465,7 +1901,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      250 => 
+      514 => 
       array (
         0 => 
         array (
@@ -1488,7 +1924,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      282 => 
+      546 => 
       array (
         0 => 
         array (
@@ -1510,7 +1946,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      313 => 
+      577 => 
       array (
         0 => 
         array (
@@ -1532,7 +1968,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      338 => 
+      602 => 
       array (
         0 => 
         array (
@@ -1554,7 +1990,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      363 => 
+      627 => 
       array (
         0 => 
         array (
@@ -1576,7 +2012,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      386 => 
+      650 => 
       array (
         0 => 
         array (
@@ -1598,7 +2034,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      420 => 
+      684 => 
       array (
         0 => 
         array (
@@ -1620,7 +2056,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      442 => 
+      706 => 
       array (
         0 => 
         array (
@@ -1642,7 +2078,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      488 => 
+      752 => 
       array (
         0 => 
         array (
@@ -1665,7 +2101,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      501 => 
+      765 => 
       array (
         0 => 
         array (
@@ -1688,7 +2124,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      517 => 
+      781 => 
       array (
         0 => 
         array (
@@ -1710,7 +2146,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      557 => 
+      821 => 
       array (
         0 => 
         array (
@@ -1732,7 +2168,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      583 => 
+      847 => 
       array (
         0 => 
         array (
@@ -1754,7 +2190,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      633 => 
+      897 => 
       array (
         0 => 
         array (
@@ -1777,7 +2213,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      646 => 
+      910 => 
       array (
         0 => 
         array (
@@ -1800,7 +2236,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      679 => 
+      943 => 
       array (
         0 => 
         array (
@@ -1823,7 +2259,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      692 => 
+      956 => 
       array (
         0 => 
         array (
@@ -1846,7 +2282,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      716 => 
+      980 => 
       array (
         0 => 
         array (
@@ -1868,7 +2304,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      748 => 
+      1012 => 
       array (
         0 => 
         array (
@@ -1891,7 +2327,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      772 => 
+      1037 => 
       array (
         0 => 
         array (
@@ -1914,7 +2350,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      794 => 
+      1060 => 
       array (
         0 => 
         array (
@@ -1937,7 +2373,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      828 => 
+      1095 => 
       array (
         0 => 
         array (
@@ -1959,7 +2395,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      852 => 
+      1120 => 
       array (
         0 => 
         array (
@@ -1981,7 +2417,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      875 => 
+      1144 => 
       array (
         0 => 
         array (
@@ -2003,7 +2439,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      897 => 
+      1167 => 
       array (
         0 => 
         array (
@@ -2025,7 +2461,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      936 => 
+      1207 => 
       array (
         0 => 
         array (
@@ -2048,7 +2484,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      966 => 
+      1238 => 
       array (
         0 => 
         array (
@@ -2070,7 +2506,7 @@ app('router')->setCompiledRoutes(
           6 => NULL,
         ),
       ),
-      994 => 
+      1267 => 
       array (
         0 => 
         array (
@@ -2333,7 +2769,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Bkqx7ef8QljBej6M' => 
+    'generated::cLtSrP6OX6zORjy0' => 
     array (
       'methods' => 
       array (
@@ -2361,8 +2797,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'E:\\\\Herd\\\\SIMA-LAB\\\\vendor\\\\laravel\\\\framework\\\\src\\\\Illuminate\\\\Foundation\\\\Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000050e0000000000000000";}}',
-        'as' => 'generated::Bkqx7ef8QljBej6M',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"000000000000050f0000000000000000";}}',
+        'as' => 'generated::cLtSrP6OX6zORjy0',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2416,7 +2852,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::DNLRGWRKCEc90Erp' => 
+    'generated::Kx74nOcY1mbD0GoL' => 
     array (
       'methods' => 
       array (
@@ -2437,7 +2873,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::DNLRGWRKCEc90Erp',
+        'as' => 'generated::Kx74nOcY1mbD0GoL',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2757,7 +3193,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::cd2rBIyTP4oSyzy0' => 
+    'generated::9G3MW0P559wNyaB1' => 
     array (
       'methods' => 
       array (
@@ -2778,7 +3214,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::cd2rBIyTP4oSyzy0',
+        'as' => 'generated::9G3MW0P559wNyaB1',
       ),
       'fallback' => false,
       'defaults' => 
@@ -2885,7 +3321,7 @@ app('router')->setCompiledRoutes(
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:81:"function () {
     // return redirect(\'/login\');
     return \\view(\'landing\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005120000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005130000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -3551,6 +3987,272 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'realisasi.bhp' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/bhp',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@indexBhp',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@indexBhp',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.bhp',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.inv' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/inventaris',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@indexInv',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@indexInv',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.inv',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.show' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/view/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@show',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@show',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.show',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.print.id' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/print/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@printId',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@printId',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.print.id',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.export.id' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/export/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@exportId',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@exportId',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.export.id',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.print' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/print',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@print',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@print',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.print',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.export' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/export',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@export',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@export',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.export',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'penggunaan' => 
     array (
       'methods' => 
@@ -4007,6 +4709,120 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'report.transaction' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'transaction/report',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ReportController@transaction',
+        'controller' => 'App\\Http\\Controllers\\ReportController@transaction',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'report.transaction',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'report.transaction.print' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'transaction/report/print',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ReportController@transactionPrint',
+        'controller' => 'App\\Http\\Controllers\\ReportController@transactionPrint',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'report.transaction.print',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'report.transaction.download' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'transaction/report/download',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+        ),
+        'uses' => 'App\\Http\\Controllers\\ReportController@transactionDownload',
+        'controller' => 'App\\Http\\Controllers\\ReportController@transactionDownload',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'report.transaction.download',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'data-harga' => 
     array (
       'methods' => 
@@ -4236,7 +5052,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::63qFtoOTFcamUNaq' => 
+    'generated::PK326pp9NzrwWhkU' => 
     array (
       'methods' => 
       array (
@@ -4258,7 +5074,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::63qFtoOTFcamUNaq',
+        'as' => 'generated::PK326pp9NzrwWhkU',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4351,7 +5167,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::18GGBAl2hIVrlKs2' => 
+    'generated::CNdihrQrQwgrYZGU' => 
     array (
       'methods' => 
       array (
@@ -4373,7 +5189,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::18GGBAl2hIVrlKs2',
+        'as' => 'generated::CNdihrQrQwgrYZGU',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4428,7 +5244,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::agvoQeG7f1bXvUvn' => 
+    'generated::4xdTIXiFmV0dvLAQ' => 
     array (
       'methods' => 
       array (
@@ -4450,7 +5266,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::agvoQeG7f1bXvUvn',
+        'as' => 'generated::4xdTIXiFmV0dvLAQ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4620,7 +5436,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::kUiuRRQptzdIyzgX' => 
+    'generated::B9pUIRj14rUn9cUy' => 
     array (
       'methods' => 
       array (
@@ -4642,7 +5458,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::kUiuRRQptzdIyzgX',
+        'as' => 'generated::B9pUIRj14rUn9cUy',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4697,7 +5513,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::4wPqN7Lxuu2oNwAz' => 
+    'generated::fPhh23xllM6DcW6c' => 
     array (
       'methods' => 
       array (
@@ -4719,7 +5535,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::4wPqN7Lxuu2oNwAz',
+        'as' => 'generated::fPhh23xllM6DcW6c',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5002,6 +5818,427 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
+    'realisasi.inv.add' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/add-inv',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@createInv',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@createInv',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.inv.add',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::BHDc0iuIX9xlp2BE' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'realisasi/add-inv',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@store',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@store',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'generated::BHDc0iuIX9xlp2BE',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.bhp.add' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/add-bhp',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@createBhp',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@createBhp',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.bhp.add',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'generated::KOv6y373tz0fxkMb' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'realisasi/add-bhp',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@store',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@store',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'generated::KOv6y373tz0fxkMb',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.destroy' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'realisasi/delete/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@destroy',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@destroy',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.destroy',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.destroy.item' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'DELETE',
+      ),
+      'uri' => 'realisasi/destroy-item/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@destroyItem',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@destroyItem',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.destroy.item',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.store.item' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'realisasi/add-item/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@storeItem',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@storeItem',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.store.item',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.edit' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'GET',
+        1 => 'HEAD',
+      ),
+      'uri' => 'realisasi/edit/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@edit',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@edit',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.edit',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.update' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'realisasi/update/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@update',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@update',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.update',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.update-detail' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'PUT',
+      ),
+      'uri' => 'realisasi/update-detail/{id}',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@updateDetail',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@updateDetail',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.update-detail',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
+    'realisasi.complete' => 
+    array (
+      'methods' => 
+      array (
+        0 => 'POST',
+      ),
+      'uri' => 'realisasi/{id}/complete',
+      'action' => 
+      array (
+        'middleware' => 
+        array (
+          0 => 'web',
+          1 => 'auth',
+          2 => 'orMiddleware',
+        ),
+        'uses' => 'App\\Http\\Controllers\\RealisasiController@complete',
+        'controller' => 'App\\Http\\Controllers\\RealisasiController@complete',
+        'namespace' => NULL,
+        'prefix' => '',
+        'where' => 
+        array (
+        ),
+        'as' => 'realisasi.complete',
+      ),
+      'fallback' => false,
+      'defaults' => 
+      array (
+      ),
+      'wheres' => 
+      array (
+      ),
+      'bindingFields' => 
+      array (
+      ),
+      'lockSeconds' => NULL,
+      'waitSeconds' => NULL,
+      'withTrashed' => false,
+    ),
     'add-penggunaan' => 
     array (
       'methods' => 
@@ -5041,7 +6278,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::aceOdtLjaiF65Bxw' => 
+    'generated::qGqtkk80ZkRFLwAA' => 
     array (
       'methods' => 
       array (
@@ -5063,7 +6300,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::aceOdtLjaiF65Bxw',
+        'as' => 'generated::qGqtkk80ZkRFLwAA',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5156,7 +6393,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::I26qnZlvhq6Btc6C' => 
+    'generated::6HTDlSnMJEXmSQWW' => 
     array (
       'methods' => 
       array (
@@ -5178,7 +6415,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::I26qnZlvhq6Btc6C',
+        'as' => 'generated::6HTDlSnMJEXmSQWW',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5309,7 +6546,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::C7CaolGeFyo3PmJ4' => 
+    'generated::1WK0IXH07m0SQXHX' => 
     array (
       'methods' => 
       array (
@@ -5331,7 +6568,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::C7CaolGeFyo3PmJ4',
+        'as' => 'generated::1WK0IXH07m0SQXHX',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5385,7 +6622,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::KJ4BjjsdVLTz4cjq' => 
+    'generated::mLQaZ6CUgCMA4yhJ' => 
     array (
       'methods' => 
       array (
@@ -5408,7 +6645,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::KJ4BjjsdVLTz4cjq',
+        'as' => 'generated::mLQaZ6CUgCMA4yhJ',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5424,7 +6661,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::XpJK9c9IMAvCHBmJ' => 
+    'generated::PDukq1vhXUJsGBCf' => 
     array (
       'methods' => 
       array (
@@ -5446,7 +6683,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::XpJK9c9IMAvCHBmJ',
+        'as' => 'generated::PDukq1vhXUJsGBCf',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5579,7 +6816,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::FCTa2CCrLM7DLYJv' => 
+    'generated::2JMNxq1FgKHxYcPX' => 
     array (
       'methods' => 
       array (
@@ -5601,7 +6838,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::FCTa2CCrLM7DLYJv',
+        'as' => 'generated::2JMNxq1FgKHxYcPX',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5888,7 +7125,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Dm6BRpRvnH8pG7zi' => 
+    'generated::367o9sotMojnxjAh' => 
     array (
       'methods' => 
       array (
@@ -5910,7 +7147,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::Dm6BRpRvnH8pG7zi',
+        'as' => 'generated::367o9sotMojnxjAh',
       ),
       'fallback' => false,
       'defaults' => 

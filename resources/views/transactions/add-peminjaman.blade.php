@@ -187,7 +187,7 @@
                                                 min="0" x-model="items[index].duration" step="any"
                                                 :max="items[index].type === 'unit' ? 1 : null"
                                                 :readonly="items[index].type === 'unit'"
-                                                x-show="items[index].type === 'rental'"
+                                                x-show="items[index].type === 'rental' || items[index].type === 'sample'"
                                                 @input="calculateTotalPrice(index)" required>
                                             <input type="text" name="items[][typeUnit]" placeholder="Satuan"
                                                 class="w-1/3 bg-gray-50 border-transparent text-gray-900 text-sm rounded-lg focus:ring-transparent focus:border-transparent block p-2.5 mt-1"
@@ -269,8 +269,12 @@
                     this.items[index].duration = 1; // durasi otomatis 1
                 } else if (type === 'rental') {
                     typeUnit.value = 'per jam';
-                    this.items[index].typeUnit = 'per jam';
-                    this.items[index].duration = ''; // durasi otomatis 1
+                    this.items[index].typeUnit = 'jam';
+                    this.items[index].duration = '';
+                } else {
+                    typeUnit.value = 'per sample';
+                    this.items[index].typeUnit = 'X';
+                    this.items[index].duration = '';
                 }
 
                 this.calculateTotalPrice(index);

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Stock Opname') }}
+            {{ __('Laporan Transaksi') }}
         </h2>
     </x-slot>
     @php
@@ -18,10 +18,10 @@
             {{ session('success') ?? session('error') }}
         </div>
     @endif
-    <div class="py-8">
+    <div class="py-4">
         <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg p-6">
+                <div class="relative overflow-x-auto shadow-md sm:rounded-lg px-6 py-4">
                     <div class="flex flex-col-reverse gap-2 justify-between pb-4">
                         <div class="z-10 flex gap-2 flex-wrap justify-end" x-data="filter">
                             {{-- Filter Lokasi --}}
@@ -46,7 +46,7 @@
                                     </select>
                                 </div>
                             @endif
-                            {{-- Filter Type --}}
+                            {{-- Filter Tujuan --}}
                             <div
                                 class="flex flex-row items-center bg-white rounded-lg w-fit border border-gray-300 ps-2">
                                 <svg class="size-4 fill-gray-400" id="Layer_1" height="512" viewBox="0 0 24 24"
@@ -54,34 +54,41 @@
                                     <path
                                         d="m17 14a1 1 0 0 1 -1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1zm-4 3h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2zm9-6.515v8.515a5.006 5.006 0 0 1 -5 5h-10a5.006 5.006 0 0 1 -5-5v-14a5.006 5.006 0 0 1 5-5h4.515a6.958 6.958 0 0 1 4.95 2.05l3.484 3.486a6.951 6.951 0 0 1 2.051 4.949zm-6.949-7.021a5.01 5.01 0 0 0 -1.051-.78v4.316a1 1 0 0 0 1 1h4.316a4.983 4.983 0 0 0 -.781-1.05zm4.949 7.021c0-.165-.032-.323-.047-.485h-4.953a3 3 0 0 1 -3-3v-4.953c-.162-.015-.321-.047-.485-.047h-4.515a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3z" />
                                 </svg>
-                                <select x-model="type" @change="updateFilter('type', type)"
+                                <select x-model="purpose" @change="updateFilter('purpose', purpose)"
                                     class="font-medium text-sm text-gray-700 bg-transparent border-none focus:ring-0 cursor-pointer ps-1">
-                                    <option value="" {{ request('type') == '' ? 'selected' : '' }}>
-                                        Pilih Tipe
+                                    <option value="" {{ request('purpose') == '' ? 'selected' : '' }}>
+                                        Semua Keperluan
                                     </option>
-                                    <option value="inventaris" {{ request('type') == 'inventaris' ? 'selected' : '' }}>
-                                        Aset Inventaris
+                                    <option value="praktikum" {{ request('purpose') == 'praktikum' ? 'selected' : '' }}>
+                                        Praktikum
                                     </option>
-                                    <option value="bhp" {{ request('type') == 'bhp' ? 'selected' : '' }}>
-                                        Bahan Habis Pakai
+                                    <option value="penelitian"
+                                        {{ request('purpose') == 'penelitian' ? 'selected' : '' }}>
+                                        Penelitian
                                     </option>
                                 </select>
                             </div>
-                            {{-- Filter Jenis --}}
+                            {{-- Filter User --}}
                             <div
                                 class="flex flex-row items-center bg-white rounded-lg w-fit border border-gray-300 ps-2">
-                                <svg class="size-4 fill-gray-400" id="Layer_1" height="512" viewBox="0 0 24 24"
-                                    width="512" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1">
+                                <svg class="size-4 fill-gray-400" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                    viewBox="0 0 24 24" width="512" height="512">
                                     <path
-                                        d="m17 14a1 1 0 0 1 -1 1h-8a1 1 0 0 1 0-2h8a1 1 0 0 1 1 1zm-4 3h-5a1 1 0 0 0 0 2h5a1 1 0 0 0 0-2zm9-6.515v8.515a5.006 5.006 0 0 1 -5 5h-10a5.006 5.006 0 0 1 -5-5v-14a5.006 5.006 0 0 1 5-5h4.515a6.958 6.958 0 0 1 4.95 2.05l3.484 3.486a6.951 6.951 0 0 1 2.051 4.949zm-6.949-7.021a5.01 5.01 0 0 0 -1.051-.78v4.316a1 1 0 0 0 1 1h4.316a4.983 4.983 0 0 0 -.781-1.05zm4.949 7.021c0-.165-.032-.323-.047-.485h-4.953a3 3 0 0 1 -3-3v-4.953c-.162-.015-.321-.047-.485-.047h-4.515a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3z" />
+                                        d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
+                                    <path
+                                        d="M12,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,12,14Z" />
                                 </svg>
-                                <select id="product_type" name="product_type" x-model="productType"
-                                    @change="updateFilter('productType', productType)"
+                                <select x-model="userId" @change="updateFilter('user_id', userId)"
                                     class="font-medium text-sm text-gray-700 bg-transparent border-none focus:ring-0 cursor-pointer ps-1">
-                                    <option value="">Semua Jenis</option>
-                                    <option value="Cairan">Cairan</option>
-                                    <option value="Padatan">Padatan</option>
-                                    <option value="Lainnya">Lainnya</option>
+                                    <option value="" {{ request('user_id') == '' ? 'selected' : '' }}>
+                                        Pilih Pengguna
+                                    </option>
+                                    @foreach ($filterUser as $data)
+                                        <option value="{{ $data->user_id }}"
+                                            {{ request('user_id') == $data->user_id ? 'selected' : '' }}>
+                                            {{ $data->user_id }} - {{ $data->name }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                             {{-- Filter Tanggal --}}
@@ -96,7 +103,7 @@
                                     :min="startDate" max="{{ now()->format('Y-m-d') }}">
                             </div>
                             <a title="Download Data"
-                                href="{{ route('report.download', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'type' => request('type'), 'productType' => request('productType')]) }}">
+                                href="{{ route('report.transaction.download', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'purpose' => request('purpose'), 'user_id' => request('user_id')]) }}">
                                 <div
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-teal-500 hover:bg-teal-700 transition-all duration-300">
                                     <svg class="size-4 fill-white me-2" xmlns="http://www.w3.org/2000/svg"
@@ -107,7 +114,7 @@
                                     Download
                                 </div>
                             </a>
-                            <a href="{{ route('report.print', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'type' => request('type'), 'productType' => request('productType')]) }}"
+                            <a href="{{ route('report.transaction.print', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'purpose' => request('purpose'), 'user_id' => request('user_id')]) }}"
                                 target="_blank">
                                 <div
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-zinc-500 hover:bg-fuchsia-700 transition-all duration-300">
@@ -122,26 +129,61 @@
                             </a>
                         </div>
                     </div>
-                    @if (!filled(request('location')) || !filled(request('type')) || !filled(request('start_date')))
+                    @if (!request('user_id') || !request('start_date'))
                         <div class="w-full bg-gray-100 text-center py-12 rounded-lg">
-                            <p>Silahkan Pilih Lokasi, Tipe dan Periode</p>
+                            <p>Silahkan Pilih Lokasi, Pengguna dan Periode</p>
+                        </div>
+                    @elseif ($report->isEmpty())
+                        <div class="w-full bg-gray-100 text-center py-12 rounded-lg">
+                            <p>Data Tidak Ditemukan</p>
                         </div>
                     @else
+                        <div class="flex flex-col space-y-4 mb-2 mt-2">
+                            <div class="flex justify-between border-b pb-2 gap-2 px-6">
+                                <div class="flex items-center gap-x-8">
+                                    <div>
+                                        <h2 class="text-gray-500 text-sm font-medium">Detail Pengguna</h2>
+                                        <h1 class="text-lg font-semibold items-baseline text-gray-900">
+                                            {{ "{$report[0]->user_id} - {$report[0]->name}" }}
+                                        </h1>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h2 class="text-gray-500 text-sm font-medium">Nomor Telepon</h2>
+                                    <h1 class="text-lg font-semibold items-baseline text-gray-900">
+                                        {{ "{$report[0]->telp}" }}
+                                    </h1>
+                                </div>
+                                <div>
+                                    <h2 class="text-gray-500 text-sm font-medium">Prodi Pengguna</h2>
+                                    <h1 class="text-lg font-semibold items-baseline text-gray-900">
+                                        {{ "{$report[0]->prodi}" }}
+                                    </h1>
+                                </div>
+                                <div>
+                                    <h2 class="text-gray-700 text-sm font-medium mb-2">Total Harga</h2>
+                                    <h1 class="text-lg font-semibold items-baseline max-w-96">
+                                        <span class="px-3 py-2 text-white rounded-full bg-uinBlue">
+                                            Rp.
+                                            {{ number_format($report->sum(fn($row) => $row->total_item_price + $row->total_loan_price) ?? 0, 0, ',', '.') }},-
+                                        </span>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
                         <div class="relative overflow-x-auto sm:rounded-lg">
                             <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                                 @php
                                     $columns = [
-                                        'product_code' => 'Kode',
+                                        'created_at' => 'Tanggal',
+                                        'type' => 'Tipe',
                                         'product_name' => 'Produk',
-                                        'product_detail' => 'Keterangan',
-                                        'merk' => 'Merk',
                                         'product_type' => 'Jenis',
-                                        'product_unit' => 'Satuan',
-                                        'stock_awal' => 'Stok Awal',
-                                        'total_masuk' => 'Masuk',
-                                        'total_praktikum' => 'Keluar Praktikum',
-                                        'total_penelitian' => 'Keluar Penelitian',
-                                        'stock' => 'Stok',
+                                        'price' => 'Harga',
+                                        'quantity' => 'Jumlah',
+                                        'rental' => 'Durasi',
+                                        'unit' => 'Satuan',
+                                        'total_price' => 'Sub Total',
                                     ];
                                 @endphp
                                 <thead class="text-xs text-white uppercase bg-uinTosca">
@@ -150,7 +192,7 @@
                                             No
                                         </th>
                                         @foreach ($columns as $field => $name)
-                                            <th scope="col" class="py-3 px-2">
+                                            <th scope="col" class="py-3 px-1">
                                                 <div class="flex items-center justify-between">
                                                     {{ $name }}
                                                     @php
@@ -162,8 +204,8 @@
                                                                 : 'asc';
                                                         $isActive = request('sort_field', 'created_at') === $field;
                                                     @endphp
-                                                    <a title="Sort by {{ $name }}" class="px-2"
-                                                        href="{{ route('peminjaman', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
+                                                    <a title="Sort by {{ $name }}"
+                                                        href="{{ route('report.transaction', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
                                                         <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
                                                             xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
                                                             viewBox="0 0 24 24" width="512" height="512">
@@ -182,45 +224,98 @@
                                         $counter = 1;
                                     @endphp
                                     @forelse ($report as $data)
-                                        <tr class="bg-white border-b hover:bg-gray-50">
-                                            <th class="text-center px-2 py-2">
-                                                {{ $counter++ }}
-                                            </th>
-                                            <td scope="row"
-                                                class="px-2 py-2 font-medium whitespace-nowrap capitalize">
-                                                {{ $data['product_code'] }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ $data['product_name'] }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ $data['product_detail'] ?: '-' }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ $data['merk'] ?: '-' }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ $data['product_type'] }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ $data['product_unit'] }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ rtrim(rtrim(number_format($data['stock_awal'], 4, ',', '.'), '0'), ',') }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ rtrim(rtrim(number_format($data['total_masuk'], 4, ',', '.'), '0'), ',') }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ rtrim(rtrim(number_format($data['total_praktikum'], 4, ',', '.'), '0'), ',') }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ rtrim(rtrim(number_format($data['total_penelitian'], 4, ',', '.'), '0'), ',') }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ rtrim(rtrim(number_format($data['stock_terhitung'], 4, ',', '.'), '0'), ',') }}
-                                            </td>
-                                        </tr>
+                                        @foreach ($data->items as $item)
+                                            <tr class="bg-white border-b hover:bg-gray-50">
+                                                <th class="text-center px-2 py-2">
+                                                    {{ $counter++ }}
+                                                </th>
+                                                <td scope="row" class="px-2 py-2 font-medium">
+                                                    {{ $item->created_at->format('d/m/y') }}
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium">
+                                                    {{ $data->type == 'bhp' ? 'BHP' : 'Alat' }}
+                                                </td>
+                                                <td scope="row"
+                                                    class="px-2 py-2 font-medium whitespace-nowrap capitalize">
+                                                    ({{ $item->product_code }})
+                                                    {{ $item->asset->product_name }}
+                                                    {{ $item->asset->merk ? "({$item->asset->merk})" : '' }}
+                                                    {{ $item->asset->product_detail ? "({$item->asset->product_detail})" : '' }}
+                                                </td>
+                                                <td scope="row" class="px-2 py-2">
+                                                    {{ $item->asset->product_type }}
+                                                </td>
+                                                <td scope="row"
+                                                    class="px-2 py-2 font-medium whitespace-nowrap text-right">
+                                                    <span class="px-2 py-1 text-white rounded-full bg-uinOrange">
+                                                        Rp. {{ number_format($item->unit_price ?? 0, 0, ',', '.') }},-
+                                                    </span>
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium text-right">
+                                                    {{ $item->formatted_quantity }}
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium">
+                                                    -
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium">
+                                                    {{ $item->asset->product_unit }}
+                                                </td>
+                                                <td class="pr-6 pl-2 font-semibold text-right whitespace-nowrap">
+                                                    <span class="px-2 py-1  text-white rounded-full bg-uinBlue">
+                                                        Rp.
+                                                        {{ number_format($item->total_price ?? 0, 0, ',', '.') }},-
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        @foreach ($data->loans as $item)
+                                            <tr class="bg-white border-b hover:bg-gray-50">
+                                                <th class="text-center px-2 py-2">
+                                                    {{ $counter++ }}
+                                                </th>
+                                                <td scope="row" class="px-2 py-2 font-medium">
+                                                    {{ $item->created_at->format('d/m/y') }}
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium">
+                                                    {{ $data->type == 'bhp' ? 'BHP' : 'Alat' }}
+                                                </td>
+                                                <td scope="row"
+                                                    class="px-2 py-2 font-medium whitespace-nowrap capitalize">
+                                                    ({{ $item->product_code }})
+                                                    {{ $item->asset->product_name }}
+                                                    {{ $item->asset->merk ? "{$item->asset->merk}" : '' }}
+                                                    {{ $item->asset->product_detail ? "({$item->asset->product_detail})" : '' }}
+                                                </td>
+                                                <td scope="row" class="px-2 py-2">
+                                                    {{ $item->asset->product_type }}
+                                                </td>
+                                                <td scope="row"
+                                                    class="px-2 py-2 font-medium whitespace-nowrap text-right">
+                                                    <span class="px-2 py-1 text-white rounded-full bg-uinOrange">
+                                                        Rp.
+                                                        {{ number_format($item->rental_price ?? 0, 0, ',', '.') }},-
+                                                    </span>
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium text-right">
+                                                    {{ intval($item->quantity) }}
+                                                    {{ $item->asset->latestPrice->price_type == 'unit' ? '' : $item->asset->product_unit }}
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium text-right">
+                                                    {{ $item->asset->latestPrice->price_type == 'unit'
+                                                        ? '-'
+                                                        : rtrim(rtrim(number_format($item->rental, 4, ',', '.'), '0'), ',') }}
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium">
+                                                    {{ $item->asset->latestPrice->price_type == 'unit' ? $item->asset->product_unit : ($item->asset->latestPrice->price_type == 'sample' ? 'sample' : 'jam') }}
+                                                </td>
+                                                <td class="pr-6 pl-2 font-semibold text-right whitespace-nowrap">
+                                                    <span class="px-2 py-1  text-white rounded-full bg-uinBlue">
+                                                        Rp.
+                                                        {{ number_format($item->total_price ?? 0, 0, ',', '.') }},-
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     @empty
                                         <tr class="bg-white border-b hover:bg-gray-50">
                                             <th colspan="12" class="px-2 py-2 text-center">
@@ -241,10 +336,10 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('filter', () => ({
             location: '{{ request('location') }}',
-            type: '{{ request('type') }}',
+            purpose: '{{ request('purpose') }}',
+            userId: '{{ request('user_id') }}',
             startDate: '{{ request('start_date') }}',
             endDate: '{{ request('end_date') ?: now()->format('Y-m-d') }}',
-            productType: '{{ request('productType') }}',
             today: '{{ now()->format('Y-m-d') }}', // Simpan nilai hari ini
 
             updateFilter(key, value) {

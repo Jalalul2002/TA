@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('damaged_quantity', 18, 4)->nullable()->default(0);
             $table->date('loan_date');
             $table->date('return_date')->nullable();
-            $table->enum('status', ['dipinjam', 'dikembalikan sebagian', 'dikembalikan', 'rusak'])->default('dipinjam');
+            $table->enum('status', ['dipinjam', 'dikembalikan sebagian', 'dikembalikan', 'rusak', 'hilang'])->default('dipinjam');
             $table->text('notes')->nullable();
             $table->text('return_notes')->nullable();
             $table->foreignId('created_by')->constrained(

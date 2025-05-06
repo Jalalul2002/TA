@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('item_prices', function (Blueprint $table) {
             $table->id();
             $table->string('product_code');
-            $table->enum('price_type', ['unit', 'rental']);
+            $table->enum('price_type', ['unit', 'rental', 'sample']);
             $table->bigInteger('price');
             $table->bigInteger('purchase_price')->default(0);
             $table->date('effective_date');

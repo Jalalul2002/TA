@@ -10,6 +10,7 @@ use App\Http\Controllers\PerencanaanController;
 use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RealisasiController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Staff\RegisterController;
 use App\Http\Controllers\Staff\StaffController;
@@ -46,6 +47,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/perencanaan/download', [PerencanaanController::class, 'export'])->name('perencanaan.export');
     Route::get('/perencanaan/print', [PerencanaanController::class, 'printAll'])->name('perencanaan.print.all');
 
+    Route::get('/realisasi/bhp', [RealisasiController::class, 'indexBhp'])->name('realisasi.bhp');
+    Route::get('/realisasi/inventaris', [RealisasiController::class, 'indexInv'])->name('realisasi.inv');
+    Route::get('/realisasi/view/{id}', [RealisasiController::class, 'show'])->name('realisasi.show');
+    Route::get('/realisasi/print/{id}', [RealisasiController::class, 'printId'])->name('realisasi.print.id');
+    Route::get('/realisasi/export/{id}', [RealisasiController::class, 'exportId'])->name('realisasi.export.id');
+    Route::get('/realisasi/print', [RealisasiController::class, 'print'])->name('realisasi.print');
+    Route::get('/realisasi/export', [RealisasiController::class, 'export'])->name('realisasi.export');
+
     Route::get('/transaction/bhp', [TransactionController::class, 'index'])->name('penggunaan');
     Route::get('/transaction/inventaris', [PeminjamanController::class, 'index'])->name('peminjaman');
     Route::get('/detail-transaction/{id}', [TransactionController::class, 'show'])->name('detail-penggunaan');
@@ -58,10 +67,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/transaction/inv/{id}/download', [PeminjamanController::class, 'exportById'])->name('peminjaman.export.id');
     Route::get('/transaction/bhp/{id}/print', [TransactionController::class, 'printById'])->name('penggunaan.print.id');
     Route::get('/transaction/inv/{id}/print', [PeminjamanController::class, 'printById'])->name('peminjaman.print.id');
+    Route::get('/transaction/report', [ReportController::class, 'transaction'])->name('report.transaction');
+    Route::get('/transaction/report/print', [ReportController::class, 'transactionPrint'])->name('report.transaction.print');
+    Route::get('/transaction/report/download', [ReportController::class, 'transactionDownload'])->name('report.transaction.download');
 
     Route::get('/data-harga', [ItemPricesController::class, 'index'])->name('data-harga');
-
     Route::get('/prediksi', [PredictionController::class, 'index'])->name('prediksi');
+
     Route::get('/report', [ReportController::class, 'index'])->name('report');
     Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');
     Route::get('/report/print', [ReportController::class, 'print'])->name('report.print');
@@ -91,6 +103,18 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::put('/update-rencana/{id}', [PerencanaanController::class, 'update'])->name('rencana.update-rencana');
     Route::put('/update-detail/{id}', [PerencanaanController::class, 'updateDetail'])->name('rencana.update-detail');
     Route::post('/perencanaan/{id}/complete', [PerencanaanController::class, 'complete'])->name('perencanaan.complete');
+
+    Route::get('/realisasi/add-inv', [RealisasiController::class, 'createInv'])->name('realisasi.inv.add');
+    Route::post('/realisasi/add-inv', [RealisasiController::class, 'store']);
+    Route::get('/realisasi/add-bhp', [RealisasiController::class, 'createBhp'])->name('realisasi.bhp.add');
+    Route::post('/realisasi/add-bhp', [RealisasiController::class, 'store']);
+    Route::delete('/realisasi/delete/{id}', [RealisasiController::class, 'destroy'])->name('realisasi.destroy');
+    Route::delete('/realisasi/destroy-item/{id}', [RealisasiController::class, 'destroyItem'])->name('realisasi.destroy.item');
+    Route::post('/realisasi/add-item/{id}', [RealisasiController::class, 'storeItem'])->name('realisasi.store.item');
+    Route::get('/realisasi/edit/{id}', [RealisasiController::class, 'edit'])->name('realisasi.edit');
+    Route::put('/realisasi/update/{id}', [RealisasiController::class, 'update'])->name('realisasi.update');
+    Route::put('/realisasi/update-detail/{id}', [RealisasiController::class, 'updateDetail'])->name('realisasi.update-detail');
+    Route::post('/realisasi/{id}/complete', [RealisasiController::class, 'complete'])->name('realisasi.complete');
 
     Route::get('/add-penggunaan-bhp', [TransactionController::class, 'create'])->name('add-penggunaan');
     Route::post('/add-penggunaan-bhp', [TransactionController::class, 'store']);

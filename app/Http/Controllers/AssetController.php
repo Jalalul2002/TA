@@ -19,7 +19,7 @@ class AssetController extends Controller
 {
     public function getAssets(Request $request)
     {
-        $query = Assetlab::with('latestPrice', 'latestPlans');
+        $query = Assetlab::with('latestPrice', 'latestPlans', 'latestRealisasi');
 
         if ($request->has('type')) {
             $query->where('type', $request->type);

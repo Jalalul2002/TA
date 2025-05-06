@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cetak Data Peminjaman Barang</title>
+    <title>Cetak Data Pengadaan</title>
     @vite('resources/css/app.css')
     <style>
         @media print {
@@ -15,6 +15,8 @@
 
             .main-data {
                 transform-origin: top left;
+                width: 100%;
+                height: 80%;
                 /* Sesuaikan agar tidak ada blank space */
             }
 
@@ -34,12 +36,9 @@
         }
     </style>
 </head>
-@php
-    // dd($data);
-@endphp
 
 <body class="bg-gray-100 text-gray-900">
-    <div class="max-w-6xl mx-auto p-6 bg-white">
+    <div class="max-w-6xl mx-auto p-6 bg-white rounded-lg">
         <div class="flex items-center justify-between border-b-[1px] border-black pb-4 mb-4 px-4">
             <!-- Logo -->
             <div class="w-14 me-1">
@@ -48,7 +47,8 @@
 
             <!-- Header -->
             <div class="text-center flex-1">
-                <h1 class="text-lg font-bold text-center uppercase">Laporan Data Barang (STOCK OPNAME)</h1>
+                <h1 class="text-lg font-bold text-center uppercase">Laporan Data Pengadaan
+                    {{ $realisasi->type == 'bhp' ? 'Bahan Habis Pakai' : 'Aset Inventaris' }}</h1>
                 <h1 class="text-sm font-bold uppercase">Laboratorium Fakultas Sains dan Teknologi</h1>
                 <h1 class="text-sm font-bold uppercase">Universitas Islam Negeri Sunan Gunung Djati Bandung</h1>
                 <p class="text-[10px] mt-2">Jl. A.H. Nasution No. 105 Cibiru Kota Bandung 40614 Jawa Barat – Indonesia |
@@ -58,20 +58,17 @@
             <!-- Kosong sebagai penyeimbang -->
             <div class="w-14"></div>
         </div>
-
-        <div class="main-data text-xs">
+        <div class="main-data">
             <div class="flex items-center justify-around flex-row mb-4">
-                <p class="text-center text-gray-700">Periode: <strong>
-                        @if (empty($startDate) && empty($endDate))
-                            Semua
-                        @else
-                            {{ $startDate->format('d M Y') }} - {{ $endDate->format('d M Y') }}
-                        @endif
-                    </strong></p>
-                <p class="text-center text-gray-700">Lokasi: <strong>{{ $location ?: 'Semua' }}</strong></p>
-                <p class="text-center text-gray-700">Tanggal Cetak: <strong>{{ $printDate }}</strong></p>
-                <p class="text-center text-gray-700">Tipe: <strong>{{ $type == 'bhp' ? 'BHP' : 'Asset Inventaris' }}</strong></p>
+                <p class="text-sm text-gray-700">Pengadaan:
+                    <strong>{{ $realisasi->name }}</strong>
+                </p>
+                <p class="text-sm text-gray-700">Prodi: <strong>{{ $realisasi->prodi }}</strong></p>
+                <p class="text-sm text-gray-700 capitalize">Status: <strong>{{ $realisasi->status }}</strong></p>
+                <p class="text-sm text-gray-700">Tanggal: <strong>{{ $realisasi->updated_at }}</strong></p>
+
             </div>
+
             <div class="flex justify-end mb-4">
                 <button onclick="window.print()"
                     class="print-button px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-800 transition flex items-center gap-2 font-semibold">
@@ -85,40 +82,48 @@
                 </button>
             </div>
 
-            <div class="overflow-x-none text-xs">
-                <table class="w-full border-collapse border border-gray-300">
+            <div>
+                <table class="w-full border-collapse border border-gray-300 text-xs">
                     <thead>
                         <tr class="bg-gray-200 text-gray-700">
-                            <th class="border border-gray-300 px-2 py-1">Kode</th>
-                            <th class="border border-gray-300 px-2 py-1">Produk</th>
-                            <th class="border border-gray-300 px-2 py-1">Keterangan</th>
-                            <th class="border border-gray-300 px-2 py-1">Merk</th>
-                            <th class="border border-gray-300 px-2 py-1">Jenis</th>
-                            <th class="border border-gray-300 px-2 py-1">Satuan</th>
-                            <th class="border border-gray-300 px-2 py-1">Stok Awal</th>
-                            <th class="border border-gray-300 px-2 py-1">Masuk</th>
-                            <th class="border border-gray-300 px-2 py-1">Keluar Praktikum</th>
-                            <th class="border border-gray-300 px-2 py-1">Keluar Penelitian</th>
+                            <th class="border border-gray-300 px-3 py-2">Nama Barang</th>
+                            <th class="border border-gray-300 px-3 py-2">Keterangan</th>
+                            <th class="border border-gray-300 px-3 py-2">Merk</th>
+                            <th class="border border-gray-300 px-3 py-2">Jenis</th>
                             <th class="border border-gray-300 px-3 py-2">Stok</th>
+                            <th class="border border-gray-300 px-3 py-2">Satuan</th>
+                            <th class="border border-gray-300 px-3 py-2">Harga Beli</th>
+                            <th class="border border-gray-300 px-3 py-2">Jumlah</th>
+                            <th class="border border-gray-300 px-3 py-2">Sub Total</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($report as $item)
+                        @foreach ($data as $row)
                             <tr class="hover:bg-gray-100">
-                                <td class="border border-gray-300 px-2 py-1">{{ $item['product_code'] }}</td>
-                                <td class="border border-gray-300 px-2 py-1">{{ $item['product_name'] }}</td>
-                                <td class="border border-gray-300 px-2 py-1">{{ $item['product_detail'] ?: '-' }}</td>
-                                <td class="border border-gray-300 px-2 py-1">{{ $item['merk'] ?: '-' }}</td>
-                                <td class="border border-gray-300 px-2 py-1">{{ $item['product_type'] }}</td>
-                                <td class="border border-gray-300 px-2 py-1">{{ $item['product_unit'] }}</td>
-                                <td class="border border-gray-300 px-2 py-1">
-                                    {{ rtrim(rtrim(number_format($item['stock_awal'], 4, ',', '.'), '0'), ',') }}</td>
-                                <td class="border border-gray-300 px-2 py-1">{{ rtrim(rtrim(number_format($item['total_masuk'], 4, ',', '.'), '0'), ',') }}</td>
-                                <td class="border border-gray-300 px-2 py-1">{{ rtrim(rtrim(number_format($item['total_praktikum'], 4, ',', '.'), '0'), ',') }}</td>
-                                <td class="border border-gray-300 px-2 py-1">{{ rtrim(rtrim(number_format($item['total_penelitian'], 4, ',', '.'), '0'), ',') }}</td>
-                                <td class="border border-gray-300 px-3 py-2">{{ rtrim(rtrim(number_format($item['stock_terhitung'], 4, ',', '.'), '0'), ',') }}</td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->product->product_name ?? '-' }}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->product->product_detail ?: '-' }}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->product->merk ?: '-' }}</td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->product->product_type ?? '-' }}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->stock > 0 ? $row->stock : '0' }}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->product->product_unit ?? '-' }}
+                                </td>
+                                <td class="border border-gray-300 px-3 py-2 whitespace-nowrap text-right">Rp.
+                                    {{ number_format($row->purchase_price ?? 0, 0, ',', '.') }},-</td>
+                                <td class="border border-gray-300 px-3 py-2">{{ $row->jumlah_kebutuhan }}</td>
+                                <td class="border border-gray-300 px-3 py-2 font-bold whitespace-nowrap text-right">Rp.
+                                    {{ number_format($row->total_price ?? 0, 0, ',', '.') }},-</td>
                             </tr>
                         @endforeach
+                        <tr>
+                            <td class="border border-gray-300 px-3 py-2 font-bold text-right" colspan="8">Total Harga
+                            </td>
+                            <td class="border border-gray-300 px-3 py-2 font-bold whitespace-nowrap text-right">Rp.
+                                {{ number_format($realisasi->total_price ?? 0, 0, ',', '.') }},-</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

@@ -245,7 +245,7 @@
                                         {{ intval($item->quantity) }} {{ $item->asset->product_unit }}
                                     </td>
                                     <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
-                                        {{ $item->asset->latestPrice->price_type == 'unit' ? '-' : rtrim(rtrim(number_format($item->rental, 4, ',', '.'), '0'), ',') . ' Jam' }}
+                                        {{ $item->asset->latestPrice->price_type == 'unit' ? '-' : ($item->asset->latestPrice->price_type == 'sample' ? rtrim(rtrim(number_format($item->rental, 4, ',', '.'), '0'), ',') . ' x' : rtrim(rtrim(number_format($item->rental, 4, ',', '.'), '0'), ',') . ' Jam') }}
                                     </td>
                                     <td class="border border-gray-300 px-2 py-1 text-right whitespace-nowrap">
                                         Rp. {{ number_format($item->total_price, 0, ',', '.') }},-

@@ -1,12 +1,12 @@
 <x-app-layout>
     @php
-        $segment = request()->segment(1); // Ambil segment pertama dari URL
-        $type = $segment === 'perencanaan-inv' ? 'inv' : 'bhp';
+        $segment = request()->segment(2); // Ambil segment pertama dari URL
+        $type = $segment ?? 'inv';
         $user = Auth::user()->usertype;
     @endphp
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Perencanaan') }} {{ $type == 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}
+            {{ __('Data Pengadaan') }} {{ $type == 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}
         </h2>
     </x-slot>
     @if (session('success') || session('error'))
@@ -77,7 +77,7 @@
                                     :min="startDate" max="{{ now()->format('Y-m-d') }}">
                             </div>
                             <a title="Download Data"
-                                href="{{ route('perencanaan.export', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'type' => $type]) }}">
+                                href="{{ route('realisasi.export', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'type' => $type]) }}">
                                 <div
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-teal-500 hover:bg-teal-700 transition-all duration-300">
                                     <svg class="size-4 fill-white me-2" xmlns="http://www.w3.org/2000/svg"
@@ -88,7 +88,7 @@
                                     Download
                                 </div>
                             </a>
-                            <a href="{{ route('perencanaan.print.all', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'type' => $type]) }}"
+                            <a href="{{ route('realisasi.print', ['start_date' => request('start_date'), 'end_date' => request('end_date'), 'location' => request('location'), 'type' => $type]) }}"
                                 target="_blank">
                                 <div
                                     class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-zinc-500 hover:bg-fuchsia-700 transition-all duration-300">
@@ -103,7 +103,7 @@
                             </a>
                             @if ($user !== 'user')
                                 <div class="flex justify-end">
-                                    <a href="{{ $type === 'bhp' ? route('add-perencanaan.bhp') : route('add-perencanaan.inv') }}"
+                                    <a href="{{ $type === 'bhp' ? route('realisasi.bhp.add') : route('realisasi.inv.add') }}"
                                         class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition-all duration-300">
                                         <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor" viewBox="0 0 448 512">
@@ -120,9 +120,9 @@
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
                             @php
                                 $columns = [
-                                    'nama_perencanaan' => 'Tahun Perencanaan',
+                                    'name' => 'Pengadaan',
                                     'prodi' => 'Program Studi',
-                                    'plans_count' => 'Total Barang',
+                                    'items_count' => 'Total Barang',
                                     'status' => 'Status',
                                     'total_price' => 'Total Harga',
                                     'updater' => 'Diupdate Oleh',
@@ -148,7 +148,7 @@
                                                     $isActive = request('sort_field', 'created_at') === $field;
                                                 @endphp
                                                 <a title="Sort by {{ $name }}"
-                                                    href="{{ $type === 'bhp' ? route('perencanaan-bhp', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) : route('perencanaan-inv', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
+                                                    href="{{ $type === 'bhp' ? route('realisasi.bhp', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) : route('realisasi.inv', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
                                                     <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
                                                         xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
                                                         viewBox="0 0 24 24" width="512" height="512">
@@ -166,41 +166,41 @@
                             </thead>
                             <tbody>
                                 @php
-                                    $counter = ($perencanaans->currentPage() - 1) * $perencanaans->perPage() + 1;
+                                    $counter = ($datas->currentPage() - 1) * $datas->perPage() + 1;
                                 @endphp
-                                @forelse ($perencanaans as $perencanaan)
+                                @forelse ($datas as $data)
                                     <tr class="bg-white border-b hover:bg-gray-50">
                                         <th class="text-center px-2 py-2">
                                             {{ $counter }}
                                         </th>
                                         <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                            {{ $perencanaan->nama_perencanaan }}
+                                            {{ $data->name }}
                                         </td>
                                         <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                            {{ $perencanaan->prodi }}
+                                            {{ $data->prodi }}
                                         </td>
                                         <td class="px-2 py-2">
-                                            {{ $perencanaan->plans_count }}
+                                            {{ $data->items_count }}
                                         </td>
                                         <td class="px-2 py-2">
                                             <span
-                                                class="text-sm font-bold rounded-full px-4 py-2 {{ $perencanaan->status == 'belum' ? 'bg-red-100 text-red-500' : 'bg-green-100 text-green-500' }}">
-                                                {{ strtoupper($perencanaan->status) }}
+                                                class="text-sm font-bold rounded-full px-4 py-2 {{ $data->status == 'belum' ? 'bg-red-100 text-red-500' : 'bg-green-100 text-green-500' }}">
+                                                {{ strtoupper($data->status) }}
                                             </span>
                                         </td>
                                         <td class="pl-2 pr-4 py-2 font-bold text-right">
-                                            Rp. {{ number_format($perencanaan->total_price ?? 0, 0, ',', '.') }},-
+                                            Rp. {{ number_format($data->total_price ?? 0, 0, ',', '.') }},-
                                         </td>
                                         <td class="px-2 py-2">
-                                            {{ $perencanaan->latestUpdater?->updater?->name ?? $perencanaan->updater->name }}
+                                            {{ $data->latestUpdater?->updater?->name ?? $data->updater->name }}
                                         </td>
                                         <td class="px-2 py-2">
-                                            {{ $perencanaan->created_at->format('d/m/Y') }}
+                                            {{ $data->created_at->format('d/m/Y') }}
                                         </td>
                                         <td class="py-2 flex flex-row gap-x-1 justify-center">
-                                            @if ($perencanaan->status === 'belum' && $user !== 'user')
+                                            @if ($data->status === 'belum' && $user !== 'user')
                                                 <form id="complete-form"
-                                                    action="{{ route('perencanaan.complete', $perencanaan->id) }}"
+                                                    action="{{ route('realisasi.complete', $data->id) }}"
                                                     method="POST" style="display: none;">
                                                     @csrf
                                                 </form>
@@ -220,7 +220,7 @@
                                                 </button>
                                             @endif
                                             <a title="Lihat Detail"
-                                                href="{{ route('detail-perencanaan', ['id' => $perencanaan->id, 'type' => $perencanaan->type]) }}">
+                                                href="{{ route('realisasi.show', ['id' => $data->id, 'type' =>$data->type]) }}">
                                                 <div
                                                     class="bg-amber-500 p-2 rounded-lg hover:bg-amber-700 transition-all duration-300">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
@@ -234,7 +234,7 @@
                                                 </div>
                                             </a>
                                             <a title="Download Data"
-                                                href="{{ route('perencanaan.download', $perencanaan->id) }}">
+                                                href="{{ route('realisasi.export.id', $data->id) }}">
                                                 <div
                                                     class="bg-teal-500 p-2 rounded-lg hover:bg-teal-700 transition-all duration-300">
                                                     <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg"
@@ -244,7 +244,7 @@
                                                     </svg>
                                                 </div>
                                             </a>
-                                            <a href="{{ route('perencanaan.print', $perencanaan->id) }}"
+                                            <a href="{{ route('realisasi.print.id', $data->id) }}"
                                                 target="_blank">
                                                 <div
                                                     class="bg-fuchsia-500 p-2 rounded-lg hover:bg-fuchsia-700 transition-all duration-300">
@@ -258,7 +258,7 @@
                                                 </div>
                                             </a>
                                             @if ($user !== 'user')
-                                                <form action="{{ route('destroy-rencana', $perencanaan->id) }}"
+                                                <form action="{{ route('realisasi.destroy', $data->id) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
@@ -292,7 +292,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{ $perencanaans->appends(request()->query())->links('pagination::tailwind') }}
+                        {{ $datas->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

@@ -2,35 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\PerencanaanExport;
-use App\Exports\PerencanaanExportAll;
+use App\Exports\RealisasiExport;
+use App\Exports\RealisasiExportAll;
 use App\Models\Assetlab;
-use App\Models\Perencanaan;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Request;
-use App\Models\DataPerencanaan;
-use App\Http\Controllers\Controller;
 use App\Models\DataRealisasi;
 use App\Models\Realisasi;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
-class PerencanaanController extends Controller
+class RealisasiController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function indexInv(Request $request)
     {
-        $query = DataPerencanaan::with([
-            'plans.product',
+        $query = DataRealisasi::with([
+            'items.product',
             'latestUpdater.updater',
             'creator' => function ($query) {
                 $query->select('id', 'name');
             }
-        ])->where('type', 'inventaris')->withCount('plans');
+        ])->where('type', 'inventaris')->withCount('items');
         $locations = ['all' => 'Semua',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Kimia' => 'Kimia', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];
 
         if (Auth::user()->usertype === 'staff') {
@@ -52,18 +52,24 @@ class PerencanaanController extends Controller
         #Sorting
         $sortField = $request->get('sort_field', 'created_at');
         $sortOrder = $request->get('sort_order', 'desc');
-        $allowedFields = ['nama_perencanaan', 'product_name', 'prodi', 'plans_count', 'status', 'created_at'];
+        $allowedFields = ['name', 'product_name', 'prodi', 'items_count', 'status', 'created_at'];
         if (in_array($sortField, $allowedFields)) {
             $query->orderBy($sortField, $sortOrder);
         }
 
-        $perencanaans = $query->paginate(10);
-        return view('perencanaan.perencanaan-aset', compact('perencanaans', 'sortField', 'sortOrder', 'locations'));
+        $datas = $query->paginate(10);
+        return view('pengadaan.index', compact('datas', 'sortField', 'sortOrder', 'locations'));
     }
 
     public function indexBhp(Request $request)
     {
-        $query = DataPerencanaan::with('plans.product', 'latestUpdater.updater')->where('type', 'bhp')->withCount('plans');
+        $query = DataRealisasi::with([
+            'items.product',
+            'latestUpdater.updater',
+            'creator' => function ($query) {
+                $query->select('id', 'name');
+            }
+        ])->where('type', 'bhp')->withCount('items');
         $locations = ['all' => 'Semua',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Kimia' => 'Kimia', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];
 
         if (Auth::user()->usertype === 'staff') {
@@ -85,79 +91,38 @@ class PerencanaanController extends Controller
         #Sorting
         $sortField = $request->get('sort_field', 'created_at');
         $sortOrder = $request->get('sort_order', 'desc');
-        $allowedFields = ['nama_perencanaan', 'product_name', 'prodi', 'plans_count', 'status', 'created_at'];
+        $allowedFields = ['name', 'product_name', 'prodi', 'items_count', 'status', 'created_at'];
         if (in_array($sortField, $allowedFields)) {
             $query->orderBy($sortField, $sortOrder);
         }
 
-        $perencanaans = $query->paginate(10);
-
-        return view('perencanaan.perencanaan-aset', compact('perencanaans', 'sortField', 'sortOrder', 'locations'));
+        $datas = $query->paginate(10);
+        return view('pengadaan.index', compact('datas', 'sortField', 'sortOrder', 'locations'));
     }
 
-    public function show($id, Request $request)
-    {
-        $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
-        $query = $dataPerencanaan->plans()->with('product');
-
-        $sortField = $request->get('sort_field', 'jumlah_kebutuhan');
-        $sortOrder = $request->get('sort_order', 'desc');
-        $allowedFields = ['product_code', 'product_name', 'product_detail', 'merk', 'product_type', 'stock', 'jumlah_kebutuhan', 'product_unit'];
-
-        if ($request->has('search')) {
-            $query->search($request->search);
-        }
-
-        if (in_array($sortField, $allowedFields)) {
-            if (in_array($sortField, ['product_name', 'merk', 'product_type', 'product_unit'])) {
-                // Sorting berdasarkan tabel product
-                $query->join('assetlabs', 'perencanaans.product_code', '=', 'assetlabs.product_code')
-                    ->select('perencanaans.*', 'assetlabs.product_name', 'assetlabs.product_detail', 'assetlabs.merk', 'assetlabs.product_type', 'assetlabs.product_unit')
-                    ->orderBy("assetlabs.$sortField", $sortOrder);
-            } else {
-                // Sorting berdasarkan tabel plans
-                $query->orderBy($sortField, $sortOrder);
-            }
-        }
-
-        $products = $query->paginate(10);
-        $totalPriceSum = $products->sum('total_price');
-        $assets = Assetlab::with('latestPrice')->where('type', $dataPerencanaan->type === 'bhp' ? 'bhp' : 'inventaris')->where('location', $dataPerencanaan->prodi)->get();
-
-        return view('perencanaan.detail-perencanaan', compact('dataPerencanaan', 'products', 'totalPriceSum', 'assets', 'sortField', 'sortOrder'));
-    }
-
+    /**
+     * Show the form for creating a new resource.
+     */
     public function createInv()
     {
         $prodi = Auth::user()->prodi;
-        $query = Assetlab::where('type', 'inventaris')->orderBy('product_name');
-
-        if (Auth::user()->usertype === 'staff') {
-            $query->where('location', $prodi);
-        }
-        $assetsinv = $query->get();
-
-        return view('perencanaan.add-perencanaan-inv', compact('assetsinv', 'prodi'));
+        return view('pengadaan.add-inv', compact('prodi'));
     }
 
     public function createBhp()
     {
         $prodi = Auth::user()->prodi;
-        $query = Assetlab::where('type', 'bhp')->orderBy('product_name');
-
-        if (Auth::user()->usertype === 'staff') {
-            $query->where('location', $prodi);
-        }
-        $assetbhps = $query->get();
-        return view('perencanaan.add-perencanaan', compact('assetbhps', 'prodi'));
+        return view('pengadaan.add-bhp', compact('prodi'));
     }
 
-    // Store Rencana + Item
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         try {
             $request->validate([
-                'nama_perencanaan' => 'required|string|max:255',
+                'pengadaan' => 'required|string|max:255',
                 'location' => 'required|string|max:255',
                 'type' => 'required|string|max:255',
             ]);
@@ -190,8 +155,8 @@ class PerencanaanController extends Controller
             }
             return DB::transaction(function () use ($request, $location, $type, $newProducts, $productCodes) {
                 // Simpan data perencanaan
-                $data = DataPerencanaan::create([
-                    'nama_perencanaan' => $request->nama_perencanaan,
+                $data = DataRealisasi::create([
+                    'name' => $request->pengadaan,
                     'prodi' => $location,
                     'type' => $type,
                     'created_by' => Auth::id(),
@@ -222,7 +187,7 @@ class PerencanaanController extends Controller
                 }
 
                 foreach ($processedItems as $item) {
-                    $data->plans()->create([
+                    $data->items()->create([
                         'product_code' => $item['product_code'],
                         'stock' => $item['stock'],
                         'purchase_price' => $item['purchase_price'],
@@ -254,7 +219,7 @@ class PerencanaanController extends Controller
                         'updated_by' => Auth::id(),
                     ]);
 
-                    $data->plans()->create([
+                    $data->items()->create([
                         'product_code' => $asset->product_code,
                         'stock' => $asset->stock ?? 0,
                         'purchase_price' => $product['purchase_price'] ?? 0,
@@ -264,8 +229,8 @@ class PerencanaanController extends Controller
                         'updated_by' => Auth::id(),
                     ]);
                 }
-                return redirect()->route($request->type === 'bhp' ? 'perencanaan-bhp' : 'perencanaan-inv')
-                    ->with('success', 'Perencanaan berhasil dibuat.');
+                return redirect()->route($request->type === 'bhp' ? 'realisasi.bhp' : 'realisasi.inv')
+                    ->with('success', 'Pengadaan berhasil dibuat.');
             });
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->validator)->withInput();
@@ -279,11 +244,10 @@ class PerencanaanController extends Controller
         }
     }
 
-    // Store Item
     public function storeItem(Request $request, $id)
     {
         try {
-            $dataPerencanaan = DataPerencanaan::findOrFail($id);
+            $dataPerencanaan = DataRealisasi::findOrFail($id);
             $location_code = [
                 'Matematika' => '701',
                 'Biologi' => '702',
@@ -335,8 +299,8 @@ class PerencanaanController extends Controller
                 }
             }
 
-            Perencanaan::create([
-                'rencana_id' => $id,
+            Realisasi::create([
+                'realisasi_id' => $id,
                 'product_code' => $product_code_upper,
                 'stock' => (int) $request->stock ?? 0,
                 'purchase_price' => (int) $request->purchase_price,
@@ -348,7 +312,7 @@ class PerencanaanController extends Controller
 
             return redirect()->back()->with('success', 'Product added successfully.');
         } catch (ModelNotFoundException $e) {
-            return redirect()->back()->with('error', 'Data perencanaan tidak ditemukan!');
+            return redirect()->back()->with('error', 'Data Pengadaan tidak ditemukan!');
         } catch (QueryException $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan pada database.');
         } catch (\Exception $e) {
@@ -356,32 +320,73 @@ class PerencanaanController extends Controller
         }
     }
 
-    public function edit($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show($id, Request $request)
     {
-        $item = Perencanaan::with(['rencana', 'product'])->where('id', $id)->firstOrFail();
-        return view('perencanaan.edit-rencana', compact('item'));
+        $dataRealisasi = DataRealisasi::with('items.product')->findOrFail($id);
+        $query = $dataRealisasi->items()->with('product');
+
+        $sortField = $request->get('sort_field', 'jumlah_kebutuhan');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $allowedFields = ['product_code', 'product_name', 'product_detail', 'merk', 'product_type', 'stock', 'jumlah_kebutuhan', 'product_unit'];
+
+        if ($request->has('search')) {
+            $query->search($request->search);
+        }
+
+        if (in_array($sortField, $allowedFields)) {
+            if (in_array($sortField, ['product_name', 'merk', 'product_type', 'product_unit'])) {
+                // Sorting berdasarkan tabel product
+                $query->join('assetlabs', 'realisasis.product_code', '=', 'assetlabs.product_code')
+                    ->select('realisasis.*', 'assetlabs.product_name', 'assetlabs.product_detail', 'assetlabs.merk', 'assetlabs.product_type', 'assetlabs.product_unit')
+                    ->orderBy("assetlabs.$sortField", $sortOrder);
+            } else {
+                // Sorting berdasarkan tabel
+                $query->orderBy($sortField, $sortOrder);
+            }
+        }
+
+        $products = $query->paginate(10);
+        $totalPriceSum = $products->sum('total_price');
+        $assets = Assetlab::with('latestPrice')->where('type', $dataRealisasi->type === 'bhp' ? 'bhp' : 'inventaris')->where('location', $dataRealisasi->prodi)->get();
+
+        return view('pengadaan.detail', compact('dataRealisasi', 'products', 'totalPriceSum', 'assets', 'sortField', 'sortOrder'));
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $item = Realisasi::with(['data', 'product'])->where('id', $id)->firstOrFail();
+        return view('pengadaan.edit', compact('item'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         try {
-            $rencana = Perencanaan::with('rencana')->where('id', $id)->firstOrFail();
+            $data = Realisasi::with('data')->where('id', $id)->firstOrFail();
             $request->validate([
                 'jumlah_kebutuhan' => ['required'],
             ]);
-            $rencana->update([
+            $data->update([
                 'purchase_price' => $request->purchase_price,
                 'jumlah_kebutuhan' => $request->jumlah_kebutuhan,
                 'total_price' => $request->total_price,
                 'updated_by' => Auth::id(),
             ]);
 
-            return redirect()->route('detail-perencanaan', ['id' => $rencana->rencana->id, 'type' => $rencana->rencana->type])
+            return redirect()->route('realisasi.show', ['id' => $data->data->id, 'type' => $data->data->type])
                 ->with('success', 'Data berhasil diperbarui');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->validator)->withInput();
         } catch (\Exception $e) {
-            return redirect()->route('detail-perencanaan', ['id' => $id])
+            return redirect()->route('realisasi.show', ['id' => $id])
                 ->with('error', 'Terjadi kesalahan saat memperbarui data!');
         }
     }
@@ -389,56 +394,56 @@ class PerencanaanController extends Controller
     public function updateDetail(Request $request, $id)
     {
         try {
-            $dataPerencanaan = DataPerencanaan::findOrFail($id);
-            $dataPerencanaan->update([
-                'nama_perencanaan' => $request->nama_perencanaan,
+            $dataRealisasi = DataRealisasi::findOrFail($id);
+            $dataRealisasi->update([
+                'name' => $request->name,
                 'updated_by' => Auth::id()
             ]);
 
-            return redirect()->route('detail-perencanaan', ['id' => $id, 'type' => $dataPerencanaan->type])
+            return redirect()->route('realisasi.show', ['id' => $dataRealisasi->id, 'type' => $dataRealisasi->type])
                 ->with('success', 'Data berhasil diperbarui');
         } catch (\Exception $e) {
-            return redirect()->route('detail-perencanaan', ['id' => $id])
+            return redirect()->route('realisasi.show', ['id' => $id])
                 ->with('error', 'Gagal memperbarui data!');
         }
     }
 
-    // Destroy Rencana + Item
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
-        $dataPerencanaan = DataPerencanaan::findOrFail($id);
-        $dataPerencanaan->delete();
-
-        return redirect()->back()->with('success', 'Perencanaan deleted successfully.');
+        $dataRealisasi = DataRealisasi::findOrFail($id);
+        $dataRealisasi->delete();
+        return redirect()->back()->with('success', 'Data Pengadaan deleted successfully.');
     }
 
-    // Destroy Item
     public function destroyItem($id)
     {
-        $perencanaan = Perencanaan::findOrFail($id);
-        $dataPerencanaan = $perencanaan->rencana;
-        if ($dataPerencanaan) {
-            $dataPerencanaan->updated_at = now();
-            $dataPerencanaan->updated_by = Auth::id();
-            $dataPerencanaan->save();
+        $realisasi = Realisasi::findOrFail($id);
+        $dataRealisasi = $realisasi->rencana;
+        if ($dataRealisasi) {
+            $dataRealisasi->updated_at = now();
+            $dataRealisasi->updated_by = Auth::id();
+            $dataRealisasi->save();
         }
-        $perencanaan->delete();
-
-        return redirect()->back()->with('success', 'Product deleted successfully.');
+        $realisasi->delete();
+        return redirect()->back()->with('success', 'Item deleted successfully.');
     }
 
-    public function download($id)
+    // Export
+    public function exportId($id)
     {
-        $perencanaan = DataPerencanaan::find($id);
+        $realisasi = DataRealisasi::find($id);
 
-        $type = $perencanaan->type;
-        $namaPerencanaan = $perencanaan->nama_perencanaan;
-        $prodi = $perencanaan->prodi;
+        $type = $realisasi->type;
+        $name = $realisasi->name;
+        $prodi = $realisasi->prodi;
 
         // Susun nama file yang lebih rapi
-        $filename = "Perencanaan_{$type}_{$namaPerencanaan}_{$prodi}.xlsx";
+        $filename = "Pengadaan {$type}_{$name}_{$prodi}.xlsx";
 
-        return Excel::download(new PerencanaanExport($id), $filename);
+        return Excel::download(new RealisasiExport($id), $filename);
     }
     public function export(Request $request)
     {
@@ -450,37 +455,38 @@ class PerencanaanController extends Controller
             $location = Auth::user()->prodi;
         }
 
-        $filename = "Data_Perencanaan_{$type}";
+        $filename = "Data_Pengadaan_{$type}";
 
         if ($location) {
             $filename .= "_{$location}";
         }
 
         if ($startDate || $endDate) {
-            $filename .= "Periode_{$startDate}-{$endDate}";
+            $filename .= "_Periode_{$startDate}-{$endDate}";
         }
 
         $filename .= ".xlsx";
 
-        return Excel::download(new PerencanaanExportAll($startDate, $endDate, $location, $type), $filename);
+        return Excel::download(new RealisasiExportAll($startDate, $endDate, $location, $type), $filename);
     }
-    public function print($id)
+    // Print
+    public function printId($id)
     {
-        $perencanaan = DataPerencanaan::findOrFail($id);
+        $realisasi = DataRealisasi::findOrFail($id);
         $printDate = Carbon::now()->format('d M Y, H:i');
 
-        $data = Perencanaan::with(['product'])
-            ->where('rencana_id', $id)
+        $data = Realisasi::with(['product'])
+            ->where('realisasi_id', $id)
             ->get();
 
-        return view('print.perencanaan', compact('data', 'perencanaan', 'printDate'));
+        return view('print.realisasi', compact('data', 'realisasi', 'printDate'));
     }
-    public function printAll(Request $request)
+    public function print(Request $request)
     {
         $type = $request->type == 'bhp' ? 'bhp' : 'inventaris';
         $location = $request->input('location');
         $printDate = Carbon::now()->format('d M Y, H:i');
-        $query = DataPerencanaan::where('type', $type)->with(['plans', 'plans.product']);
+        $query = DataRealisasi::where('type', $type)->with(['items', 'items.product']);
         $startDate = null;
         $endDate = null;
         if (Auth::user()->usertype === 'staff') {
@@ -501,62 +507,48 @@ class PerencanaanController extends Controller
         $data = $query->get();
         $grandTotal = $data->sum->total_price;
 
-        return view('print.perencanaan-all', compact('data', 'startDate', 'endDate', 'location', 'printDate', 'type', 'grandTotal'));
+        return view('print.realisasi-all', compact('data', 'startDate', 'endDate', 'location', 'printDate', 'type', 'grandTotal'));
     }
+
+    // Complete the realisasion data
     public function complete($id)
     {
         try {
-            $dataPerencanaan = DataPerencanaan::with('plans.product')->findOrFail($id);
+            $dataRealisasi = DataRealisasi::with('items.product')->findOrFail($id);
 
-            if ($dataPerencanaan->status === 'selesai') {
-                return redirect()->back()->with('error', 'Perencanaan ini sudah selesai.');
+            if ($dataRealisasi->status === 'selesai') {
+                return redirect()->back()->with('error', 'Pengadaan ini sudah selesai.');
             }
 
-            $dataRealisasi = DataRealisasi::create([
-                'name' => $dataPerencanaan->nama_perencanaan,
-                'prodi' => $dataPerencanaan->prodi,
-                'type' => $dataPerencanaan->type,
-                'status' => 'belum',
-                'created_by' => Auth::id(),
-                'updated_by' => Auth::id(),
-            ]);
+            foreach ($dataRealisasi->items as $item) {
+                $productDetails = $item->product;
 
-            foreach ($dataPerencanaan->plans as $perencanaan) {
-                // $productDetails = $perencanaan->product;
-                // if ($productDetails) {
-                //     $productDetails->stock += $perencanaan->jumlah_kebutuhan;
-                //     if ($productDetails->stock < 0) {
-                //         return redirect()->back()->with(
-                //             'error',
-                //             "Stok untuk produk {$productDetails->product_name} tidak normal."
-                //         );
-                //     }
-                //     $productDetails->save();
-                // } else {
-                //     return redirect()->back()->with(
-                //         'error',
-                //         "Produk dengan kode {$perencanaan->product_code} tidak ditemukan."
-                //     );
-                // }
-                Realisasi::create([
-                    'realisasi_id' => $dataRealisasi->id,
-                    'product_code' => $perencanaan->product_code,
-                    'stock' => $perencanaan->stock,
-                    'purchase_price' => $perencanaan->purchase_price,
-                    'total_price' => $perencanaan->total_price,
-                    'jumlah_kebutuhan' => $perencanaan->jumlah_kebutuhan,
-                    'created_by' => Auth::id(),
-                    'updated_by' => Auth::id(),
-                ]);
+                if ($productDetails) {
+                    $productDetails->stock += $item->jumlah_kebutuhan;
+
+                    if ($productDetails->stock < 0) {
+                        return redirect()->back()->with(
+                            'error',
+                            "Stok untuk produk {$productDetails->product_name} tidak normal."
+                        );
+                    }
+
+                    $productDetails->save();
+                } else {
+                    return redirect()->back()->with(
+                        'error',
+                        "Produk dengan kode {$item->product_code} tidak ditemukan."
+                    );
+                }
             }
 
-            $dataPerencanaan->status = 'selesai';
-            $perencanaan->updated_by = Auth::id();
-            $perencanaan->updated_at = now();
-            $dataPerencanaan->save();
+            $dataRealisasi->status = 'selesai';
+            $item->updated_by = Auth::id();
+            $item->updated_at = now();
+            $dataRealisasi->save();
 
 
-            return redirect()->route($dataPerencanaan->type === 'bhp' ? 'perencanaan-bhp' : 'perencanaan-inv')->with('success', 'Perencanaan berhasil diselesaikan.');
+            return redirect()->route($dataRealisasi->type === 'bhp' ? 'realisasi.bhp' : 'realisasi.inv')->with('success', 'Pengadaan berhasil diselesaikan.');
         } catch (QueryException $e) {
             return redirect()->back()->with('error', 'Terjadi kesalahan pada database saat memperbarui data.');
         } catch (\Exception $e) {

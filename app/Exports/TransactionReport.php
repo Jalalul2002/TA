@@ -61,6 +61,16 @@ class TransactionReport implements FromCollection, WithCustomStartCell, WithEven
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
+                $setTableBorder = function ($sheet, $range) {
+                    $sheet->getStyle($range)->applyFromArray([
+                        'borders' => [
+                            'allBorders' => [
+                                'borderStyle' => Border::BORDER_THIN,
+                                'color' => ['argb' => '000000'],
+                            ],
+                        ],
+                    ]);
+                };
                 $sheet = $event->sheet->getDelegate();
 
                 // Judul
@@ -69,9 +79,24 @@ class TransactionReport implements FromCollection, WithCustomStartCell, WithEven
                 $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
                 $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
+                // === INFORMASI PEMINJAM ===
+                $sheet->mergeCells('A3:B3');
+                $sheet->setCellValue('A3', 'Informasi Pengguna');
+                $sheet->getStyle('A3')->getFont()->setBold(true);
+
+                $borrower = $this->items->first()?->transaction ?? $this->loans->first()?->transaction;
+                $sheet->setCellValue('A4', 'ID');
+                $sheet->setCellValue('B4', $borrower->user_id ?? '-');
+                $sheet->setCellValue('A5', 'Nama');
+                $sheet->setCellValue('B5', $borrower->name ?? '-');
+                $sheet->setCellValue('A6', 'Prodi');
+                $sheet->setCellValue('B6', $borrower->prodi ?? '-');
+                $sheet->setCellValue('A7', 'Telepon');
+                $sheet->setCellValue('B7', $borrower->telp ?? '-');
+
                 // === TABEL ===
-                $startRow = 3;
-                $sheet->mergeCells('A3:E3');
+                $startRow = 9;
+                $sheet->mergeCells("A$startRow:B$startRow");
                 $sheet->setCellValue("A$startRow", 'Bahan Habis Pakai');
                 $sheet->getStyle("A$startRow")->getFont()->setBold(true);
                 $startRow++;
@@ -86,6 +111,7 @@ class TransactionReport implements FromCollection, WithCustomStartCell, WithEven
 
                 $row = $startRow + 1;
                 $no = 1;
+                $totalBhp = 0;
                 foreach ($this->items as $item) {
                     $sheet->setCellValue("A$row", $no++);
                     $sheet->setCellValue("B$row", optional($item->created_at)->format('d/m/Y'));
@@ -94,26 +120,37 @@ class TransactionReport implements FromCollection, WithCustomStartCell, WithEven
                     $sheet->setCellValue("E$row", $item->formatted_quantity);
                     $sheet->setCellValue("F$row", $item->asset->product_unit);
                     $sheet->setCellValue("G$row", $item->total_price);
+                    $totalBhp += $item->total_price;
                     $row++;
                 }
 
+                // TOTAL BHP
+                $sheet->mergeCells("A$row:F$row");
+                $sheet->setCellValue("A$row", 'TOTAL BHP');
+                $sheet->getStyle("A$row")->getFont()->setBold(true);
+                $sheet->setCellValue("G$row", $totalBhp);
+                $sheet->getStyle("G$row")->getFont()->setBold(true);
+                $startBhp = $startRow;
+                $setTableBorder($sheet, "A$startBhp:G$row");
+                $row += 2;
+
                 // === TABEL ===
-                $startRow = $row + 2;
-                $sheet->mergeCells("A$startRow:E$startRow");
-                $sheet->setCellValue("A$startRow", 'Pemakaian Alat');
-                $sheet->getStyle("A$startRow")->getFont()->setBold(true);
-                $startRow++;
+                $sheet->mergeCells("A$row:E$row");
+                $sheet->setCellValue("A$row", 'Pemakaian Alat');
+                $sheet->getStyle("A$row")->getFont()->setBold(true);
+                $row++;
 
                 $headers2 = ['No', 'Tanggal', 'Produk', 'Harga', 'Jumlah', 'Durasi', 'Satuan', 'Sub Total'];
                 $col = 'A';
                 foreach ($headers2 as $header) {
-                    $sheet->setCellValue("$col$startRow", $header);
-                    $sheet->getStyle("$col$startRow")->getFont()->setBold(true);
+                    $sheet->setCellValue("$col$row", $header);
+                    $sheet->getStyle("$col$row")->getFont()->setBold(true);
                     $col++;
                 }
 
-                $row = $startRow + 1;
+                $row++;
                 $no = 1;
+                $totalAlat = 0;
                 foreach ($this->loans as $item) {
                     $sheet->setCellValue("A$row", $no++);
                     $sheet->setCellValue("B$row", optional($item->created_at)->format('d/m/Y'));
@@ -123,8 +160,34 @@ class TransactionReport implements FromCollection, WithCustomStartCell, WithEven
                     $sheet->setCellValue("F$row", $item->rental);
                     $sheet->setCellValue("G$row", $item->asset->product_unit);
                     $sheet->setCellValue("H$row", $item->total_price);
+                    $totalAlat += $item->total_price;
                     $row++;
                 }
+
+                // TOTAL ALAT
+                $sheet->mergeCells("A$row:G$row");
+                $sheet->setCellValue("A$row", 'TOTAL ALAT');
+                $sheet->getStyle("A$row")->getFont()->setBold(true);
+                $sheet->setCellValue("H$row", $totalAlat);
+                $sheet->getStyle("H$row")->getFont()->setBold(true);
+                $alatStart = $row - (count($this->loans) + 1);
+                $alatEnd = $row;
+                $setTableBorder($sheet, "A$alatStart:H$alatEnd");
+                $row += 2;
+
+                // === TOTAL KESELURUHAN ===
+                $sheet->setCellValue("A$row", 'TOTAL KESELURUHAN');
+                $sheet->getStyle("A$row")->getFont()->setBold(true)->setSize(12);
+                $sheet->setCellValue("B$row", $totalBhp + $totalAlat);
+                $sheet->getStyle("B$row")->getFont()->setBold(true)->setSize(12);
+                $row++;
+                $sheet->setCellValue("A$row", 'KETERANGAN');
+                $sheet->getStyle("A$row")->getFont()->setBold(true)->setSize(12);
+                $sheet->setCellValue("B$row", '');
+                $sheet->getStyle("B$row")->getFont()->setBold(true)->setSize(12);
+                $start3 = $row - 1;
+                $setTableBorder($sheet, "A$start3:B$row");
+
 
                 // AutoSize kolom
                 foreach (range('A', 'H') as $col) {

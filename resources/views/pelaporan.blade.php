@@ -122,7 +122,7 @@
                             </a>
                         </div>
                     </div>
-                    @if (!filled(request('location')) || !filled(request('type')) || !filled(request('start_date')))
+                    @if (!filled(request('type')) || !filled(request('start_date')))
                         <div class="w-full bg-gray-100 text-center py-12 rounded-lg">
                             <p>Silahkan Pilih Lokasi, Tipe dan Periode</p>
                         </div>

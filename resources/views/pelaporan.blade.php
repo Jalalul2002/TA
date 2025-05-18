@@ -139,11 +139,18 @@
                                         'product_unit' => 'Satuan',
                                         'stock_awal' => 'Stok Awal',
                                         'total_masuk' => 'Masuk',
-                                        'total_praktikum' => 'Keluar Praktikum',
-                                        'total_penelitian' => 'Keluar Penelitian',
-                                        'stock' => 'Stok',
                                     ];
+
+                                    if (request('type') === 'bhp') {
+                                        $columns['total_praktikum'] = 'Keluar Praktikum';
+                                        $columns['total_penelitian'] = 'Keluar Penelitian';
+                                    } else {
+                                        $columns['total_rusak'] = 'Rusak';
+                                    }
+
+                                    $columns['stock_terhitung'] = 'Stok';
                                 @endphp
+
                                 <thead class="text-xs text-white uppercase bg-uinTosca">
                                     <tr>
                                         <th scope="col" class="text-center px-2 py-3">
@@ -160,10 +167,10 @@
                                                             request('sort_order') === 'asc'
                                                                 ? 'desc'
                                                                 : 'asc';
-                                                        $isActive = request('sort_field', 'created_at') === $field;
+                                                        $isActive = request('sort_field', 'product_code') === $field;
                                                     @endphp
-                                                    <a title="Sort by {{ $name }}" class="px-2"
-                                                        href="{{ route('peminjaman', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
+                                                    <a title="Sort by {{ $name }}"
+                                                        href="{{ route('report', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
                                                         <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
                                                             xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
                                                             viewBox="0 0 24 24" width="512" height="512">
@@ -211,12 +218,18 @@
                                             <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
                                                 {{ rtrim(rtrim(number_format($data['total_masuk'], 4, ',', '.'), '0'), ',') }}
                                             </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ rtrim(rtrim(number_format($data['total_praktikum'], 4, ',', '.'), '0'), ',') }}
-                                            </td>
-                                            <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
-                                                {{ rtrim(rtrim(number_format($data['total_penelitian'], 4, ',', '.'), '0'), ',') }}
-                                            </td>
+                                            @if (request('type') === 'bhp')
+                                                <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
+                                                    {{ rtrim(rtrim(number_format($data['total_praktikum'], 4, ',', '.'), '0'), ',') }}
+                                                </td>
+                                                <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
+                                                    {{ rtrim(rtrim(number_format($data['total_penelitian'], 4, ',', '.'), '0'), ',') }}
+                                                </td>
+                                            @else
+                                                <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
+                                                    {{ rtrim(rtrim(number_format($data['total_rusak'], 4, ',', '.'), '0'), ',') }}
+                                                </td>
+                                            @endif
                                             <td scope="row" class="px-2 py-2 font-medium whitespace-nowrap">
                                                 {{ rtrim(rtrim(number_format($data['stock_terhitung'], 4, ',', '.'), '0'), ',') }}
                                             </td>

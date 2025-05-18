@@ -1,12 +1,7 @@
 <x-app-layout>
-    @php
-        $segment = request()->segment(1); // Ambil segment pertama dari URL
-        $type = $segment === 'data-aset' ? 'inv' : 'bhp';
-    @endphp
-
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data ') }} {{ $type == 'bhp' ? 'Barang Habis Pakai' : 'Aset Inventaris' }}
+            {{ __('Data Pengajuan') }}
         </h2>
     </x-slot>
     @if (session('success') || session('error'))
@@ -43,8 +38,7 @@
                         </div>
                         <div x-data="filterData()"
                             class="flex flex-col md:flex-row space-y-1 md:space-y-0 md:items-center gap-x-1 xl:gap-x-2 justify-end">
-                            <form action="{{ $type == 'bhp' ? route('export.bhp') : route('export.inv') }}"
-                                method="GET"
+                            <form action="#" method="GET"
                                 class="flex flex-col space-y-1 md:space-y-0 md:flex-row md:items-center gap-x-1 xl:gap-x-2">
                                 <div class="flex space-x-1 xl:space-x-2">
                                     <select id="product_type" name="product_type" x-model="productType"
@@ -71,44 +65,42 @@
                                         </select>
                                     @endif
                                 </div>
-                                @if (Auth::user()->usertype !== 'mahasiswa')
-                                    @if (Auth::user()->usertype !== 'user')
-                                        <a href="{{ $type == 'bhp' ? route('add-aset-bhp') : route('add-aset-inv') }}"
-                                            class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition duration-300">
-                                            <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor" viewBox="0 0 448 512">
-                                                <path
-                                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                            </svg>
-                                            Tambah
-                                        </a>
-                                    @endif
-                                    <button type="submit"
-                                        class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
-                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
-                                            data-name="Layer 1" viewBox="0 0 24 24">
+                                @if (Auth::user()->usertype !== 'user')
+                                    <a href="{{ route('mahasiswa.add') }}"
+                                        class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition duration-300">
+                                        <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor" viewBox="0 0 448 512">
                                             <path
-                                                d="M23.971,17.98c-.191,1.175-1.215,2.028-2.436,2.028-.664,0-1.301-.196-1.84-.553-.387-.257-.447-.801-.118-1.129l.002-.002c.236-.235,.602-.283,.886-.11,.316,.191,.689,.298,1.07,.298,.604,0,1.031-.404,1.096-.795,.088-.55-.602-.873-.817-.959-.915-.371-1.751-.78-1.753-.78-.692-.484-1.027-1.231-.921-2.049,.111-.845,.674-1.534,1.471-1.796,.839-.277,1.603-.076,2.152,.203,.405,.205,.518,.733,.24,1.093-.203,.263-.559,.358-.863,.225-.306-.134-.71-.226-1.137-.088-.412,.136-.517,.447-.515,.577,.005,.442,.335,.57,.433,.615,.282,.128,.806,.368,1.366,.595,1.461,.591,1.828,1.745,1.685,2.627Zm-8.368-5.972h0c-.442,0-.8,.358-.8,.8v6.401c0,.442,.358,.8,.8,.8h2.133c.442,0,.8-.358,.8-.8s-.358-.8-.8-.8c-.755,0-1.333,0-1.333,0v-5.601c0-.442-.358-.8-.8-.8Zm-2.612,0c-.307,0-.589,.174-.726,.449l-.864,1.733-.864-1.733c-.137-.275-.418-.449-.726-.449-.602,0-.994,.634-.726,1.173l1.409,2.827-1.409,2.827c-.269,.539,.123,1.173,.726,1.173h0c.307,0,.589-.174,.726-.449l.864-1.733,.864,1.733c.137,.275,.418,.449,.726,.449,.602,0,.994-.634,.726-1.173l-1.409-2.827,1.409-2.827c.269-.539-.123-1.173-.726-1.173Zm7.009,10.992c0,.553-.447,1-1,1H5c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h4.515c1.869,0,3.627,.728,4.95,2.05l3.484,3.486c.888,.887,1.521,2,1.833,3.217,.076,.299,.011,.617-.179,.861s-.481,.387-.79,.387h-5.813c-1.654,0-3-1.346-3-3V2.023c-.16-.015-.322-.023-.485-.023H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h14c.553,0,1,.447,1,1ZM12,7c0,.551,.448,1,1,1h4.339c-.22-.382-.489-.736-.804-1.05l-3.484-3.486c-.318-.318-.671-.587-1.051-.805V7Z" />
+                                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                         </svg>
-                                        <span>Export</span>
-                                    </button>
-                                    <a href="{{ $type == 'bhp' ? route('print.bhp', ['product_type' => request('product_type'), 'location' => request('location')]) : route('print.inv', ['product_type' => request('product_type'), 'location' => request('location')]) }}"
-                                        target="_blank"
-                                        class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-teal-500 border border-transparent rounded-md font-semibold text-white hover:bg-teal-600 transition duration-300">
-                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
-                                            viewBox="0 0 24 24" width="512" height="512">
-                                            <path
-                                                d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
-                                            <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
-                                        </svg>
-                                        <span>Print</span>
+                                        Tambah
                                     </a>
                                 @endif
+                                <button type="submit"
+                                    class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
+                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
+                                        data-name="Layer 1" viewBox="0 0 24 24">
+                                        <path
+                                            d="M23.971,17.98c-.191,1.175-1.215,2.028-2.436,2.028-.664,0-1.301-.196-1.84-.553-.387-.257-.447-.801-.118-1.129l.002-.002c.236-.235,.602-.283,.886-.11,.316,.191,.689,.298,1.07,.298,.604,0,1.031-.404,1.096-.795,.088-.55-.602-.873-.817-.959-.915-.371-1.751-.78-1.753-.78-.692-.484-1.027-1.231-.921-2.049,.111-.845,.674-1.534,1.471-1.796,.839-.277,1.603-.076,2.152,.203,.405,.205,.518,.733,.24,1.093-.203,.263-.559,.358-.863,.225-.306-.134-.71-.226-1.137-.088-.412,.136-.517,.447-.515,.577,.005,.442,.335,.57,.433,.615,.282,.128,.806,.368,1.366,.595,1.461,.591,1.828,1.745,1.685,2.627Zm-8.368-5.972h0c-.442,0-.8,.358-.8,.8v6.401c0,.442,.358,.8,.8,.8h2.133c.442,0,.8-.358,.8-.8s-.358-.8-.8-.8c-.755,0-1.333,0-1.333,0v-5.601c0-.442-.358-.8-.8-.8Zm-2.612,0c-.307,0-.589,.174-.726,.449l-.864,1.733-.864-1.733c-.137-.275-.418-.449-.726-.449-.602,0-.994,.634-.726,1.173l1.409,2.827-1.409,2.827c-.269,.539,.123,1.173,.726,1.173h0c.307,0,.589-.174,.726-.449l.864-1.733,.864,1.733c.137,.275,.418,.449,.726,.449,.602,0,.994-.634,.726-1.173l-1.409-2.827,1.409-2.827c.269-.539-.123-1.173-.726-1.173Zm7.009,10.992c0,.553-.447,1-1,1H5c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h4.515c1.869,0,3.627,.728,4.95,2.05l3.484,3.486c.888,.887,1.521,2,1.833,3.217,.076,.299,.011,.617-.179,.861s-.481,.387-.79,.387h-5.813c-1.654,0-3-1.346-3-3V2.023c-.16-.015-.322-.023-.485-.023H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h14c.553,0,1,.447,1,1ZM12,7c0,.551,.448,1,1,1h4.339c-.22-.382-.489-.736-.804-1.05l-3.484-3.486c-.318-.318-.671-.587-1.051-.805V7Z" />
+                                    </svg>
+                                    <span>Export</span>
+                                </button>
+                                <a href="{{ route('print.bhp', ['product_type' => request('product_type'), 'location' => request('location')]) }}"
+                                    target="_blank"
+                                    class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-teal-500 border border-transparent rounded-md font-semibold text-white hover:bg-teal-600 transition duration-300">
+                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                        viewBox="0 0 24 24" width="512" height="512">
+                                        <path
+                                            d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
+                                        <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
+                                    </svg>
+                                    <span>Print</span>
+                                </a>
                             </form>
                         </div>
                     </div>
                     <div class="mb-1">
-                        {{ $assetLabs->appends(request()->query())->links('pagination::tailwind') }}
+                        {{ $datas->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         @php
@@ -121,7 +113,6 @@
                                 'stock' => 'stok',
                                 'product_unit' => 'satuan',
                                 'purchase_price' => 'Harga Beli',
-                                'price' => $type === 'bhp' ? 'Harga Pakai' : 'Harga Sewa',
                                 'location_detail' => 'Lokasi Penyimpanan',
                             ];
                             if (Auth::user()->usertype !== 'staff') {
@@ -148,7 +139,7 @@
                                                     $isActive = request('sort_field', 'product_name') === $field;
                                                 @endphp
                                                 <a title="Sort by {{ $name }}"
-                                                    href="{{ $type === 'bhp' ? route('data-bhp', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) : route('data-aset', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
+                                                    href="{{ route('data-bhp', array_merge(request()->query(), ['sort_field' => $field, 'sort_order' => $newSortOrder])) }}">
                                                     <svg class="w-3 h-3 ms-1.5 {{ $isActive ? 'fill-uinOrange' : 'fill-white' }}"
                                                         xmlns="http://www.w3.org/2000/svg" id="arrow-circle-down"
                                                         viewBox="0 0 24 24" width="512" height="512">
@@ -173,70 +164,70 @@
                             </thead>
                             <tbody>
                                 @php
-                                    $counter = ($assetLabs->currentPage() - 1) * $assetLabs->perPage() + 1;
+                                    $counter = ($datas->currentPage() - 1) * $datas->perPage() + 1;
                                 @endphp
-                                @forelse ($assetLabs as $assetLab)
+                                @forelse ($datas as $data)
                                     <tr class="bg-white border-b hover:bg-gray-50">
                                         <th class="px-2 py-4 text-center">
                                             {{ $counter }}
                                         </th>
                                         <td scope="row" class="px-2 font-medium">
-                                            {{ $assetLab->product_code }}
+                                            {{ $data->product_code }}
                                         </td>
                                         <td scope="row" class="px-2 font-medium">
-                                            {{ $assetLab->product_name }}
+                                            {{ $data->product_name }}
                                         </td>
                                         <td class="px-2">
-                                            {{ empty($assetLab->product_detail) ? '-' : $assetLab->product_detail }}
+                                            {{ empty($data->product_detail) ? '-' : $data->product_detail }}
                                         </td>
                                         <td class="px-2">
-                                            {{ empty($assetLab->merk) ? '-' : $assetLab->merk }}
+                                            {{ empty($data->merk) ? '-' : $data->merk }}
                                         </td>
                                         <td class="px-2">
-                                            {{ $assetLab->product_type }}
+                                            {{ $data->product_type }}
                                         </td>
                                         <td class="px-2">
-                                            {{ $assetLab->formatted_stock }}
+                                            {{ $data->formatted_stock }}
                                         </td>
                                         <td class="px-2">
-                                            {{ $assetLab->product_unit }}
+                                            {{ $data->product_unit }}
                                         </td>
                                         <td class="px-2 text-right font-semibold whitespace-nowrap">
                                             <span class="px-2 py-1 text-white rounded-full bg-uinOrange">
                                                 Rp.
-                                                {{ number_format($assetLab->latestPrice->purchase_price ?? 0, 0, ',', '.') }},-
+                                                {{ number_format($data->latestPrice->purchase_price ?? 0, 0, ',', '.') }},-
                                             </span>
                                         </td>
                                         <td class="px-2 text-right font-semibold whitespace-nowrap">
                                             <span class="px-2 py-1 text-white rounded-full bg-uinBlue">
                                                 Rp.
-                                                {{ number_format($assetLab->latestPrice->price ?? 0, 0, ',', '.') }},-
-                                                /{{ optional($assetLab->latestPrice)->price_type
-                                                    ? ($assetLab->latestPrice->price_type == 'unit'
+                                                {{ number_format($data->latestPrice->price ?? 0, 0, ',', '.') }},-
+                                                /{{ optional($data->latestPrice)->price_type
+                                                    ? ($data->latestPrice->price_type == 'unit'
                                                         ? 'item'
-                                                        : ($assetLab->latestPrice->price_type == 'sample'
+                                                        : ($data->latestPrice->price_type == 'sample'
                                                             ? 'sampel'
                                                             : 'jam'))
-                                                    : ($assetLab->type == 'bhp'
-                                                        ? $assetLab->product_unit
+                                                    : ($data->type == 'bhp'
+                                                        ? $data->product_unit
                                                         : 'jam') }}
                                             </span>
                                         </td>
                                         <td class="px-2">
-                                            {{ empty($assetLab->location_detail) ? '-' : $assetLab->location_detail }}
+                                            {{ empty($data->location_detail) ? '-' : $data->location_detail }}
                                         </td>
                                         @if (Auth::user()->usertype !== 'staff')
                                             <td class="px-2">
-                                                {{ $assetLab->location }}
+                                                {{ $data->location }}
                                             </td>
                                         @endif
                                         @if (Auth::user()->usertype !== 'mahasiswa' || Auth::user()->usertype == 'dosen')
                                             <td class="px-2">
-                                                {{ $assetLab->updater->name }}
+                                                {{ $data->updater->name }}
                                             </td>
                                             @if (Auth::user()->usertype !== 'user')
                                                 <td class="py-2 flex flex-row gap-x-2 justify-center">
-                                                    <a href="{{ route('edit-aset', $assetLab->product_code) }}">
+                                                    <a href="{{ route('edit-aset', $data->product_code) }}">
                                                         <div
                                                             class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400 transition duration-300">
                                                             <svg class="size-4 fill-white"
@@ -249,8 +240,7 @@
                                                             </svg>
                                                         </div>
                                                     </a>
-                                                    <form
-                                                        action="{{ route('destroy-aset', $assetLab->product_code) }}"
+                                                    <form action="{{ route('destroy-aset', $data->product_code) }}"
                                                         method="POST">
                                                         @csrf
                                                         @method('DELETE')
@@ -291,7 +281,7 @@
                         </table>
                     </div>
                     <div class="mt-4">
-                        {{ $assetLabs->appends(request()->query())->links('pagination::tailwind') }}
+                        {{ $datas->appends(request()->query())->links('pagination::tailwind') }}
                     </div>
                 </div>
             </div>

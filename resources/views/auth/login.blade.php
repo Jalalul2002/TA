@@ -22,11 +22,11 @@
                             stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </div>
-                <input type="email" id="email" name="email" :value="old('email')"
+                <input type="text" id="login" name="login" :value="old('login')"
                     class="border border-gray-300 text-gray-900 text-sm rounded-3xl focus:ring-blue-500 focus:border-blue-500 block w-full ps-12 p-2.5"
-                    placeholder="Write your Email Address" required autofocus autocomplete="username">
+                    placeholder="NIM/NIP/ID or Email" required autofocus autocomplete="username">
             </div>
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-error :messages="$errors->get('login')" class="mt-2" />
         </div>
 
         <!-- Password -->

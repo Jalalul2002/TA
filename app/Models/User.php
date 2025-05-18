@@ -17,6 +17,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'username',
         'name',
         'usertype',
         'prodi',
@@ -57,6 +58,10 @@ class User extends Authenticatable
 
         return $query;
     }
+    public function signature()
+{
+    return $this->hasOne(UserSign::class);
+}
     public function products()
     {
         return $this->hasMany(Product::class, 'created_by');

@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         User::create([
+            'username' => 'admin1',
             'name' => 'Master Admin',
             'email' => 'admin@uinsgd.ac.id',
             'usertype' => 'admin',
@@ -92,6 +93,21 @@ class DatabaseSeeder extends Seeder
             'email' => 'saintek@uinsgd.ac.id',
             'usertype' => 'user',
             'password' => Hash::make('Ju@r4')
+        ]);
+
+        User::create([
+            'username' => '1207050055',
+            'name' => 'Jalalul Mu`ti',
+            'email' => 'jalalul2000@gmail.com',
+            'usertype' => 'mahasiswa',
+            'password' => Hash::make('user12345')
+        ]);
+
+        User::create([
+            'username' => '111222333',
+            'name' => 'Edward Elrich',
+            'usertype' => 'dosen',
+            'password' => Hash::make('user12345')
         ]);
 
         // Product::factory(20)->create();

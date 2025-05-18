@@ -3,9 +3,13 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\RegisterStaffController;
 use App\Http\Controllers\AssetController;
+use App\Http\Controllers\DataLabController;
 use App\Http\Controllers\DataStaffController;
+use App\Http\Controllers\Dosen\DosenController;
 use App\Http\Controllers\ItemPricesController;
+use App\Http\Controllers\Mahasiswa\MahasiswaController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PerencanaanController;
 use App\Http\Controllers\PredictionController;
 use App\Http\Controllers\ProductController;
@@ -16,7 +20,6 @@ use App\Http\Controllers\Staff\RegisterController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\User\UserController;
-use App\Models\Peminjaman;
 use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/auth.php';
@@ -77,6 +80,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/report', [ReportController::class, 'index'])->name('report');
     Route::get('/report/download', [ReportController::class, 'download'])->name('report.download');
     Route::get('/report/print', [ReportController::class, 'print'])->name('report.print');
+
+    Route::get('/data-lab', [DataLabController::class, 'index'])->name('lab.index');
 });
 
 Route::middleware(['auth', 'orMiddleware'])->group(function () {
@@ -130,6 +135,11 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
 
     Route::get('/assets', [AssetController::class, 'getAssets']);
     Route::post('/prediksi', [PredictionController::class, 'sendData']);
+    Route::get('/add-lab', [DataLabController::class, 'create'])->name('lab.add');
+    Route::post('/add-lab', [DataLabController::class, 'store']);
+    Route::delete('/delete-lab/{dataLab}', [DataLabController::class, 'destroy'])->name('lab.destroy');
+
+    Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan');
 });
 
 //Staff Route
@@ -157,4 +167,16 @@ Route::middleware(['auth', 'adminMiddleware'])->group(function () {
     Route::get('admin/edit-staff/{id}', [RegisterStaffController::class, 'edit'])->name('admin.edit-staff');
     Route::put('admin/update-staff/{id}', [RegisterStaffController::class, 'update'])->name('admin.update-staff');
     Route::delete('admin/data-staff/{id}', [DataStaffController::class, 'destroy'])->name('admin.destroy-staff');
+});
+
+Route::middleware(['auth', 'mahasiswaMiddleware'])->group(function () {
+    Route::get('mahasiswa/dashboard', [MahasiswaController::class, 'index'])->name('mahasiswa.dashboard');
+    Route::get('/mahasiswa/pengajuan', [MahasiswaController::class, 'pengajuan'])->name('mahasiswa.pengajuan');
+    Route::get('/mahasiswa/pengajuan/add', [MahasiswaController::class, 'create'])->name('mahasiswa.add');
+    Route::post('/mahasiswa/pengajuan/add', [MahasiswaController::class, 'store']);
+    Route::delete('/mahasiswa/pengajuan/delete/{pengajuan}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
+});
+
+Route::middleware(['auth', 'dosenMiddleware'])->group(function () {
+    Route::get('dosen/dashboard', [DosenController::class, 'index'])->name('dosen.dashboard');
 });

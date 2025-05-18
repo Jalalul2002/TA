@@ -6,6 +6,7 @@ use App\Exports\ReportExport;
 use App\Exports\TransactionReport;
 use App\Models\Assetlab;
 use App\Models\DataPerencanaan;
+use App\Models\Peminjaman;
 use App\Models\Perencanaan;
 use App\Models\Transaction;
 use App\Models\TransactionItem;
@@ -58,7 +59,7 @@ class ReportController extends Controller
                     ->exists();
 
                 return $hasStock || $hasMasuk || $hasKeluar;
-            })->map(function ($asset) use ($startDate, $endDate) {
+            })->map(function ($asset) use ($startDate, $endDate, $type) {
                 $productCode = $asset->product_code;
 
                 $stockAwal = null;
@@ -129,8 +130,17 @@ class ReportController extends Controller
                     )
                     ->sum('jumlah_pemakaian');
 
+                $totalRusak = 0;
+                if ($type !== 'bhp') {
+                    $totalRusak = Peminjaman::where('product_code', $productCode)
+                        ->whereBetween('loan_date', [$startDate, $endDate])
+                        ->sum('damaged_quantity');
+                }
 
                 $stockSekarang = $stockAwal + $totalMasuk - ($totalPraktikum + $totalPenelitian);
+                if ($type !== 'bhp') {
+                    $stockSekarang = $stockAwal + $totalMasuk - $totalRusak;
+                }
                 $stockDatabase = $asset->stock;
                 $selisih = $stockDatabase - $stockSekarang;
 
@@ -145,12 +155,20 @@ class ReportController extends Controller
                     'total_masuk'      => $totalMasuk,
                     'total_praktikum'  => $totalPraktikum,
                     'total_penelitian' => $totalPenelitian,
+                    'total_rusak'      => $totalRusak,
                     'stock_terhitung'  => $stockSekarang,
                     'stock_database'   => $stockDatabase,
                     'selisih'          => $selisih,
                     'location'         => $asset->location,
                 ];
             });
+
+            $sortField = $request->input('sort_field');
+            $sortOrder = $request->input('sort_order', 'asc');
+
+            if ($sortField) {
+                $report = $report->sortBy($sortField, SORT_REGULAR, $sortOrder === 'desc')->values();
+            }
         }
 
         $locations = ['' => 'Pilih Lokasi',  'Matematika' => 'Matematika', 'Biologi' => 'Biologi', 'Fisika' => 'Fisika', 'Kimia' => 'Kimia', 'Teknik Informatika' => 'Teknik Informatika', 'Agroteknologi' => 'Agroteknologi', 'Teknik Elektro' => 'Teknik Elektro'];

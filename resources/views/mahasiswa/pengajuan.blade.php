@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Data Pengajuan') }}
+            {{ __('Data Pengajuan Penelitian') }}
         </h2>
     </x-slot>
     @if (session('success') || session('error'))
@@ -36,22 +36,25 @@
                                 class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 lg:w-52 xl:w-64 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                                 placeholder="Search for items" autocomplete="off">
                         </div>
-                        <div x-data="filterData()"
+                        <div x-data="filterPengajuan()"
                             class="flex flex-col md:flex-row space-y-1 md:space-y-0 md:items-center gap-x-1 xl:gap-x-2 justify-end">
                             <form action="#" method="GET"
-                                class="flex flex-col space-y-1 md:space-y-0 md:flex-row md:items-center gap-x-1 xl:gap-x-2">
-                                <div class="flex space-x-1 xl:space-x-2">
-                                    <select id="product_type" name="product_type" x-model="productType"
-                                        @change="applyFilter()"
+                                class="flex flex-col space-y-1 lg:space-y-0 lg:flex-row lg:items-center gap-x-1 xl:gap-x-2">
+                                <div
+                                    class="flex flex-col lg:flex-row space-y-1 lg:space-y-0 lg:items-center gap-x-1 xl:gap-x-2">
+                                    {{-- Filter Jenis --}}
+                                    <select id="type" name="type" x-model="type"
+                                        @change="updateFilter('type', type)"
                                         class="block w-full p-2 border border-gray-300 rounded-md text-sm text-gray-700">
                                         <option value="">-- Filter Jenis --</option>
-                                        <option value="Cairan">Cairan</option>
-                                        <option value="Padatan">Padatan</option>
-                                        <option value="Lainnya">Lainnya</option>
+                                        <option value="P01">Peminjaman Ruang Lab</option>
+                                        <option value="P02">Peminjaman Alat Lab</option>
+                                        <option value="P03">Permintahan Bahan/Zat</option>
+                                        <option value="P04">Izin Pemakaian diluar Jam Kerja</option>
                                     </select>
-                                    @if (Auth::user()->usertype !== 'staff')
+                                    @if (Auth::user()->usertype == 'admin' || Auth::user()->usertype == 'user')
                                         <select id="location" name="location" x-model="location"
-                                            @change="applyFilter()"
+                                            @change="updateFilter('location', location)"
                                             class="block w-full p-2 border border-gray-300 rounded-md text-sm text-gray-700">
                                             <option value="">-- Filter Lokasi --</option>
                                             <option value="Umum">Umum</option>
@@ -64,38 +67,52 @@
                                             <option value="Teknik Elektro">Teknik Elektro</option>
                                         </select>
                                     @endif
+                                    {{-- Filter Tanggal --}}
+                                    <div class="flex flex-row items-center gap-x-2">
+                                        <input type="date" x-model="startDate"
+                                            @change="updateFilter('start_date', startDate)"
+                                            class="border border-gray-300 text-gray-900 rounded-lg text-sm p-2"
+                                            max="{{ now()->format('Y-m-d') }}">
+                                        <span>-</span>
+                                        <input type="date" x-model="endDate"
+                                            @change="updateFilter('end_date', endDate)"
+                                            class="border border-gray-300 text-gray-900 rounded-lg text-sm p-2"
+                                            :min="startDate" max="{{ now()->format('Y-m-d') }}">
+                                    </div>
                                 </div>
-                                @if (Auth::user()->usertype !== 'user')
-                                    <a href="{{ route('mahasiswa.add') }}"
-                                        class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition duration-300">
-                                        <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor" viewBox="0 0 448 512">
+                                <div class="flex items-center justify-between space-x-2">
+                                    @if (Auth::user()->usertype !== 'user')
+                                        <a href="{{ route('mahasiswa.add') }}"
+                                            class="inline-flex text-sm items-center px-4 py-2 border border-transparent rounded-md font-semibold text-white bg-uinBlue hover:bg-uinNavy transition duration-300">
+                                            <svg class="w-4 h-4 me-2 text-white" xmlns="http://www.w3.org/2000/svg"
+                                                fill="currentColor" viewBox="0 0 448 512">
+                                                <path
+                                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                                            </svg>
+                                            Tambah
+                                        </a>
+                                    @endif
+                                    <button type="submit"
+                                        class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
+                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
+                                            data-name="Layer 1" viewBox="0 0 24 24">
                                             <path
-                                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                                                d="M23.971,17.98c-.191,1.175-1.215,2.028-2.436,2.028-.664,0-1.301-.196-1.84-.553-.387-.257-.447-.801-.118-1.129l.002-.002c.236-.235,.602-.283,.886-.11,.316,.191,.689,.298,1.07,.298,.604,0,1.031-.404,1.096-.795,.088-.55-.602-.873-.817-.959-.915-.371-1.751-.78-1.753-.78-.692-.484-1.027-1.231-.921-2.049,.111-.845,.674-1.534,1.471-1.796,.839-.277,1.603-.076,2.152,.203,.405,.205,.518,.733,.24,1.093-.203,.263-.559,.358-.863,.225-.306-.134-.71-.226-1.137-.088-.412,.136-.517,.447-.515,.577,.005,.442,.335,.57,.433,.615,.282,.128,.806,.368,1.366,.595,1.461,.591,1.828,1.745,1.685,2.627Zm-8.368-5.972h0c-.442,0-.8,.358-.8,.8v6.401c0,.442,.358,.8,.8,.8h2.133c.442,0,.8-.358,.8-.8s-.358-.8-.8-.8c-.755,0-1.333,0-1.333,0v-5.601c0-.442-.358-.8-.8-.8Zm-2.612,0c-.307,0-.589,.174-.726,.449l-.864,1.733-.864-1.733c-.137-.275-.418-.449-.726-.449-.602,0-.994,.634-.726,1.173l1.409,2.827-1.409,2.827c-.269,.539,.123,1.173,.726,1.173h0c.307,0,.589-.174,.726-.449l.864-1.733,.864,1.733c.137,.275,.418,.449,.726,.449,.602,0,.994-.634,.726-1.173l-1.409-2.827,1.409-2.827c.269-.539-.123-1.173-.726-1.173Zm7.009,10.992c0,.553-.447,1-1,1H5c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h4.515c1.869,0,3.627,.728,4.95,2.05l3.484,3.486c.888,.887,1.521,2,1.833,3.217,.076,.299,.011,.617-.179,.861s-.481,.387-.79,.387h-5.813c-1.654,0-3-1.346-3-3V2.023c-.16-.015-.322-.023-.485-.023H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h14c.553,0,1,.447,1,1ZM12,7c0,.551,.448,1,1,1h4.339c-.22-.382-.489-.736-.804-1.05l-3.484-3.486c-.318-.318-.671-.587-1.051-.805V7Z" />
                                         </svg>
-                                        Tambah
+                                        <span>Export</span>
+                                    </button>
+                                    <a href="{{ route('print.bhp', ['product_type' => request('product_type'), 'location' => request('location')]) }}"
+                                        target="_blank"
+                                        class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-teal-500 border border-transparent rounded-md font-semibold text-white hover:bg-teal-600 transition duration-300">
+                                        <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                            viewBox="0 0 24 24" width="512" height="512">
+                                            <path
+                                                d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
+                                            <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
+                                        </svg>
+                                        <span>Print</span>
                                     </a>
-                                @endif
-                                <button type="submit"
-                                    class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-800 transition duration-300">
-                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Layer_1"
-                                        data-name="Layer 1" viewBox="0 0 24 24">
-                                        <path
-                                            d="M23.971,17.98c-.191,1.175-1.215,2.028-2.436,2.028-.664,0-1.301-.196-1.84-.553-.387-.257-.447-.801-.118-1.129l.002-.002c.236-.235,.602-.283,.886-.11,.316,.191,.689,.298,1.07,.298,.604,0,1.031-.404,1.096-.795,.088-.55-.602-.873-.817-.959-.915-.371-1.751-.78-1.753-.78-.692-.484-1.027-1.231-.921-2.049,.111-.845,.674-1.534,1.471-1.796,.839-.277,1.603-.076,2.152,.203,.405,.205,.518,.733,.24,1.093-.203,.263-.559,.358-.863,.225-.306-.134-.71-.226-1.137-.088-.412,.136-.517,.447-.515,.577,.005,.442,.335,.57,.433,.615,.282,.128,.806,.368,1.366,.595,1.461,.591,1.828,1.745,1.685,2.627Zm-8.368-5.972h0c-.442,0-.8,.358-.8,.8v6.401c0,.442,.358,.8,.8,.8h2.133c.442,0,.8-.358,.8-.8s-.358-.8-.8-.8c-.755,0-1.333,0-1.333,0v-5.601c0-.442-.358-.8-.8-.8Zm-2.612,0c-.307,0-.589,.174-.726,.449l-.864,1.733-.864-1.733c-.137-.275-.418-.449-.726-.449-.602,0-.994,.634-.726,1.173l1.409,2.827-1.409,2.827c-.269,.539,.123,1.173,.726,1.173h0c.307,0,.589-.174,.726-.449l.864-1.733,.864,1.733c.137,.275,.418,.449,.726,.449,.602,0,.994-.634,.726-1.173l-1.409-2.827,1.409-2.827c.269-.539-.123-1.173-.726-1.173Zm7.009,10.992c0,.553-.447,1-1,1H5c-2.757,0-5-2.243-5-5V5C0,2.243,2.243,0,5,0h4.515c1.869,0,3.627,.728,4.95,2.05l3.484,3.486c.888,.887,1.521,2,1.833,3.217,.076,.299,.011,.617-.179,.861s-.481,.387-.79,.387h-5.813c-1.654,0-3-1.346-3-3V2.023c-.16-.015-.322-.023-.485-.023H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h14c.553,0,1,.447,1,1ZM12,7c0,.551,.448,1,1,1h4.339c-.22-.382-.489-.736-.804-1.05l-3.484-3.486c-.318-.318-.671-.587-1.051-.805V7Z" />
-                                    </svg>
-                                    <span>Export</span>
-                                </button>
-                                <a href="{{ route('print.bhp', ['product_type' => request('product_type'), 'location' => request('location')]) }}"
-                                    target="_blank"
-                                    class="inline-flex gap-x-2 text-sm items-center px-4 py-2 bg-teal-500 border border-transparent rounded-md font-semibold text-white hover:bg-teal-600 transition duration-300">
-                                    <svg class="size-4 fill-white" xmlns="http://www.w3.org/2000/svg" id="Outline"
-                                        viewBox="0 0 24 24" width="512" height="512">
-                                        <path
-                                            d="M19,6V4a4,4,0,0,0-4-4H9A4,4,0,0,0,5,4V6a5.006,5.006,0,0,0-5,5v5a5.006,5.006,0,0,0,5,5,3,3,0,0,0,3,3h8a3,3,0,0,0,3-3,5.006,5.006,0,0,0,5-5V11A5.006,5.006,0,0,0,19,6ZM7,4A2,2,0,0,1,9,2h6a2,2,0,0,1,2,2V6H7ZM17,21a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V17a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1Zm5-5a3,3,0,0,1-3,3V17a3,3,0,0,0-3-3H8a3,3,0,0,0-3,3v2a3,3,0,0,1-3-3V11A3,3,0,0,1,5,8H19a3,3,0,0,1,3,3Z" />
-                                        <path d="M18,10H16a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
-                                    </svg>
-                                    <span>Print</span>
-                                </a>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -105,17 +122,17 @@
                     <div class="relative overflow-x-auto sm:rounded-lg">
                         @php
                             $columns = [
-                                'product_code' => 'Kode Barang',
-                                'product_name' => 'Nama Barang',
-                                'product_detail' => 'Keterangan',
-                                'merk' => 'Merk',
-                                'product_type' => 'Jenis',
-                                'stock' => 'stok',
-                                'product_unit' => 'satuan',
-                                'purchase_price' => 'Harga Beli',
-                                'location_detail' => 'Lokasi Penyimpanan',
+                                'type' => 'Jenis Pengajuan',
+                                'mahasiswa_id' => 'NIM',
+                                'name' => 'Nama',
+                                'telp' => 'Telp',
+                                'email' => 'Email',
+                                'lab_name' => 'Lab',
+                                'start_date' => 'Tanggal Mulai',
+                                'end_date' => 'Tanggal Berakhir',
+                                'status' => 'Status',
                             ];
-                            if (Auth::user()->usertype !== 'staff') {
+                            if (Auth::user()->usertype == 'staff') {
                                 $columns['location'] = 'Lokasi';
                             }
                         @endphp
@@ -150,15 +167,13 @@
                                             </div>
                                         </th>
                                     @endforeach
-                                    @if (Auth::user()->usertype !== 'mahasiswa' || Auth::user()->usertype == 'dosen')
-                                        <th scope="col" class="py-3">
-                                            Diupdate Oleh
+                                    <th scope="col" class="py-3">
+                                        Diupdate Oleh
+                                    </th>
+                                    @if (Auth::user()->usertype !== 'user')
+                                        <th scope="col" class="py-3 text-center">
+                                            Action
                                         </th>
-                                        @if (Auth::user()->usertype !== 'user')
-                                            <th scope="col" class="py-3 text-center">
-                                                Action
-                                            </th>
-                                        @endif
                                     @endif
                                 </tr>
                             </thead>
@@ -221,44 +236,42 @@
                                                 {{ $data->location }}
                                             </td>
                                         @endif
-                                        @if (Auth::user()->usertype !== 'mahasiswa' || Auth::user()->usertype == 'dosen')
-                                            <td class="px-2">
-                                                {{ $data->updater->name }}
+                                        <td class="px-2">
+                                            {{ $data->updater->name }}
+                                        </td>
+                                        @if (Auth::user()->usertype !== 'user')
+                                            <td class="py-2 flex flex-row gap-x-2 justify-center">
+                                                <a href="{{ route('edit-aset', $data->product_code) }}">
+                                                    <div
+                                                        class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400 transition duration-300">
+                                                        <svg class="size-4 fill-white"
+                                                            xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                                            viewBox="0 0 24 24" width="512" height="512">
+                                                            <path
+                                                                d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />
+                                                            <path
+                                                                d="M23,8.979a1,1,0,0,0-1,1V15H18a3,3,0,0,0-3,3v4H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2h9.042a1,1,0,0,0,0-2H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H16.343a4.968,4.968,0,0,0,3.536-1.464l2.656-2.658A4.968,4.968,0,0,0,24,16.343V9.979A1,1,0,0,0,23,8.979ZM18.465,21.122a2.975,2.975,0,0,1-1.465.8V18a1,1,0,0,1,1-1h3.925a3.016,3.016,0,0,1-.8,1.464Z" />
+                                                        </svg>
+                                                    </div>
+                                                </a>
+                                                <form action="{{ route('destroy-aset', $data->product_code) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="bg-uinRed p-2 rounded-lg hover:bg-red-600 transition duration-300"><svg
+                                                            class="size-4 fill-white"
+                                                            xmlns="http://www.w3.org/2000/svg" id="Outline"
+                                                            viewBox="0 0 24 24" width="512" height="512">
+                                                            <path
+                                                                d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
+                                                            <path
+                                                                d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
+                                                            <path
+                                                                d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
+                                                        </svg></button>
+                                                </form>
                                             </td>
-                                            @if (Auth::user()->usertype !== 'user')
-                                                <td class="py-2 flex flex-row gap-x-2 justify-center">
-                                                    <a href="{{ route('edit-aset', $data->product_code) }}">
-                                                        <div
-                                                            class="bg-uinOrange p-2 rounded-lg hover:bg-yellow-400 transition duration-300">
-                                                            <svg class="size-4 fill-white"
-                                                                xmlns="http://www.w3.org/2000/svg" id="Outline"
-                                                                viewBox="0 0 24 24" width="512" height="512">
-                                                                <path
-                                                                    d="M18.656.93,6.464,13.122A4.966,4.966,0,0,0,5,16.657V18a1,1,0,0,0,1,1H7.343a4.966,4.966,0,0,0,3.535-1.464L23.07,5.344a3.125,3.125,0,0,0,0-4.414A3.194,3.194,0,0,0,18.656.93Zm3,3L9.464,16.122A3.02,3.02,0,0,1,7.343,17H7v-.343a3.02,3.02,0,0,1,.878-2.121L20.07,2.344a1.148,1.148,0,0,1,1.586,0A1.123,1.123,0,0,1,21.656,3.93Z" />
-                                                                <path
-                                                                    d="M23,8.979a1,1,0,0,0-1,1V15H18a3,3,0,0,0-3,3v4H5a3,3,0,0,1-3-3V5A3,3,0,0,1,5,2h9.042a1,1,0,0,0,0-2H5A5.006,5.006,0,0,0,0,5V19a5.006,5.006,0,0,0,5,5H16.343a4.968,4.968,0,0,0,3.536-1.464l2.656-2.658A4.968,4.968,0,0,0,24,16.343V9.979A1,1,0,0,0,23,8.979ZM18.465,21.122a2.975,2.975,0,0,1-1.465.8V18a1,1,0,0,1,1-1h3.925a3.016,3.016,0,0,1-.8,1.464Z" />
-                                                            </svg>
-                                                        </div>
-                                                    </a>
-                                                    <form action="{{ route('destroy-aset', $data->product_code) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="bg-uinRed p-2 rounded-lg hover:bg-red-600 transition duration-300"><svg
-                                                                class="size-4 fill-white"
-                                                                xmlns="http://www.w3.org/2000/svg" id="Outline"
-                                                                viewBox="0 0 24 24" width="512" height="512">
-                                                                <path
-                                                                    d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z" />
-                                                                <path
-                                                                    d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z" />
-                                                                <path
-                                                                    d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z" />
-                                                            </svg></button>
-                                                    </form>
-                                                </td>
-                                            @endif
                                         @endif
                                     </tr>
                                     @php
@@ -288,3 +301,31 @@
         </div>
     </div>
 </x-app-layout>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('filterPengajuan', () => ({
+            type: '{{ request('type') }}',
+            location: '{{ request('location') }}',
+            startDate: '{{ request('start_date') }}',
+            endDate: '{{ request('end_date') ?: now()->format('Y-m-d') }}',
+            today: '{{ now()->format('Y-m-d') }}', // Simpan nilai hari ini
+
+            updateFilter(key, value) {
+                let url = new URL(window.location.href);
+
+                if (key === 'start_date') {
+                    this.endDate = this.today; // Ubah endDate jadi hari ini
+                    url.searchParams.set('end_date', this.endDate);
+                }
+
+                if (value) {
+                    url.searchParams.set(key, value);
+                } else {
+                    url.searchParams.delete(key);
+                }
+
+                window.location.href = url.toString();
+            }
+        }));
+    });
+</script>

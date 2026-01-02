@@ -30,6 +30,8 @@ Route::get('/', function () {
 })->name('landing');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/assets', [AssetController::class, 'getAssets']);
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -133,7 +135,6 @@ Route::middleware(['auth', 'orMiddleware'])->group(function () {
     Route::post('/add-harga', [ItemPricesController::class, 'store']);
     Route::delete('/delete-harga/{itemPrices}', [ItemPricesController::class, 'destroy'])->name('data-harga.destroy');
 
-    Route::get('/assets', [AssetController::class, 'getAssets']);
     Route::post('/prediksi', [PredictionController::class, 'sendData']);
     Route::get('/add-lab', [DataLabController::class, 'create'])->name('lab.add');
     Route::post('/add-lab', [DataLabController::class, 'store']);

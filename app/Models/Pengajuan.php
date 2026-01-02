@@ -10,23 +10,18 @@ class Pengajuan extends Model
 
     protected $fillable = [
         'mahasiswa_id',
-        'dosen_id',
-        'lab_id',
-        'name',
-        'prodi',
-        'detail',
-        'dosen',
-        'kepala_lab',
-        'ketua_lab',
-        'laboran',
+        'type',
+        'telp',
+        'email',
+        'lab_code',
+        'start_date',
+        'end_date',
         'status_pengajuan',
-        'status',
-        'keterangan',
     ];
 
     public function lab()
     {
-        return $this->belongsTo( DataLab::class);
+        return $this->belongsTo(DataLab::class);
     }
 
     public function mahasiswa()
@@ -34,8 +29,13 @@ class Pengajuan extends Model
         return $this->belongsTo(User::class, 'mahasiswa_id', 'id');
     }
 
-    public function dosen()
+    public function items()
     {
-        return $this->belongsTo(User::class, 'dosen_id', 'id');
+        return $this->hasMany(PengajuanDetail::class, 'pengajuan_id');
+    }
+
+    public function approval()
+    {
+        return $this->hasMany(Approval::class, 'pengajuan_id');
     }
 }

@@ -14,17 +14,13 @@ return new class extends Migration
         Schema::create('pengajuans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('mahasiswa_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('dosen_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('lab_id')->constrained('data_labs')->onDelete('cascade');
-            $table->string('name');
-            $table->string('prodi');
-            $table->string('detail');
-            $table->string('dosen')->nullable();
-            $table->string('kepala_lab')->nullable();
-            $table->string('ketua_lab')->nullable();
-            $table->string('laboran')->nullable();
+            $table->enum('type', ['P01', 'P02', 'P03', 'P04'])->default('P01');
+            $table->string('telp');
+            $table->string('email');
+            $table->foreignId('lab_code')->constrained('data_labs')->onDelete('cascade');
+            $table->date('start_date');
+            $table->date('end_date')->nullable();
             $table->enum('status_pengajuan', ['pending', 'approved', 'rejected'])->default('pending'); // pending, approved, rejected
-            $table->string('keterangan')->nullable();
             $table->timestamps();
         });
     }

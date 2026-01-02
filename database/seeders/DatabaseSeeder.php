@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\DataLab;
 use App\Models\Product;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -127,5 +128,94 @@ class DatabaseSeeder extends Seeder
             }
             fclose($handle);
         }
+
+        DataLab::create([
+            'lab_code' => 'LAB-1',
+            'name' => 'Lab Instruksional 1',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-2',
+            'name' => 'Lab Instruksional 2',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-3',
+            'name' => 'Lab Instruksional 3',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-4',
+            'name' => 'Lab Data Biometrika',
+            'prodi' => 'Agroteknologi',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-5',
+            'name' => 'Lab Genetika Molekular',
+            'prodi' => 'Agroteknologi',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-6',
+            'name' => 'Lab Ekologi',
+            'prodi' => 'Biologi',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-7',
+            'name' => 'Lab Biosistematika dan Perkembangan Hewan',
+            'prodi' => 'Biologi',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-8',
+            'name' => 'Lab Instrument',
+            'prodi' => 'Kimia',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-9',
+            'name' => 'Lab Riset 1',
+            'prodi' => 'Kimia',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-10',
+            'name' => 'Lab Basic Physics',
+            'prodi' => 'Fisika',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-11',
+            'name' => 'Lab Geophysics',
+            'prodi' => 'Fisika',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-12',
+            'name' => 'Lab Dasar Programan',
+            'prodi' => 'Matematika',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-13',
+            'name' => 'Lab Computational Intelligent',
+            'prodi' => 'Matematika',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-14',
+            'name' => 'Lab Dasar Elektronika',
+            'prodi' => 'Teknik Elektro',
+        ]);
+
+        DataLab::create([
+            'lab_code' => 'LAB-15',
+            'name' => 'Lab Mikroprocessor',
+            'prodi' => 'Teknik Elektro',
+        ]);
+
+        
     }
 }
